@@ -218,15 +218,15 @@
     <div id="screens">
         <!-- 1. Selection Screen -->
         <div id="start-screen" class="screen active">
-            <h1>Teka-teki Hewan! 🧩</h1>
+            <h1>Teka-teki Gambar! 🧩</h1>
 
-            <h2>1. Pilih Karakter Gambar:</h2>
+            <h2>1. Pilih Gambar Hewan:</h2>
             <div class="picker-grid" id="puzzle-grid"></div>
 
-            <h2>2. Pilih Potongan:</h2>
+            <h2>2. Pilih Jumlah Potongan:</h2>
             <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;">
-                <button class="btn" onclick="startPuzzle(2)">⭐ 2 x 2 Potongan</button>
-                <button class="btn" onclick="startPuzzle(3)">⭐⭐ 3 x 3 Potongan</button>
+                <button class="btn" onclick="startPuzzle(2)">⭐ 2 x 2 (4 Potongan)</button>
+                <button class="btn" onclick="startPuzzle(3)">⭐⭐ 3 x 3 (9 Potongan)</button>
             </div>
         </div>
 
@@ -240,7 +240,7 @@
         <!-- 3. Celebration Screen -->
         <div id="celeb-screen" class="screen">
             <div class="celeb-text">Hebat Sekali! 🎉</div>
-            <div style="font-size: 80px; margin: 15px 0;" id="celeb-emoji">🐱</div>
+            <div style="font-size: 80px; margin: 15px 0;" id="celeb-emoji">🦖</div>
             <button class="btn btn-primary" onclick="showScreen('start-screen')">Main Lagi!</button>
         </div>
     </div>
@@ -249,12 +249,12 @@
 
     <script>
         const puzzleList = [
-            { id: 'cat', emoji: '🐱', name: 'Kucing', color: '#ff7675' },
-            { id: 'dino', emoji: '🦖', name: 'Dino', color: '#55efc4' },
-            { id: 'dog', emoji: '🐶', name: 'Anjing', color: '#ffeaa7' },
-            { id: 'rabbit', emoji: '🐰', name: 'Kelinci', color: '#74b9ff' },
-            { id: 'panda', emoji: '🐼', name: 'Panda', color: '#a29bfe' },
-            { id: 'lion', emoji: '🦁', name: 'Singa', color: '#fdcb6e' }
+            { id: 'dino', emoji: '🦖', name: 'Dino T-Rex', bg: '#55efc4', detail: '🌋 DINO PARK 🦖' },
+            { id: 'cat', emoji: '🐱', name: 'Kucing', bg: '#ff7675', detail: '🐟 KUCING MANIS 🐱' },
+            { id: 'dog', emoji: '🐶', name: 'Anjing', bg: '#ffeaa7', detail: '🦴 ANJING LUCU 🐶' },
+            { id: 'rabbit', emoji: '🐰', name: 'Kelinci', bg: '#74b9ff', detail: '🥕 KELINCI LOMPAT 🐰' },
+            { id: 'panda', emoji: '🐼', name: 'Panda', bg: '#a29bfe', detail: '🎋 PANDA BAMBU 🐼' },
+            { id: 'lion', emoji: '🦁', name: 'Singa', bg: '#fdcb6e', detail: '👑 RAJA SINGA 🦁' }
         ];
 
         let selectedPuzzle = puzzleList[0];
@@ -291,6 +291,11 @@
 
         const canvas = document.getElementById('puzzle-canvas');
         const ctx = canvas.getContext('2d');
+        
+        // Offscreen Canvas for drawing the full artwork once, then slicing it!
+        const sourceCanvas = document.createElement('canvas');
+        const sourceCtx = sourceCanvas.getContext('2d');
+
         let pieces = [];
         let gridSize = 2;
         let activePiece = null;
@@ -307,11 +312,50 @@
             initCanvas();
         }
 
+        // Generate the FULL Artwork on sourceCanvas
+        function generateFullArtwork(width, height) {
+            sourceCanvas.width = width;
+            sourceCanvas.height = height;
+
+            // Background gradient
+            const grad = sourceCtx.createLinearGradient(0, 0, width, height);
+            grad.addColorStop(0, selectedPuzzle.bg);
+            grad.addColorStop(1, '#ffffff');
+            sourceCtx.fillStyle = grad;
+            sourceCtx.fillRect(0, 0, width, height);
+
+            // Sun & clouds background decor
+            sourceCtx.fillStyle = '#ffeaa7';
+            sourceCtx.beginPath();
+            sourceCtx.arc(width * 0.85, height * 0.15, width * 0.1, 0, Math.PI * 2);
+            sourceCtx.fill();
+
+            // Big Center Emoji Illustration
+            sourceCtx.font = `${width * 0.45}px Arial`;
+            sourceCtx.textAlign = 'center';
+            sourceCtx.textBaseline = 'middle';
+            sourceCtx.fillText(selectedPuzzle.emoji, width / 2, height / 2 - 20);
+
+            // Title Text Banner at bottom
+            sourceCtx.fillStyle = '#2d3436';
+            sourceCtx.font = `bold ${width * 0.065}px Bubblegum Sans, Arial`;
+            sourceCtx.fillText(selectedPuzzle.detail, width / 2, height * 0.85);
+
+            // Decorative Corner Stars
+            sourceCtx.font = `${width * 0.09}px Arial`;
+            sourceCtx.fillText('⭐', width * 0.12, height * 0.15);
+            sourceCtx.fillText('🌟', width * 0.88, height * 0.82);
+            sourceCtx.fillText('🎈', width * 0.15, height * 0.82);
+        }
+
         function initCanvas() {
             const container = document.getElementById('puzzle-container');
             const rect = container.getBoundingClientRect();
             canvas.width = rect.width * 2;
             canvas.height = rect.height * 2;
+
+            // Generate Full Image Artwork
+            generateFullArtwork(canvas.width, canvas.height);
 
             const pw = canvas.width / gridSize;
             const ph = canvas.height / gridSize;
@@ -321,11 +365,15 @@
                 for (let c = 0; c < gridSize; c++) {
                     const targetX = c * pw;
                     const targetY = r * ph;
-                    const randomX = Math.random() * (canvas.width - pw);
-                    const randomY = Math.random() * (canvas.height - ph);
-                    
+
+                    // Random initial scatter position (avoiding exact target)
+                    let randomX = Math.random() * (canvas.width - pw);
+                    let randomY = Math.random() * (canvas.height - ph);
+
                     pieces.push({
                         id: r * gridSize + c,
+                        row: r,
+                        col: c,
                         targetX, targetY,
                         currentX: randomX,
                         currentY: randomY,
@@ -341,44 +389,49 @@
         function render() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            // Draw background ghost container
+            // Draw background ghost container (light dashed slots)
             ctx.fillStyle = '#f8f9fa';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // Draw grid outline targets
+            // Draw grid outline targets with ghost artwork
+            ctx.globalAlpha = 0.18;
+            ctx.drawImage(sourceCanvas, 0, 0);
+            ctx.globalAlpha = 1.0;
+
             const pw = canvas.width / gridSize;
             const ph = canvas.height / gridSize;
-            ctx.strokeStyle = '#dcdde1';
+            ctx.strokeStyle = '#b2bec3';
             ctx.lineWidth = 4;
+            ctx.setLineDash([12, 8]);
             for (let r = 0; r < gridSize; r++) {
                 for (let c = 0; c < gridSize; c++) {
                     ctx.strokeRect(c * pw, r * ph, pw, ph);
                 }
             }
+            ctx.setLineDash([]); // reset line dash
 
-            // Draw Pieces
+            // Draw Pieces (Each piece draws ITS OWN SLICED SEGMENT from sourceCanvas!)
             pieces.forEach(p => {
                 ctx.save();
                 ctx.translate(p.currentX, p.currentY);
                 
-                // Card background
-                ctx.fillStyle = selectedPuzzle.color;
-                ctx.fillRect(0, 0, p.width, p.height);
-                ctx.strokeStyle = '#2d3436';
-                ctx.lineWidth = 6;
-                ctx.strokeRect(0, 0, p.width, p.height);
+                // Draw Slicing: Crop (p.col * pw, p.row * ph, pw, ph) from sourceCanvas!
+                ctx.drawImage(
+                    sourceCanvas,
+                    p.col * pw, p.row * ph, pw, ph, // Source crop rectangle
+                    0, 0, p.width, p.height         // Target piece position
+                );
 
-                // Draw Emoji Artwork
-                ctx.font = `${p.width * 0.5}px Arial`;
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText(selectedPuzzle.emoji, p.width / 2, p.height / 2);
+                // Piece Border & Shadow
+                ctx.strokeStyle = p.isSnapped ? '#00b894' : '#2d3436';
+                ctx.lineWidth = p.isSnapped ? 5 : 4;
+                ctx.strokeRect(0, 0, p.width, p.height);
 
                 ctx.restore();
             });
         }
 
-        // Pointer Events for Dragging
+        // Pointer Events for Dragging & Snapping
         canvas.addEventListener('pointerdown', (e) => {
             const rect = canvas.getBoundingClientRect();
             const scale = canvas.width / rect.width;
@@ -392,7 +445,8 @@
                     dragOffset.x = x - p.currentX;
                     dragOffset.y = y - p.currentY;
                     playAudioTone(500, 0.08);
-                    // Move to top
+                    
+                    // Move dragged piece to top of stack
                     pieces.splice(i, 1);
                     pieces.push(p);
                     break;
@@ -416,7 +470,7 @@
             if (!activePiece) return;
             
             const dist = Math.hypot(activePiece.currentX - activePiece.targetX, activePiece.currentY - activePiece.targetY);
-            if (dist < 60) {
+            if (dist < 75) { // Forgiving 75px snap radius
                 activePiece.currentX = activePiece.targetX;
                 activePiece.currentY = activePiece.targetY;
                 activePiece.isSnapped = true;

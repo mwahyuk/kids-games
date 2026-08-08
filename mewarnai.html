@@ -207,6 +207,9 @@
             top: 0; left: 0;
             background: inherit;
             z-index: 20;
+            padding-top: max(40px, env(safe-area-inset-top));
+            padding-left: 20px;
+            padding-right: 20px;
         }
 
         .thumbnail-grid {
@@ -251,14 +254,14 @@
     <canvas id="confetti-canvas"></canvas>
     
     <div id="game-container">
-        <h1>Ayo Mewarnai! 🎨</h1>
-        
         <div id="selection-screen">
-            <h2>Pilih Gambar!</h2>
+            <h1>Ayo Mewarnai! 🎨</h1>
+            <h2>Pilih Gambar Untuk Diwarnai:</h2>
             <div class="thumbnail-grid" id="thumbnail-grid"></div>
         </div>
 
         <div id="main-area">
+            <h1>Ayo Mewarnai! 🎨</h1>
             <div id="palette"></div>
             
             <div id="canvas-container">

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Pecahkan Balonnya! 🎈</title>
+    <title>Pecahkan Balon! 🎈</title>
     <meta name="theme-color" content="#667eea">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -73,7 +73,7 @@
         .screen.active { display: flex; }
 
         h1 {
-            font-size: clamp(32px, 6vw, 56px);
+            font-size: clamp(34px, 6.5vw, 58px);
             margin: 0 0 15px 0;
             color: #ff7675;
             text-shadow: 3px 3px 0px white, -3px -3px 0px white, 3px -3px 0px white, -3px 3px 0px white;
@@ -111,9 +111,10 @@
             font-size: clamp(22px, 4.5vw, 32px);
             color: white;
             background: rgba(0,0,0,0.25);
-            padding: 8px 20px;
+            padding: 8px 22px;
             border-radius: 24px;
             z-index: 100;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
         }
 
         canvas {
@@ -136,14 +137,16 @@
     <div id="screens">
         <!-- 1. Start Screen -->
         <div id="start-screen" class="screen active">
-            <h1>Pecahkan Balonnya! 🎈</h1>
-            <p style="font-size: clamp(20px, 4vw, 28px); color: white; margin-bottom: 25px; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);">Sentuh atau klik balon yang terbang di langit!</p>
+            <h1>Pecahkan Balon! 🎈</h1>
+            <p style="font-size: clamp(20px, 4vw, 28px); color: white; margin-bottom: 25px; text-shadow: 1px 1px 2px rgba(0,0,0,0.4); max-width: 600px;">
+                Petunjuk: Tekan atau sentuh balon warna-warni yang terbang di langit untuk memecahkannya! 🎈✨
+            </p>
             <button class="btn btn-primary" onclick="startGame()">Mulai Main! 🎈</button>
         </div>
 
         <!-- 2. Game Screen -->
         <div id="game-screen" class="screen">
-            <div id="score-board">Skor: <span id="score-val">0</span></div>
+            <div id="score-board">Skor Balon: <span id="score-val">0</span> ⭐</div>
             <canvas id="balloon-canvas"></canvas>
         </div>
     </div>
@@ -154,8 +157,8 @@
         let balloons = [];
         let score = 0;
         let animId = null;
-        const colors = ['#ff7675', '#74b9ff', '#55efc4', '#ffeaa7', '#a29bfe', '#fd79a8'];
-        const emojis = ['⭐', '🎈', '🎉', '🍎', '🐱', '🦖'];
+        const colors = ['#ff7675', '#74b9ff', '#55efc4', '#ffeaa7', '#a29bfe', '#fd79a8', '#fdcb6e'];
+        const emojis = ['⭐', '🎈', '🎉', '🍎', '🐱', '🦖', '🦄', '🎁'];
 
         function showScreen(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -180,18 +183,18 @@
 
         function spawnBalloons() {
             balloons = [];
-            for (let i = 0; i < 7; i++) {
+            for (let i = 0; i < 8; i++) {
                 createBalloon();
             }
         }
 
         function createBalloon() {
-            const r = Math.random() * 25 + 35;
+            const r = Math.random() * 25 + 38;
             balloons.push({
                 x: Math.random() * (canvas.width - r * 2) + r,
                 y: canvas.height + r + Math.random() * 200,
                 r: r,
-                speed: Math.random() * 2 + 1.5,
+                speed: Math.random() * 2.2 + 1.6,
                 color: colors[Math.floor(Math.random() * colors.length)],
                 emoji: emojis[Math.floor(Math.random() * emojis.length)]
             });
@@ -202,12 +205,20 @@
             
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            balloons.forEach((b, idx) => {
+            balloons.forEach((b) => {
                 b.y -= b.speed;
                 if (b.y < -b.r * 2) {
                     b.y = canvas.height + b.r;
                     b.x = Math.random() * (canvas.width - b.r * 2) + b.r;
                 }
+
+                // Draw Balloon String
+                ctx.beginPath();
+                ctx.moveTo(b.x, b.y + b.r);
+                ctx.lineTo(b.x, b.y + b.r + 30);
+                ctx.strokeStyle = 'rgba(255,255,255,0.7)';
+                ctx.lineWidth = 2.5;
+                ctx.stroke();
 
                 // Draw Balloon Body
                 ctx.beginPath();
@@ -215,22 +226,20 @@
                 ctx.fillStyle = b.color;
                 ctx.fill();
                 ctx.strokeStyle = 'white';
-                ctx.lineWidth = 3;
+                ctx.lineWidth = 3.5;
                 ctx.stroke();
 
+                // Draw Shine Highlight
+                ctx.beginPath();
+                ctx.arc(b.x - b.r * 0.35, b.y - b.r * 0.35, b.r * 0.2, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255,255,255,0.5)';
+                ctx.fill();
+
                 // Draw Emoji inside balloon
-                ctx.font = `${b.r * 0.9}px Arial`;
+                ctx.font = `${b.r * 0.85}px Arial`;
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
                 ctx.fillText(b.emoji, b.x, b.y);
-
-                // String line
-                ctx.beginPath();
-                ctx.moveTo(b.x, b.y + b.r);
-                ctx.lineTo(b.x, b.y + b.r + 25);
-                ctx.strokeStyle = 'rgba(255,255,255,0.7)';
-                ctx.lineWidth = 2;
-                ctx.stroke();
             });
 
             animId = requestAnimationFrame(loop);
@@ -263,9 +272,9 @@
                 const osc = ctxAudio.createOscillator();
                 const gain = ctxAudio.createGain();
                 osc.connect(gain); gain.connect(ctxAudio.destination);
-                osc.frequency.setValueAtTime(800, ctxAudio.currentTime);
+                osc.frequency.setValueAtTime(850, ctxAudio.currentTime);
                 osc.frequency.exponentialRampToValueAtTime(200, ctxAudio.currentTime + 0.1);
-                gain.gain.setValueAtTime(0.3, ctxAudio.currentTime);
+                gain.gain.setValueAtTime(0.35, ctxAudio.currentTime);
                 gain.gain.exponentialRampToValueAtTime(0.01, ctxAudio.currentTime + 0.1);
                 osc.start(); osc.stop(ctxAudio.currentTime + 0.1);
             } catch(e) {}
