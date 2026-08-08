@@ -1,4 +1,4 @@
-const CACHE_NAME = 'kiddo-games-v19';
+const CACHE_NAME = 'kiddo-games-v20';
 const ASSETS = [
   './',
   './index.html',

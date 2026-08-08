@@ -278,6 +278,7 @@
         let balloons = [];
         let score = 0;
         let animId = null;
+        let lastTouchTime = 0;
         const colors = ['#ff7675', '#74b9ff', '#55efc4', '#ffeaa7', '#a29bfe', '#fd79a8', '#fdcb6e'];
 
         function showScreen(id) {
@@ -330,7 +331,6 @@
             const list = modeData[currentMode];
 
             for (let i = 0; i < count; i++) {
-                // Ensure at least 2 balloons match currentTarget
                 let item = (i === 0 || i === 1) ? currentTarget : list[Math.floor(Math.random() * list.length)];
 
                 balloons.push({
@@ -348,9 +348,8 @@
         }
 
         function ensureTargetOnScreen() {
-            let targetCount = balloons.filter(b => b.item.val === currentTarget.val && b.y > -b.r).length;
+            let targetCount = balloons.filter(b => b.y > -b.r && String(b.item.val).trim() === String(currentTarget.val).trim()).length;
             if (targetCount === 0 && balloons.length > 0) {
-                // Force at least 2 balloons to be the target
                 balloons[0].item = currentTarget;
                 balloons[1].item = currentTarget;
             }
@@ -380,10 +379,9 @@
 
                 let drawX = b.x + Math.sin(b.sway) * 0.8;
 
-                // Handle Wrong Tap Shake Animation
                 if (b.shakeTimer > 0) {
                     b.shakeTimer--;
-                    drawX += Math.sin(b.shakeTimer * 0.9) * 10;
+                    drawX += Math.sin(b.shakeTimer * 0.9) * 12;
                 }
 
                 if (b.y < -b.r * 2) {
@@ -434,39 +432,52 @@
             animId = requestAnimationFrame(loop);
         }
 
-        canvas.addEventListener('click', handlePop);
         canvas.addEventListener('touchstart', (e) => {
             e.preventDefault();
-            const touch = e.touches[0];
-            handlePop({ clientX: touch.clientX, clientY: touch.clientY });
+            lastTouchTime = Date.now();
+            const touch = e.changedTouches[0];
+            handlePop(touch.clientX, touch.clientY);
+        }, {passive: false});
+
+        canvas.addEventListener('click', (e) => {
+            if (Date.now() - lastTouchTime < 500) return; // Prevent double trigger from touchscreen click emulation
+            handlePop(e.clientX, e.clientY);
         });
 
-        function handlePop(e) {
+        function handlePop(clientX, clientY) {
             const rect = canvas.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            const x = (clientX - rect.left) * scaleX;
+            const y = (clientY - rect.top) * scaleY;
 
             for (let i = balloons.length - 1; i >= 0; i--) {
                 let b = balloons[i];
                 let dist = Math.hypot(x - b.x, y - b.y);
                 
                 if (dist < b.r + 15) {
-                    if (b.item.val === currentTarget.val) {
-                        // CORRECT BALLOON TAPPED -> POP & NEW INSTRUCTION!
+                    const isCorrectTarget = String(b.item.val).trim() === String(currentTarget.val).trim();
+
+                    if (isCorrectTarget) {
+                        // 1. TARGET BALLOON MATCHES INSTRUCTION -> POP IT!
                         playAudioTone(1200, 0.2);
                         spawnConfettiAt(b.x, b.y);
                         score += 10;
                         document.getElementById('score-val').innerText = score;
-                        setNewTargetInstruction();
-                        
-                        b.y = canvas.height + 100;
+
+                        // Respawn balloon far below with random new item
+                        b.y = canvas.height + Math.random() * 200 + 100;
                         b.x = Math.random() * (canvas.width - 140) + 70;
+                        b.item = modeData[currentMode][Math.floor(Math.random() * modeData[currentMode].length)];
+
+                        // Switch to new target instruction
+                        setNewTargetInstruction();
                     } else {
-                        // WRONG BALLOON TAPPED -> SHAKE/WOBBLE ONLY, DO NOT POP!
-                        playAudioTone(250, 0.15);
-                        b.shakeTimer = 18;
+                        // 2. WRONG BALLOON -> WOBBLE/SHAKE ONLY! DO NOT POP OR CHANGE POSITION!
+                        playAudioTone(200, 0.2);
+                        b.shakeTimer = 22;
                     }
-                    break;
+                    break; // Only process one balloon tap per touch
                 }
             }
         }
