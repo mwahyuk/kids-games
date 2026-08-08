@@ -1,4 +1,4 @@
-const CACHE_NAME = 'kiddo-games-v12';
+const CACHE_NAME = 'kiddo-games-v13';
 const ASSETS = [
   './',
   './index.html',
@@ -26,7 +26,9 @@ const ASSETS = [
   './images/balloon.jpg',
   './images/coloring.jpg',
   './images/sorting.jpg',
-  './images/maze.jpg'
+  './images/maze.jpg',
+  './images/puzzle_dino.jpg',
+  './images/puzzle_safari.jpg'
 ];
 
 // Install: pre-cache all game files

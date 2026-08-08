@@ -249,12 +249,11 @@
 
     <script>
         const puzzleList = [
-            { id: 'dino', emoji: '🦖', name: 'Dino T-Rex', bg: '#55efc4', detail: '🌋 DINO PARK 🦖' },
+            { id: 'dino', emoji: '🦖', name: 'Dino 3D', imgSrc: 'images/puzzle_dino.jpg', bg: '#55efc4', detail: '🌋 DINO PARK 3D 🦖' },
+            { id: 'safari', emoji: '🦁', name: 'Safari 3D', imgSrc: 'images/puzzle_safari.jpg', bg: '#fdcb6e', detail: '🦁 SAFARI ANIMALS 3D 🦁' },
             { id: 'cat', emoji: '🐱', name: 'Kucing', bg: '#ff7675', detail: '🐟 KUCING MANIS 🐱' },
             { id: 'dog', emoji: '🐶', name: 'Anjing', bg: '#ffeaa7', detail: '🦴 ANJING LUCU 🐶' },
-            { id: 'rabbit', emoji: '🐰', name: 'Kelinci', bg: '#74b9ff', detail: '🥕 KELINCI LOMPAT 🐰' },
-            { id: 'panda', emoji: '🐼', name: 'Panda', bg: '#a29bfe', detail: '🎋 PANDA BAMBU 🐼' },
-            { id: 'lion', emoji: '🦁', name: 'Singa', bg: '#fdcb6e', detail: '👑 RAJA SINGA 🦁' }
+            { id: 'rabbit', emoji: '🐰', name: 'Kelinci', bg: '#74b9ff', detail: '🥕 KELINCI LOMPAT 🐰' }
         ];
 
         let selectedPuzzle = puzzleList[0];
@@ -313,39 +312,47 @@
         }
 
         // Generate the FULL Artwork on sourceCanvas
-        function generateFullArtwork(width, height) {
+        function generateFullArtwork(width, height, callback) {
             sourceCanvas.width = width;
             sourceCanvas.height = height;
 
-            // Background gradient
+            if (selectedPuzzle.imgSrc) {
+                const img = new Image();
+                img.src = selectedPuzzle.imgSrc;
+                img.onload = () => {
+                    sourceCtx.drawImage(img, 0, 0, width, height);
+                    if (callback) callback();
+                };
+                img.onerror = () => {
+                    renderFallbackArtwork(width, height);
+                    if (callback) callback();
+                };
+            } else {
+                renderFallbackArtwork(width, height);
+                if (callback) callback();
+            }
+        }
+
+        function renderFallbackArtwork(width, height) {
             const grad = sourceCtx.createLinearGradient(0, 0, width, height);
             grad.addColorStop(0, selectedPuzzle.bg);
             grad.addColorStop(1, '#ffffff');
             sourceCtx.fillStyle = grad;
             sourceCtx.fillRect(0, 0, width, height);
 
-            // Sun & clouds background decor
             sourceCtx.fillStyle = '#ffeaa7';
             sourceCtx.beginPath();
             sourceCtx.arc(width * 0.85, height * 0.15, width * 0.1, 0, Math.PI * 2);
             sourceCtx.fill();
 
-            // Big Center Emoji Illustration
             sourceCtx.font = `${width * 0.45}px Arial`;
             sourceCtx.textAlign = 'center';
             sourceCtx.textBaseline = 'middle';
             sourceCtx.fillText(selectedPuzzle.emoji, width / 2, height / 2 - 20);
 
-            // Title Text Banner at bottom
             sourceCtx.fillStyle = '#2d3436';
             sourceCtx.font = `bold ${width * 0.065}px Bubblegum Sans, Arial`;
             sourceCtx.fillText(selectedPuzzle.detail, width / 2, height * 0.85);
-
-            // Decorative Corner Stars
-            sourceCtx.font = `${width * 0.09}px Arial`;
-            sourceCtx.fillText('⭐', width * 0.12, height * 0.15);
-            sourceCtx.fillText('🌟', width * 0.88, height * 0.82);
-            sourceCtx.fillText('🎈', width * 0.15, height * 0.82);
         }
 
         function initCanvas() {
@@ -353,9 +360,6 @@
             const rect = container.getBoundingClientRect();
             canvas.width = rect.width * 2;
             canvas.height = rect.height * 2;
-
-            // Generate Full Image Artwork
-            generateFullArtwork(canvas.width, canvas.height);
 
             const pw = canvas.width / gridSize;
             const ph = canvas.height / gridSize;
@@ -366,7 +370,6 @@
                     const targetX = c * pw;
                     const targetY = r * ph;
 
-                    // Random initial scatter position (avoiding exact target)
                     let randomX = Math.random() * (canvas.width - pw);
                     let randomY = Math.random() * (canvas.height - ph);
 
@@ -383,7 +386,10 @@
                 }
             }
 
-            render();
+            // Generate Full Image Artwork and render when ready
+            generateFullArtwork(canvas.width, canvas.height, () => {
+                render();
+            });
         }
 
         function render() {
