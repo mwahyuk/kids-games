@@ -329,25 +329,30 @@
             const count = 6;
             const list = modeData[currentMode];
 
-            let targetBalloonAdded = false;
-
             for (let i = 0; i < count; i++) {
-                let item = list[Math.floor(Math.random() * list.length)];
-                if (i === 0 || (!targetBalloonAdded && i === count - 1)) {
-                    item = currentTarget;
-                    targetBalloonAdded = true;
-                }
+                // Ensure at least 2 balloons match currentTarget
+                let item = (i === 0 || i === 1) ? currentTarget : list[Math.floor(Math.random() * list.length)];
 
                 balloons.push({
-                    x: Math.random() * (canvas.width - 120) + 60,
-                    y: canvas.height + Math.random() * 300 + 50,
-                    r: Math.random() * 12 + 38,
-                    speed: Math.random() * 0.6 + 0.7,
+                    x: Math.random() * (canvas.width - 140) + 70,
+                    y: canvas.height + Math.random() * 250 + 50,
+                    r: Math.random() * 10 + 40,
+                    speed: Math.random() * 0.5 + 0.7,
                     color: colors[Math.floor(Math.random() * colors.length)],
                     item: item,
                     sway: Math.random() * Math.PI * 2,
-                    swaySpeed: Math.random() * 0.03 + 0.01
+                    swaySpeed: Math.random() * 0.03 + 0.01,
+                    shakeTimer: 0
                 });
+            }
+        }
+
+        function ensureTargetOnScreen() {
+            let targetCount = balloons.filter(b => b.item.val === currentTarget.val && b.y > -b.r).length;
+            if (targetCount === 0 && balloons.length > 0) {
+                // Force at least 2 balloons to be the target
+                balloons[0].item = currentTarget;
+                balloons[1].item = currentTarget;
             }
         }
 
@@ -367,28 +372,31 @@
         function loop() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            let targetOnScreen = false;
+            ensureTargetOnScreen();
 
-            balloons.forEach((b, index) => {
+            balloons.forEach((b) => {
                 b.y -= b.speed;
                 b.sway += b.swaySpeed;
-                b.x += Math.sin(b.sway) * 0.8;
 
-                if (b.item.val === currentTarget.val && b.y > -b.r * 2) {
-                    targetOnScreen = true;
+                let drawX = b.x + Math.sin(b.sway) * 0.8;
+
+                // Handle Wrong Tap Shake Animation
+                if (b.shakeTimer > 0) {
+                    b.shakeTimer--;
+                    drawX += Math.sin(b.shakeTimer * 0.9) * 10;
                 }
 
                 if (b.y < -b.r * 2) {
                     b.y = canvas.height + 50;
-                    b.x = Math.random() * (canvas.width - 120) + 60;
+                    b.x = Math.random() * (canvas.width - 140) + 70;
                 }
 
                 // Render 3D Glossy Balloon
                 ctx.save();
                 ctx.beginPath();
-                ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+                ctx.arc(drawX, b.y, b.r, 0, Math.PI * 2);
                 
-                let grad = ctx.createRadialGradient(b.x - b.r * 0.3, b.y - b.r * 0.3, b.r * 0.1, b.x, b.y, b.r);
+                let grad = ctx.createRadialGradient(drawX - b.r * 0.3, b.y - b.r * 0.3, b.r * 0.1, drawX, b.y, b.r);
                 grad.addColorStop(0, '#ffffff');
                 grad.addColorStop(0.3, b.color);
                 grad.addColorStop(1, '#2d3436');
@@ -401,14 +409,14 @@
 
                 // Balloon Shine Highlight
                 ctx.beginPath();
-                ctx.ellipse(b.x - b.r * 0.35, b.y - b.r * 0.35, b.r * 0.25, b.r * 0.15, -Math.PI / 4, 0, Math.PI * 2);
+                ctx.ellipse(drawX - b.r * 0.35, b.y - b.r * 0.35, b.r * 0.25, b.r * 0.15, -Math.PI / 4, 0, Math.PI * 2);
                 ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
                 ctx.fill();
 
                 // Balloon String
                 ctx.beginPath();
-                ctx.moveTo(b.x, b.y + b.r);
-                ctx.quadraticCurveTo(b.x + Math.sin(b.sway) * 10, b.y + b.r + 20, b.x, b.y + b.r + 35);
+                ctx.moveTo(drawX, b.y + b.r);
+                ctx.quadraticCurveTo(drawX + Math.sin(b.sway) * 10, b.y + b.r + 20, drawX, b.y + b.r + 35);
                 ctx.strokeStyle = 'rgba(255,255,255,0.8)';
                 ctx.lineWidth = 2;
                 ctx.stroke();
@@ -418,15 +426,9 @@
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
                 ctx.fillStyle = '#2d3436';
-                ctx.fillText(b.item.val, b.x, b.y);
+                ctx.fillText(b.item.val, drawX, b.y);
                 ctx.restore();
             });
-
-            if (!targetOnScreen) {
-                if (balloons.length > 0) {
-                    balloons[0].item = currentTarget;
-                }
-            }
 
             renderConfetti();
             animId = requestAnimationFrame(loop);
@@ -450,17 +452,20 @@
                 
                 if (dist < b.r + 15) {
                     if (b.item.val === currentTarget.val) {
+                        // CORRECT BALLOON TAPPED -> POP & NEW INSTRUCTION!
                         playAudioTone(1200, 0.2);
                         spawnConfettiAt(b.x, b.y);
                         score += 10;
                         document.getElementById('score-val').innerText = score;
                         setNewTargetInstruction();
+                        
+                        b.y = canvas.height + 100;
+                        b.x = Math.random() * (canvas.width - 140) + 70;
                     } else {
-                        playAudioTone(300, 0.15);
+                        // WRONG BALLOON TAPPED -> SHAKE/WOBBLE ONLY, DO NOT POP!
+                        playAudioTone(250, 0.15);
+                        b.shakeTimer = 18;
                     }
-
-                    b.y = canvas.height + 100;
-                    b.x = Math.random() * (canvas.width - 120) + 60;
                     break;
                 }
             }
