@@ -90,13 +90,13 @@
         }
 
         .play-sound-btn {
-            width: clamp(120px, 25vw, 160px);
-            height: clamp(120px, 25vw, 160px);
+            width: clamp(130px, 25vw, 170px);
+            height: clamp(130px, 25vw, 170px);
             border-radius: 50%;
-            background: #e84393;
+            background: linear-gradient(135deg, #e84393, #d63031);
             border: 6px solid white;
             color: white;
-            font-size: clamp(50px, 10vw, 75px);
+            font-size: clamp(55px, 11vw, 85px);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -104,6 +104,7 @@
             box-shadow: 0 10px 25px rgba(232, 67, 147, 0.4);
             transition: transform 0.15s;
             margin: 20px 0;
+            animation: pulse 1.5s infinite alternate;
         }
 
         .play-sound-btn:active {
@@ -114,24 +115,33 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: clamp(12px, 3vw, 22px);
-            max-width: 650px;
+            gap: clamp(14px, 3.5vw, 24px);
+            max-width: 680px;
             width: 100%;
         }
 
         .option-card {
-            width: clamp(90px, 20vw, 130px);
-            height: clamp(90px, 20vw, 130px);
+            width: clamp(95px, 20vw, 135px);
+            height: clamp(95px, 20vw, 135px);
             background: white;
             border: 4px solid #fd79a8;
             border-radius: 28px;
-            font-size: clamp(45px, 9vw, 65px);
+            font-size: clamp(48px, 9.5vw, 70px);
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             box-shadow: 0 8px 18px rgba(0,0,0,0.1);
             transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            padding: 5px;
+        }
+
+        .option-card span {
+            font-size: clamp(13px, 2.3vw, 16px);
+            font-weight: bold;
+            color: #2d3436;
+            margin-top: 2px;
         }
 
         .option-card:hover {
@@ -171,6 +181,11 @@
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-15px); }
         }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.08); }
+        }
     </style>
 </head>
 <body>
@@ -181,21 +196,22 @@
         <!-- 1. Start Screen -->
         <div id="start-screen" class="screen active">
             <h1>Siapa Suaranya? 🔊</h1>
-            <p style="font-size: clamp(20px, 4vw, 28px); color: #2d3436; margin-bottom: 20px;">Dengarkan suara lalu tebak hewan yang mana!</p>
+            <p style="font-size: clamp(20px, 4vw, 28px); color: #2d3436; margin-bottom: 20px;">Dengarkan sampel suara asli hewan lalu tebak hewannya!</p>
             <button class="btn" style="background: #e84393; color: white; border-color: #d63031;" onclick="startGame()">Mulai Tebak! 🔊</button>
         </div>
 
         <!-- 2. Game Screen -->
         <div id="game-screen" class="screen">
-            <h2 style="font-size: clamp(24px, 4.5vw, 36px); color: #d63031; margin-top: max(10px, env(safe-area-inset-top));">Tekan Tombol & Tebak Suaranya!</h2>
-            <div class="play-sound-btn" onclick="playSoundPrompt()">🔊</div>
+            <h2 style="font-size: clamp(24px, 4.5vw, 36px); color: #d63031; margin-top: max(10px, env(safe-area-inset-top));">Tekan Tombol & Dengarkan Suara Aslinya!</h2>
+            <div class="play-sound-btn" onclick="playSoundPrompt()" title="Putar Suara">🔊</div>
             <div class="options-grid" id="options-grid"></div>
         </div>
 
         <!-- 3. Celebration Screen -->
         <div id="celeb-screen" class="screen">
             <h1 style="color: #00b894;">Pintar sekali! 🎉</h1>
-            <div style="font-size: 80px; margin: 15px 0;" id="celeb-emoji">🐮</div>
+            <div style="font-size: 90px; margin: 15px 0;" id="celeb-emoji">🐮</div>
+            <h2 id="celeb-name" style="color: #2d3436; margin-bottom: 20px;">Sapi</h2>
             <button class="btn" style="background: #00b894; color: white; border-color: #00876c;" onclick="nextQuestion()">Suara Berikutnya!</button>
         </div>
     </div>
@@ -203,19 +219,53 @@
     <canvas id="confetti-canvas"></canvas>
 
     <script>
+        // Real Animal Sound Sample URLs (Wikimedia Commons open audio files)
         const animals = [
-            { id: 'cow', name: 'Sapi', emoji: '🐮', freq: 150, type: 'sawtooth' },
-            { id: 'cat', name: 'Kucing', emoji: '🐱', freq: 600, type: 'sine' },
-            { id: 'dog', name: 'Anjing', emoji: '🐶', freq: 300, type: 'square' },
-            { id: 'duck', name: 'Bebek', emoji: '🦆', freq: 400, type: 'sawtooth' },
-            { id: 'frog', name: 'Katak', emoji: '🐸', freq: 200, type: 'triangle' },
-            { id: 'bird', name: 'Burung', emoji: '🐦', freq: 900, type: 'sine' },
-            { id: 'dino', name: 'Dino', emoji: '🦖', freq: 120, type: 'sawtooth' },
-            { id: 'lion', name: 'Singa', emoji: '🦁', freq: 100, type: 'square' }
+            { 
+                id: 'cow', name: 'Sapi', emoji: '🐮', 
+                soundUrl: 'https://upload.wikimedia.org/wikipedia/commons/e/e0/Cow_moo.ogg',
+                speech: 'Moo! Sapi!'
+            },
+            { 
+                id: 'cat', name: 'Kucing', emoji: '🐱', 
+                soundUrl: 'https://upload.wikimedia.org/wikipedia/commons/3/3a/Cat_meow.ogg',
+                speech: 'Meow! Kucing!'
+            },
+            { 
+                id: 'dog', name: 'Anjing', emoji: '🐶', 
+                soundUrl: 'https://upload.wikimedia.org/wikipedia/commons/0/05/Dog_barking.ogg',
+                speech: 'Woof woof! Anjing!'
+            },
+            { 
+                id: 'duck', name: 'Bebek', emoji: '🦆', 
+                soundUrl: 'https://upload.wikimedia.org/wikipedia/commons/8/87/Mallard_duck_quack.ogg',
+                speech: 'Kwek kwek! Bebek!'
+            },
+            { 
+                id: 'rooster', name: 'Ayam', emoji: '🐓', 
+                soundUrl: 'https://upload.wikimedia.org/wikipedia/commons/5/52/Rooster_crowing.ogg',
+                speech: 'Kukuruyuk! Ayam!'
+            },
+            { 
+                id: 'sheep', name: 'Domba', emoji: '🐑', 
+                soundUrl: 'https://upload.wikimedia.org/wikipedia/commons/a/a5/Sheep_bleat.ogg',
+                speech: 'Mbee! Domba!'
+            },
+            { 
+                id: 'lion', name: 'Singa', emoji: '🦁', 
+                soundUrl: 'https://upload.wikimedia.org/wikipedia/commons/4/4b/Lion_roar.ogg',
+                speech: 'Roar! Singa!'
+            },
+            { 
+                id: 'bird', name: 'Burung', emoji: '🐦', 
+                soundUrl: 'https://upload.wikimedia.org/wikipedia/commons/9/9b/Bird_chirping.ogg',
+                speech: 'Cip cip! Burung!'
+            }
         ];
 
         let currentTarget = null;
         let options = [];
+        let currentAudio = null;
 
         function showScreen(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -242,21 +292,27 @@
         }
 
         function playSoundPrompt() {
-            try {
-                const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.connect(gain); gain.connect(ctx.destination);
-                
-                osc.type = currentTarget.type;
-                osc.frequency.setValueAtTime(currentTarget.freq, ctx.currentTime);
-                osc.frequency.linearRampToValueAtTime(currentTarget.freq * 1.2, ctx.currentTime + 0.3);
-                
-                gain.gain.setValueAtTime(0.3, ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.6);
-                
-                osc.start(); osc.stop(ctx.currentTime + 0.6);
-            } catch(e) {}
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio.currentTime = 0;
+            }
+
+            // Try playing REAL ANIMAL AUDIO SAMPLE
+            currentAudio = new Audio(currentTarget.soundUrl);
+            currentAudio.play().catch(() => {
+                // Fallback to SpeechSynthesis voice if offline or network blocked
+                speakFallback(currentTarget.speech);
+            });
+        }
+
+        function speakFallback(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utter = new SpeechSynthesisUtterance(text);
+                utter.lang = 'id-ID';
+                utter.rate = 0.9;
+                window.speechSynthesis.speak(utter);
+            }
         }
 
         function renderOptions() {
@@ -265,7 +321,7 @@
             options.forEach(opt => {
                 const card = document.createElement('div');
                 card.className = 'option-card';
-                card.innerText = opt.emoji;
+                card.innerHTML = `${opt.emoji}<span>${opt.name}</span>`;
                 card.onclick = () => checkAnswer(opt);
                 grid.appendChild(card);
             });
@@ -274,6 +330,7 @@
         function checkAnswer(opt) {
             if (opt.id === currentTarget.id) {
                 document.getElementById('celeb-emoji').innerText = currentTarget.emoji;
+                document.getElementById('celeb-name').innerText = currentTarget.name;
                 showScreen('celeb-screen');
             } else {
                 playSoundPrompt();
