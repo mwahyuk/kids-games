@@ -30,11 +30,12 @@
             min-height: -webkit-fill-available;
             display: flex;
             flex-direction: column;
+            align-items: center;
             overflow: hidden;
-            touch-action: none; /* Prevent scroll while dragging */
+            touch-action: none;
         }
 
-        /* Standardized PWA Accessible Home Button */
+        /* PWA Accessible Home Button */
         #back-btn {
             position: fixed;
             top: max(15px, env(safe-area-inset-top));
@@ -100,11 +101,10 @@
             padding: 15px;
             position: relative;
             width: 100%;
-            max-width: 1200px;
+            max-width: 1100px;
             margin: 0 auto;
         }
 
-        /* Landscape optimization for Tablet & Desktop */
         @media (orientation: landscape) and (min-height: 400px) {
             #game-area {
                 flex-direction: row;
@@ -113,11 +113,9 @@
             }
             #targets {
                 align-items: center !important;
-                padding-bottom: 0 !important;
             }
             #draggables {
                 align-items: center !important;
-                padding-top: 0 !important;
             }
         }
 
@@ -126,22 +124,14 @@
             justify-content: center;
             align-items: center;
             flex-wrap: wrap;
-            gap: clamp(10px, 3vw, 25px);
+            gap: clamp(12px, 3.5vw, 28px);
             width: 100%;
-            max-width: 650px;
-        }
-
-        #targets {
-            align-items: flex-end;
-        }
-
-        #draggables {
-            align-items: flex-start;
+            max-width: 700px;
         }
 
         .shape-container {
-            width: clamp(75px, 12vw, 110px);
-            height: clamp(75px, 12vw, 110px);
+            width: clamp(75px, 12vw, 115px);
+            height: clamp(75px, 12vw, 115px);
             position: relative;
             display: flex;
             justify-content: center;
@@ -152,25 +142,26 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0,0,0,0.08);
-            border: 4px dashed rgba(255,255,255,0.8);
-            border-radius: 20px;
+            border: 4px dashed rgba(255,255,255,0.85);
+            border-radius: 22px;
             display: flex;
             justify-content: center;
             align-items: center;
-            transition: all 0.2s;
+            transition: transform 0.2s, background-color 0.2s, border-color 0.2s;
             position: relative;
             overflow: hidden;
         }
         .target-slot.highlight {
-            background-color: rgba(255,255,255,0.5);
-            transform: scale(1.08);
+            background-color: rgba(255,255,255,0.6);
+            transform: scale(1.12);
             border-color: #ff6b6b;
+            box-shadow: 0 0 15px rgba(255, 107, 107, 0.4);
         }
         
         .target-shape {
-            width: 80%;
-            height: 80%;
-            background-color: rgba(0,0,0,0.12);
+            width: 75%;
+            height: 75%;
+            background-color: rgba(0,0,0,0.15);
         }
 
         .draggable {
@@ -189,8 +180,8 @@
         .dragging {
             z-index: 1000 !important;
             transition: none !important;
-            filter: drop-shadow(0px 12px 18px rgba(0,0,0,0.35)) scale(1.15);
-            pointer-events: none; /* Allows elementsFromPoint to hit target below */
+            filter: drop-shadow(0px 14px 22px rgba(0,0,0,0.35)) scale(1.15);
+            pointer-events: none; /* Allows underlying target detection */
         }
         
         .shape-circle { border-radius: 50%; }
@@ -221,10 +212,8 @@
 
         #confetti-canvas {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
             pointer-events: none;
             z-index: 9000;
         }
@@ -303,7 +292,7 @@
     </div>
 
     <script>
-        // Sound System
+        // Audio System
         function playSound(type) {
             try {
                 const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -408,7 +397,7 @@
                 p.tiltAngle += p.tiltAngleInc;
                 p.y += (Math.cos(p.tiltAngle) + 1 + p.r / 2) / 2;
                 p.x += Math.sin(p.tiltAngle) * 2;
-                p.dy += 0.2; // gravity
+                p.dy += 0.2;
                 p.y += p.dy;
                 p.x += p.dx;
                 
@@ -464,7 +453,6 @@
             draggablesDiv.innerHTML = '';
             tutorialArrow.style.display = 'none';
             
-            // Update Stars
             for(let i=1; i<=4; i++) {
                 document.getElementById(`star-${i}`).classList.remove('active');
             }
@@ -474,7 +462,6 @@
 
             const shapeCount = LEVEL_COUNTS[currentLevel - 1];
             
-            // Pick random shapes and colors
             let shapesPool = shuffle([...ALL_SHAPES]);
             let colorsPool = shuffle([...ALL_COLORS]);
             
@@ -515,7 +502,6 @@
                 drag.dataset.type = shape.type;
                 drag.style.backgroundColor = shape.color;
                 
-                // Event Listeners
                 drag.addEventListener('mousedown', startDrag);
                 drag.addEventListener('touchstart', startDrag, {passive: false});
                 
@@ -564,7 +550,6 @@
             offset.x = clientX - rect.left;
             offset.y = clientY - rect.top;
 
-            // Float above everything
             document.body.appendChild(draggingElement);
             draggingElement.style.position = 'fixed';
             
@@ -585,10 +570,10 @@
             
             moveElement(clientX, clientY);
             
-            // Highlight target
+            // Highlight matching target if within drop threshold
             document.querySelectorAll('.target-slot').forEach(slot => slot.classList.remove('highlight'));
-            const target = getDropTarget(clientX, clientY);
-            if (target && target.dataset.type === draggingElement.dataset.type && !target.dataset.matched) {
+            const target = findBestMatchingTarget(draggingElement);
+            if (target) {
                 target.classList.add('highlight');
             }
         }
@@ -601,15 +586,11 @@
         function stopDrag(e) {
             if (!draggingElement) return;
             
-            const clientX = e.type === 'touchend' ? e.changedTouches[0].clientX : e.clientX;
-            const clientY = e.type === 'touchend' ? e.changedTouches[0].clientY : e.clientY;
-            
-            const target = getDropTarget(clientX, clientY);
+            const target = findBestMatchingTarget(draggingElement);
             document.querySelectorAll('.target-slot').forEach(slot => slot.classList.remove('highlight'));
             
-            // FIXED BUG: Check !target.dataset.matched instead of !hasChildNodes()
-            if (target && target.dataset.type === draggingElement.dataset.type && !target.dataset.matched) {
-                // Correct Match
+            if (target) {
+                // Correct Match!
                 playSound('ding');
                 target.dataset.matched = 'true';
                 
@@ -618,7 +599,7 @@
                 draggingElement.style.top = '0';
                 draggingElement.style.position = 'relative';
                 
-                // Clear the dummy inner shape & insert placed shape
+                // Replace ghost shape with real color shape
                 target.innerHTML = '';
                 target.appendChild(draggingElement);
                 
@@ -631,7 +612,7 @@
                 
                 checkLevelComplete();
             } else {
-                // Wrong Match
+                // Wrong Match or Dropped far away -> Return to original box
                 playSound('wrong');
                 draggingElement.classList.remove('dragging');
                 draggingElement.classList.add('anim-bounce');
@@ -655,14 +636,36 @@
             document.removeEventListener('touchend', stopDrag);
         }
 
-        function getDropTarget(x, y) {
-            const elements = document.elementsFromPoint(x, y);
-            for (let el of elements) {
-                if (el.classList.contains('target-slot')) {
-                    return el;
+        // ACCURATE FORGIVING DISTANCE & BOUNDING-BOX COLLISION MATCHING FOR KIDS
+        function findBestMatchingTarget(dragEl) {
+            const dragRect = dragEl.getBoundingClientRect();
+            const dragCenter = {
+                x: dragRect.left + dragRect.width / 2,
+                y: dragRect.top + dragRect.height / 2
+            };
+            
+            let bestTarget = null;
+            let minDistance = Infinity;
+            // Forgiving distance threshold (approx 90px around slot)
+            const threshold = Math.max(dragRect.width, dragRect.height) * 1.1;
+
+            document.querySelectorAll('.target-slot').forEach(slot => {
+                if (slot.dataset.matched) return;
+                if (slot.dataset.type !== dragEl.dataset.type) return;
+
+                const slotRect = slot.getBoundingClientRect();
+                const slotCenter = {
+                    x: slotRect.left + slotRect.width / 2,
+                    y: slotRect.top + slotRect.height / 2
+                };
+                const dist = Math.hypot(dragCenter.x - slotCenter.x, dragCenter.y - slotCenter.y);
+                if (dist < threshold && dist < minDistance) {
+                    minDistance = dist;
+                    bestTarget = slot;
                 }
-            }
-            return null;
+            });
+
+            return bestTarget;
         }
 
         function checkLevelComplete() {
@@ -673,7 +676,7 @@
                 const overlay = document.getElementById('celebration-overlay');
                 setTimeout(() => {
                     overlay.classList.add('show');
-                }, 500);
+                }, 400);
                 
                 setTimeout(() => {
                     overlay.classList.remove('show');
@@ -682,7 +685,7 @@
                         currentLevel = 1;
                     }
                     loadLevel();
-                }, 3000);
+                }, 2800);
             }
         }
 

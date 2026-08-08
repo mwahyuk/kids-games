@@ -88,6 +88,7 @@
             height: 100%;
             padding: 20px;
             text-align: center;
+            overflow-y: auto;
         }
 
         .screen.active {
@@ -95,26 +96,73 @@
         }
 
         h1 {
-            font-size: clamp(36px, 8vw, 60px);
-            margin: 0 0 25px 0;
+            font-size: clamp(32px, 6vw, 56px);
+            margin: 0 0 15px 0;
             color: #ff4081;
             text-shadow: 3px 3px 0px white, -3px -3px 0px white, 3px -3px 0px white, -3px 3px 0px white;
             animation: bounce 2s infinite ease-in-out;
+        }
+
+        h2 {
+            font-size: clamp(24px, 4vw, 36px);
+            color: #5c6bc0;
+            margin: 10px 0 15px;
+            text-shadow: 1px 1px 0 #fff;
+        }
+
+        /* Selection Card Grid */
+        .picker-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: clamp(10px, 2.5vw, 18px);
+            max-width: 650px;
+            margin-bottom: 20px;
+        }
+
+        .picker-card {
+            width: clamp(70px, 15vw, 100px);
+            height: clamp(70px, 15vw, 100px);
+            background: white;
+            border: 4px solid #b388ff;
+            border-radius: 24px;
+            font-size: clamp(40px, 8vw, 60px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .picker-card:hover {
+            transform: scale(1.1);
+        }
+
+        .picker-card.selected {
+            background: #ffe082;
+            border-color: #ff4081;
+            transform: scale(1.15);
+            box-shadow: 0 0 20px rgba(255, 64, 129, 0.4);
+        }
+
+        .picker-card:active {
+            transform: scale(0.95);
         }
 
         .btn {
             background: white;
             border: 4px solid var(--secondary);
             border-radius: 25px;
-            padding: 14px 30px;
-            font-size: clamp(24px, 5vw, 34px);
+            padding: 12px 28px;
+            font-size: clamp(22px, 4vw, 32px);
             font-family: inherit;
             color: var(--text);
             cursor: pointer;
-            margin: 10px;
-            box-shadow: 0 8px 0 var(--secondary);
+            margin: 8px;
+            box-shadow: 0 6px 0 var(--secondary);
             transition: transform 0.1s, box-shadow 0.1s;
-            width: clamp(240px, 70vw, 320px);
+            width: clamp(220px, 60vw, 300px);
         }
 
         .btn:active {
@@ -123,18 +171,20 @@
         }
 
         .btn.btn-primary {
-            border-color: var(--primary);
-            box-shadow: 0 8px 0 var(--primary);
+            background: #ff80ab;
+            color: white;
+            border-color: #ff4081;
+            box-shadow: 0 6px 0 #c60055;
         }
         .btn.btn-primary:active {
-            box-shadow: 0 0 0 var(--primary);
+            box-shadow: 0 0 0 #c60055;
         }
 
         #game-container {
             position: relative;
-            width: clamp(280px, 80vmin, 620px);
-            height: clamp(280px, 80vmin, 620px);
-            background: rgba(255, 255, 255, 0.65);
+            width: clamp(280px, 78vmin, 620px);
+            height: clamp(280px, 78vmin, 620px);
+            background: rgba(255, 255, 255, 0.7);
             border-radius: 24px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.12);
             padding: 10px;
@@ -209,15 +259,25 @@
     <a href="index.html" class="back-btn" onclick="window.location.href='index.html'; return true;">🏠</a>
 
     <div id="screens">
-        <!-- Start Screen -->
+        <!-- 1. Character & Goal Selection Screen -->
         <div id="start-screen" class="screen active">
             <h1>Bantu Temannya! 🌟</h1>
-            <button class="btn" onclick="startGame(5)">⭐ Mudah</button>
-            <button class="btn" onclick="startGame(7)">⭐⭐ Sedang</button>
-            <button class="btn" onclick="startGame(9)">⭐⭐⭐ Sulit</button>
+            
+            <h2>1. Pilih Karakter:</h2>
+            <div class="picker-grid" id="char-grid"></div>
+
+            <h2>2. Pilih Hadiah Target:</h2>
+            <div class="picker-grid" id="goal-grid"></div>
+
+            <h2>3. Pilih Tingkat Kesulitan:</h2>
+            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;">
+                <button class="btn" onclick="startGame(5)">⭐ Mudah</button>
+                <button class="btn" onclick="startGame(7)">⭐⭐ Sedang</button>
+                <button class="btn" onclick="startGame(9)">⭐⭐⭐ Sulit</button>
+            </div>
         </div>
 
-        <!-- Game Screen -->
+        <!-- 2. Game Screen -->
         <div id="game-screen" class="screen">
             <div id="game-container">
                 <canvas id="game-canvas"></canvas>
@@ -225,18 +285,77 @@
             </div>
         </div>
 
-        <!-- Celebration Screen -->
+        <!-- 3. Celebration Screen -->
         <div id="celeb-screen" class="screen">
             <div class="celeb-text">Horeee! 🎉</div>
             <div class="emoji-showcase" id="celeb-emoji">🐱❤️⭐</div>
             <button class="btn btn-primary" onclick="nextLevel()">Main Lagi!</button>
-            <button class="btn" onclick="showScreen('start-screen')">Pilih Tingkat</button>
+            <button class="btn" onclick="showScreen('start-screen')">Ganti Karakter</button>
         </div>
     </div>
 
     <canvas id="confetti-canvas"></canvas>
 
     <script>
+        const chars = [
+            { id: 'cat', emoji: '🐱', name: 'Kucing' },
+            { id: 'dog', emoji: '🐶', name: 'Anjing' },
+            { id: 'rabbit', emoji: '🐰', name: 'Kelinci' },
+            { id: 'frog', emoji: '🐸', name: 'Katak' },
+            { id: 'panda', emoji: '🐼', name: 'Panda' },
+            { id: 'bear', emoji: '🐻', name: 'Beruang' },
+            { id: 'fox', emoji: '🦊', name: 'Rubah' },
+            { id: 'unicorn', emoji: '🦄', name: 'Unicorn' }
+        ];
+
+        const goals = [
+            { id: 'star', emoji: '⭐', name: 'Bintang' },
+            { id: 'apple', emoji: '🍎', name: 'Apel' },
+            { id: 'cookie', emoji: '🍪', name: 'Biskuit' },
+            { id: 'gift', emoji: '🎁', name: 'Kado' },
+            { id: 'trophy', emoji: '🏆', name: 'Piala' },
+            { id: 'gem', emoji: '💎', name: 'Permata' },
+            { id: 'cheese', emoji: '🧀', name: 'Keju' },
+            { id: 'carrot', emoji: '🥕', name: 'Wortel' }
+        ];
+
+        let selectedChar = chars[0].emoji;
+        let selectedGoal = goals[0].emoji;
+
+        // Render Character and Goal Selection Cards
+        function renderPickers() {
+            const charGrid = document.getElementById('char-grid');
+            const goalGrid = document.getElementById('goal-grid');
+            charGrid.innerHTML = '';
+            goalGrid.innerHTML = '';
+
+            chars.forEach((c, idx) => {
+                const card = document.createElement('div');
+                card.className = `picker-card ${c.emoji === selectedChar ? 'selected' : ''}`;
+                card.innerText = c.emoji;
+                card.title = c.name;
+                card.onclick = () => {
+                    AudioSys.playOsc('sine', 600, 0.1);
+                    selectedChar = c.emoji;
+                    renderPickers();
+                };
+                charGrid.appendChild(card);
+            });
+
+            goals.forEach((g, idx) => {
+                const card = document.createElement('div');
+                card.className = `picker-card ${g.emoji === selectedGoal ? 'selected' : ''}`;
+                card.innerText = g.emoji;
+                card.title = g.name;
+                card.onclick = () => {
+                    AudioSys.playOsc('sine', 800, 0.1);
+                    selectedGoal = g.emoji;
+                    renderPickers();
+                };
+                goalGrid.appendChild(card);
+            });
+        }
+
         // Audio System
         const AudioSys = {
             ctx: null,
@@ -351,15 +470,13 @@
         // Game State & Logic
         const canvas = document.getElementById('game-canvas');
         const ctx = canvas.getContext('2d');
-        const chars = ['🐱', '🐶', '🐰', '🐸', '🐼', '🐻'];
-        const goals = ['⭐', '🍎', '🍪', '🎁', '🏆', '💎'];
         
         let gridSize = 5;
         let cellSize = 0;
         let cells = [];
         let player = { x: 0, y: 0, animX: 0, animY: 0 };
-        let charEmoji = '';
-        let goalEmoji = '';
+        let charEmoji = selectedChar;
+        let goalEmoji = selectedGoal;
         let isAnimating = false;
         let trail = [];
         let hintPath = [];
@@ -375,8 +492,8 @@
         function startGame(size) {
             AudioSys.init();
             gridSize = size;
-            charEmoji = chars[Math.floor(Math.random() * chars.length)];
-            goalEmoji = goals[Math.floor(Math.random() * goals.length)];
+            charEmoji = selectedChar;
+            goalEmoji = selectedGoal;
             showScreen('game-screen');
             initMaze();
         }
@@ -713,6 +830,9 @@
                 cellSize = canvas.width / gridSize;
             }
         });
+
+        // Initialize Character Pickers
+        renderPickers();
 
     </script>
 </body>
