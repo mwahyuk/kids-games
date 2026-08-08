@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#667eea">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <link rel="manifest" href="manifest.json">
+    <title>Susun Urutannya! 📊</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap');
+
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Bubblegum Sans', 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            color: #333;
+        }
+
+        #home-btn {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            font-size: 40px;
+            text-decoration: none;
+            z-index: 9999;
+            background: white;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+            cursor: pointer;
+        }
+
+        #home-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .screen {
+            display: none;
+            flex: 1;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 20px;
+            z-index: 10;
+        }
+
+        .screen.active {
+            display: flex;
+        }
+
+        h1 {
+            font-size: 50px;
+            color: white;
+            text-shadow: 3px 3px 0 #0056b3, -1px -1px 0 #0056b3, 1px -1px 0 #0056b3, -1px 1px 0 #0056b3, 1px 1px 0 #0056b3;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .mode-btn {
+            background: white;
+            border: 4px solid #ffd700;
+            border-radius: 20px;
+            padding: 20px 40px;
+            font-size: 36px;
+            font-family: inherit;
+            margin: 15px;
+            cursor: pointer;
+            box-shadow: 0 8px 0 #d4af37, 0 15px 20px rgba(0,0,0,0.2);
+            transition: all 0.1s;
+            color: #333;
+            min-width: 280px;
+        }
+
+        .mode-btn:active {
+            transform: translateY(8px);
+            box-shadow: 0 0 0 #d4af37, 0 5px 10px rgba(0,0,0,0.2);
+        }
+
+        #game-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-evenly;
+            width: 100%;
+            max-width: 800px;
+            position: relative;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            width: 100%;
+            min-height: 120px;
+        }
+
+        .draggable {
+            width: 90px;
+            height: 90px;
+            background: white;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            font-weight: bold;
+            box-shadow: 0 6px 0 #ddd, 0 10px 15px rgba(0,0,0,0.2);
+            cursor: grab;
+            position: absolute; /* Absolute for dragging */
+            z-index: 100;
+            transition: transform 0.1s;
+            border: 3px solid transparent;
+        }
+        
+        .draggable.dragging {
+            box-shadow: 0 15px 25px rgba(0,0,0,0.3);
+            z-index: 1000;
+            cursor: grabbing;
+        }
+
+        .slot {
+            width: 100px;
+            height: 100px;
+            border: 4px dashed rgba(255, 255, 255, 0.8);
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .slot::before {
+            content: attr(data-index);
+            position: absolute;
+            bottom: -35px;
+            font-size: 24px;
+            color: white;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .slot.filled {
+            border: 4px solid #00ff00;
+            background: rgba(0, 255, 0, 0.2);
+        }
+
+        .locked {
+            pointer-events: none !important;
+            box-shadow: 0 2px 0 #ddd !important;
+            transform: translate(0, 0) !important;
+            margin: 0;
+            position: static !important;
+        }
+
+        #items-source {
+            position: relative;
+            height: 120px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        .star-celebration {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: white;
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            text-align: center;
+            z-index: 2000;
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .star-celebration.show {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .star-celebration h2 {
+            font-size: 40px;
+            color: #ffaa00;
+            margin: 0 0 20px 0;
+        }
+        
+        .stars {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+
+        .pop-anim {
+            animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+
+        #round-indicator {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 28px;
+            color: white;
+            background: rgba(0,0,0,0.2);
+            padding: 10px 20px;
+            border-radius: 20px;
+        }
+
+        /* Prevent scrolling on touch */
+        html, body {
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+        }
+
+        @media (max-width: 600px) {
+            .draggable { width: 70px; height: 70px; font-size: 40px; }
+            .slot { width: 80px; height: 80px; }
+            .container { gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <a href="index.html" id="home-btn">🏠</a>
+    <canvas id="confetti-canvas"></canvas>
+
+    <div class="star-celebration" id="star-celebration">
+        <h2>Luar Biasa!</h2>
+        <div class="stars">⭐⭐⭐⭐⭐</div>
+        <button class="mode-btn" onclick="nextRoundAfterStar()">Lanjut Main!</button>
+    </div>
+
+    <!-- Home Screen -->
+    <div id="home-screen" class="screen active">
+        <h1>Susun Urutannya! 📊</h1>
+        <button class="mode-btn" onclick="startGame('number')">🔢 Angka</button>
+        <button class="mode-btn" onclick="startGame('size')">📏 Ukuran</button>
+        <button class="mode-btn" onclick="startGame('alphabet')">🔤 Alfabet</button>
+    </div>
+
+    <!-- Game Screen -->
+    <div id="game-screen" class="screen">
+        <div id="round-indicator">Ronde: <span id="round-text">1</span></div>
+        <div id="game-area">
+            <div id="items-source" class="container"></div>
+            <div id="slots-target" class="container"></div>
+        </div>
+    </div>
+
+    <script>
+        /* --- Audio System --- */
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx;
+
+        function initAudio() {
+            if (!audioCtx) audioCtx = new AudioContext();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+        }
+
+        function playSound(type) {
+            if (!audioCtx) initAudio();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            const now = audioCtx.currentTime;
+
+            if (type === 'ding') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(600, now);
+                osc.frequency.exponentialRampToValueAtTime(1200, now + 0.1);
+                gain.gain.setValueAtTime(0, now);
+                gain.gain.linearRampToValueAtTime(0.5, now + 0.05);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+                osc.start(now);
+                osc.stop(now + 0.5);
+            } else if (type === 'yeay') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(400, now);
+                osc.frequency.linearRampToValueAtTime(600, now + 0.2);
+                osc.frequency.linearRampToValueAtTime(800, now + 0.4);
+                
+                gain.gain.setValueAtTime(0, now);
+                gain.gain.linearRampToValueAtTime(0.3, now + 0.1);
+                gain.gain.linearRampToValueAtTime(0.3, now + 0.4);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.8);
+                
+                osc.start(now);
+                osc.stop(now + 0.8);
+                
+                // Arpeggio
+                setTimeout(() => playTone(600, 0.1), 100);
+                setTimeout(() => playTone(800, 0.1), 200);
+                setTimeout(() => playTone(1000, 0.3), 300);
+            } else if (type === 'pop') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(800, now);
+                osc.frequency.exponentialRampToValueAtTime(200, now + 0.1);
+                gain.gain.setValueAtTime(0.5, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+                osc.start(now);
+                osc.stop(now + 0.1);
+            }
+        }
+        
+        function playTone(freq, dur) {
+            if (!audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.frequency.value = freq;
+            gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + dur);
+            osc.start();
+            osc.stop(audioCtx.currentTime + dur);
+        }
+
+        /* --- Confetti System --- */
+        const canvas = document.getElementById('confetti-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let confettiActive = false;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function spawnConfetti() {
+            particles = [];
+            confettiActive = true;
+            const colors = ['#ff0', '#f0f', '#0ff', '#0f0', '#f00'];
+            for (let i = 0; i < 100; i++) {
+                particles.push({
+                    x: canvas.width / 2,
+                    y: canvas.height / 2,
+                    vx: (Math.random() - 0.5) * 20,
+                    vy: (Math.random() - 1) * 20 - 5,
+                    size: Math.random() * 10 + 10,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    rot: Math.random() * Math.PI * 2,
+                    rotSpeed: (Math.random() - 0.5) * 0.2
+                });
+            }
+            requestAnimationFrame(updateConfetti);
+        }
+
+        function updateConfetti() {
+            if (!confettiActive) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            let activeCount = 0;
+            
+            particles.forEach(p => {
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.5; // gravity
+                p.rot += p.rotSpeed;
+                
+                if (p.y < canvas.height) activeCount++;
+                
+                ctx.save();
+                ctx.translate(p.x, p.y);
+                ctx.rotate(p.rot);
+                ctx.fillStyle = p.color;
+                ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size);
+                ctx.restore();
+            });
+
+            if (activeCount > 0) {
+                requestAnimationFrame(updateConfetti);
+            } else {
+                confettiActive = false;
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+        }
+
+        /* --- Game Logic --- */
+        let currentMode = '';
+        let roundsCompleted = 0;
+        let itemsCount = 3;
+        let currentSequence = [];
+        let correctlyPlaced = 0;
+
+        const colors = ['#FF6B6B', '#4ECDC4', '#FFE66D', '#FF8C42', '#9D4EDD'];
+        const sizeEmojis = ['🍎', '⚽', '🚗', '⭐', '🎈'];
+
+        function showScreen(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+
+        document.body.addEventListener('click', initAudio, { once: true });
+        document.body.addEventListener('touchstart', initAudio, { once: true });
+
+        function startGame(mode) {
+            initAudio();
+            currentMode = mode;
+            roundsCompleted = 0;
+            itemsCount = 3;
+            document.getElementById('round-text').innerText = roundsCompleted + 1;
+            showScreen('game-screen');
+            startRound();
+        }
+
+        function getSequence(count) {
+            let seq = [];
+            if (currentMode === 'number') {
+                let start = Math.floor(Math.random() * 10) + 1;
+                for (let i = 0; i < count; i++) {
+                    seq.push({ val: start + i, display: start + i, color: colors[i % colors.length] });
+                }
+            } else if (currentMode === 'alphabet') {
+                let start = Math.floor(Math.random() * 21); // A to U
+                for (let i = 0; i < count; i++) {
+                    let char = String.fromCharCode(65 + start + i);
+                    seq.push({ val: i, display: char, color: colors[i % colors.length] });
+                }
+            } else if (currentMode === 'size') {
+                let emoji = sizeEmojis[Math.floor(Math.random() * sizeEmojis.length)];
+                let baseSize = 20;
+                let step = 15;
+                for (let i = 0; i < count; i++) {
+                    seq.push({ 
+                        val: i, 
+                        display: emoji, 
+                        fontSize: `${baseSize + (i * step)}px`,
+                        color: 'white' 
+                    });
+                }
+            }
+            return seq;
+        }
+
+        function shuffle(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex != 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
+        function startRound() {
+            correctlyPlaced = 0;
+            const source = document.getElementById('items-source');
+            const target = document.getElementById('slots-target');
+            source.innerHTML = '';
+            target.innerHTML = '';
+
+            // Update difficulty
+            if (roundsCompleted >= 10) itemsCount = 5;
+            else if (roundsCompleted >= 5) itemsCount = 4;
+            else itemsCount = 3;
+
+            document.getElementById('round-text').innerText = roundsCompleted + 1;
+
+            currentSequence = getSequence(itemsCount);
+            
+            // Create Slots
+            for (let i = 0; i < itemsCount; i++) {
+                let slot = document.createElement('div');
+                slot.className = 'slot';
+                slot.setAttribute('data-index', (i+1) + (i==0?'st':i==1?'nd':i==2?'rd':'th')); // 1st, 2nd, 3rd, 4th
+                if (i===0) slot.setAttribute('data-index', 'ke-1');
+                if (i===1) slot.setAttribute('data-index', 'ke-2');
+                if (i===2) slot.setAttribute('data-index', 'ke-3');
+                if (i===3) slot.setAttribute('data-index', 'ke-4');
+                if (i===4) slot.setAttribute('data-index', 'ke-5');
+                
+                slot.setAttribute('data-val', currentSequence[i].val);
+                target.appendChild(slot);
+            }
+
+            // Create Draggables
+            let shuffled = shuffle([...currentSequence]);
+            
+            let sourceWidth = Math.min(window.innerWidth - 40, 800);
+            let itemSpace = sourceWidth / itemsCount;
+
+            shuffled.forEach((item, index) => {
+                let el = document.createElement('div');
+                el.className = 'draggable';
+                el.innerHTML = item.display;
+                if (item.fontSize) el.style.fontSize = item.fontSize;
+                el.style.border = `4px solid ${item.color}`;
+                el.setAttribute('data-val', item.val);
+                
+                // Position absolutely in source
+                let leftPos = (index * itemSpace) + (itemSpace/2) - 45; // 45 is half width
+                el.style.left = leftPos + 'px';
+                el.style.top = '15px';
+                el.setAttribute('data-orig-left', leftPos);
+                el.setAttribute('data-orig-top', '15px');
+
+                setupDrag(el);
+                source.appendChild(el);
+            });
+        }
+
+        /* --- Drag and Drop Logic --- */
+        let activeEl = null;
+        let startX, startY;
+        let initialX, initialY;
+
+        function setupDrag(el) {
+            el.addEventListener('mousedown', dragStart);
+            el.addEventListener('touchstart', dragStart, {passive: false});
+        }
+
+        function dragStart(e) {
+            if (e.target.classList.contains('locked')) return;
+            e.preventDefault();
+            activeEl = e.target;
+            activeEl.classList.add('dragging');
+
+            if (e.type === 'touchstart') {
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
+            } else {
+                startX = e.clientX;
+                startY = e.clientY;
+            }
+
+            // Bring to front and relative to body for smooth drag
+            const rect = activeEl.getBoundingClientRect();
+            initialX = rect.left;
+            initialY = rect.top;
+            
+            activeEl.style.position = 'fixed';
+            activeEl.style.left = initialX + 'px';
+            activeEl.style.top = initialY + 'px';
+            activeEl.style.margin = '0';
+            document.body.appendChild(activeEl);
+
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('touchmove', drag, {passive: false});
+            document.addEventListener('mouseup', dragEnd);
+            document.addEventListener('touchend', dragEnd);
+        }
+
+        function drag(e) {
+            if (!activeEl) return;
+            e.preventDefault();
+            
+            let clientX, clientY;
+            if (e.type === 'touchmove') {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            } else {
+                clientX = e.clientX;
+                clientY = e.clientY;
+            }
+
+            let dx = clientX - startX;
+            let dy = clientY - startY;
+
+            activeEl.style.left = (initialX + dx) + 'px';
+            activeEl.style.top = (initialY + dy) + 'px';
+        }
+
+        function dragEnd(e) {
+            if (!activeEl) return;
+            
+            document.removeEventListener('mousemove', drag);
+            document.removeEventListener('touchmove', drag);
+            document.removeEventListener('mouseup', dragEnd);
+            document.removeEventListener('touchend', dragEnd);
+
+            activeEl.classList.remove('dragging');
+
+            // Check collision with slots
+            const rect = activeEl.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+
+            const slots = document.querySelectorAll('.slot:not(.filled)');
+            let matched = false;
+
+            for (let slot of slots) {
+                const sRect = slot.getBoundingClientRect();
+                const sCenterX = sRect.left + sRect.width / 2;
+                const sCenterY = sRect.top + sRect.height / 2;
+                
+                // Distance
+                const dist = Math.hypot(centerX - sCenterX, centerY - sCenterY);
+                
+                if (dist < 60) { // generous radius
+                    if (slot.getAttribute('data-val') === activeEl.getAttribute('data-val')) {
+                        // Correct!
+                        matched = true;
+                        playSound('ding');
+                        
+                        // Move to slot visually
+                        slot.appendChild(activeEl);
+                        activeEl.style.position = 'static';
+                        activeEl.style.left = 'auto';
+                        activeEl.style.top = 'auto';
+                        
+                        activeEl.classList.add('locked');
+                        activeEl.classList.add('pop-anim');
+                        slot.classList.add('filled');
+                        
+                        correctlyPlaced++;
+                        checkWin();
+                    }
+                }
+            }
+
+            if (!matched) {
+                // Return to original
+                playSound('pop'); // soft fail sound
+                const source = document.getElementById('items-source');
+                source.appendChild(activeEl);
+                activeEl.style.position = 'absolute';
+                activeEl.style.left = activeEl.getAttribute('data-orig-left') + 'px';
+                activeEl.style.top = activeEl.getAttribute('data-orig-top');
+            }
+
+            activeEl = null;
+        }
+
+        function checkWin() {
+            if (correctlyPlaced === itemsCount) {
+                playSound('yeay');
+                spawnConfetti();
+                roundsCompleted++;
+                
+                setTimeout(() => {
+                    if (roundsCompleted % 5 === 0) {
+                        document.getElementById('star-celebration').classList.add('show');
+                    } else {
+                        startRound();
+                    }
+                }, 3000);
+            }
+        }
+
+        function nextRoundAfterStar() {
+            document.getElementById('star-celebration').classList.remove('show');
+            startRound();
+        }
+    </script>
+</body>
+</html>

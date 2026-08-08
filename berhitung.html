@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Berapa Jumlahnya?</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#667eea">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <link rel="manifest" href="manifest.json">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap');
+
+        * {
+            box-sizing: border-box;
+            touch-action: manipulation;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Bubblegum Sans', 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow: hidden;
+            color: #444;
+        }
+
+        #home-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 9999;
+            text-decoration: none;
+            font-size: 40px;
+            background: white;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+
+        #home-button:active {
+            transform: scale(0.9);
+        }
+
+        #progress-bar {
+            margin-top: 20px;
+            font-size: 32px;
+            min-height: 40px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 5px;
+            padding: 0 100px; /* avoid home button */
+            z-index: 10;
+        }
+
+        h1 {
+            font-size: 48px;
+            margin: 10px 0;
+            color: #ff6b6b;
+            text-shadow: 2px 2px 0 #fff, -2px -2px 0 #fff, 2px -2px 0 #fff, -2px 2px 0 #fff;
+            text-align: center;
+            z-index: 10;
+        }
+
+        #game-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            padding: 20px;
+            z-index: 10;
+        }
+
+        #question-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            min-height: 200px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 30px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            margin-bottom: 40px;
+            max-width: 90%;
+            gap: 15px;
+        }
+
+        .object {
+            font-size: 64px;
+            animation: bounceIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+        }
+
+        .operator {
+            font-size: 64px;
+            color: #4a69bd;
+            font-weight: bold;
+            margin: 0 20px;
+            animation: bounceIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+        }
+
+        .object-group {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        #choices-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .choice-btn {
+            background: #fff;
+            border: none;
+            border-radius: 25px;
+            min-width: 120px;
+            min-height: 120px;
+            font-size: 56px;
+            font-family: 'Bubblegum Sans', cursive;
+            color: #4a69bd;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1), 0 10px 0 #d1d8e0;
+            transition: all 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .choice-btn:active {
+            transform: translateY(10px);
+            box-shadow: 0 0 10px rgba(0,0,0,0.1), 0 0 0 #d1d8e0;
+        }
+
+        .shake {
+            animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+        }
+
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-2px, 0, 0); }
+            20%, 80% { transform: translate3d(4px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-8px, 0, 0); }
+            40%, 60% { transform: translate3d(8px, 0, 0); }
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 36px; }
+            .object { font-size: 48px; }
+            .operator { font-size: 48px; margin: 0 10px; }
+            .choice-btn { min-width: 90px; min-height: 90px; font-size: 40px; }
+            #home-button { top: 10px; left: 10px; width: 50px; height: 50px; font-size: 24px; }
+            #progress-bar { padding: 0 70px; }
+        }
+    </style>
+</head>
+<body>
+
+    <a href="index.html" id="home-button">🏠</a>
+
+    <div id="progress-bar"></div>
+
+    <h1>Berapa Jumlahnya?</h1>
+
+    <div id="game-area">
+        <div id="question-container">
+            <!-- Objects will be injected here -->
+        </div>
+        <div id="choices-container">
+            <!-- Buttons will be injected here -->
+        </div>
+    </div>
+
+    <canvas id="confetti-canvas"></canvas>
+
+    <script>
+        const themes = {
+            buah: ['🍎', '🍊', '🍌', '🍓', '🍇', '🍉', '🍑', '🥝'],
+            hewan: ['🐶', '🐱', '🐰', '🐸', '🦁', '🐻', '🐼', '🐨'],
+            kendaraan: ['🚗', '🚌', '🚂', '✈️', '🚀', '🚲', '🚁', '🛸']
+        };
+
+        let correctCount = 0;
+        let isAnimating = false;
+
+        // Audio System
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new AudioContext();
+            }
+        }
+
+        function playSound(type) {
+            initAudio();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            const now = audioCtx.currentTime;
+            
+            if (type === 'correct') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(400, now);
+                osc.frequency.exponentialRampToValueAtTime(800, now + 0.3);
+                gain.gain.setValueAtTime(0, now);
+                gain.gain.linearRampToValueAtTime(0.5, now + 0.1);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+                osc.start(now);
+                osc.stop(now + 0.5);
+            } else if (type === 'wrong') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(300, now);
+                osc.frequency.exponentialRampToValueAtTime(200, now + 0.3);
+                gain.gain.setValueAtTime(0, now);
+                gain.gain.linearRampToValueAtTime(0.3, now + 0.1);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+                osc.start(now);
+                osc.stop(now + 0.4);
+            }
+        }
+
+        // Confetti System
+        const canvas = document.getElementById('confetti-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let confettiActive = false;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function spawnConfetti() {
+            particles = [];
+            const colors = ['#ff6b6b', '#48dbfb', '#1dd1a1', '#feca57', '#ff9ff3'];
+            for (let i = 0; i < 100; i++) {
+                particles.push({
+                    x: canvas.width / 2,
+                    y: canvas.height / 2,
+                    vx: (Math.random() - 0.5) * 20,
+                    vy: (Math.random() - 1) * 20 - 5,
+                    size: Math.random() * 10 + 10,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    rotation: Math.random() * 360,
+                    rs: (Math.random() - 0.5) * 10
+                });
+            }
+            confettiActive = true;
+            animateConfetti();
+        }
+
+        function animateConfetti() {
+            if (!confettiActive) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            let activeParticles = 0;
+
+            particles.forEach(p => {
+                p.vy += 0.5; // gravity
+                p.x += p.vx;
+                p.y += p.vy;
+                p.rotation += p.rs;
+
+                if (p.y < canvas.height + 50) {
+                    activeParticles++;
+                    ctx.save();
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate(p.rotation * Math.PI / 180);
+                    ctx.fillStyle = p.color;
+                    ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size);
+                    ctx.restore();
+                }
+            });
+
+            if (activeParticles > 0) {
+                requestAnimationFrame(animateConfetti);
+            } else {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                confettiActive = false;
+            }
+        }
+
+        function updateProgressBar() {
+            const starCount = Math.floor(correctCount / 5);
+            const pb = document.getElementById('progress-bar');
+            pb.innerHTML = '';
+            for (let i = 0; i < starCount; i++) {
+                pb.innerHTML += '⭐';
+            }
+        }
+
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function generateChoices(correctAnswer, maxLimit) {
+            let choices = new Set([correctAnswer]);
+            while(choices.size < 3) {
+                let r = getRandomInt(1, Math.max(correctAnswer + 3, maxLimit));
+                if (r > 0) choices.add(r);
+            }
+            return Array.from(choices).sort(() => Math.random() - 0.5);
+        }
+
+        function initRound() {
+            isAnimating = false;
+            updateProgressBar();
+            
+            const qContainer = document.getElementById('question-container');
+            const cContainer = document.getElementById('choices-container');
+            qContainer.innerHTML = '';
+            cContainer.innerHTML = '';
+
+            // Random theme and emoji
+            const themeKeys = Object.keys(themes);
+            const randomTheme = themeKeys[Math.floor(Math.random() * themeKeys.length)];
+            const emojis = themes[randomTheme];
+            const emoji = emojis[Math.floor(Math.random() * emojis.length)];
+
+            // Determine difficulty
+            let mode = 'counting';
+            let maxCount = 5;
+
+            if (correctCount >= 30) {
+                mode = 'addition';
+                maxCount = 10;
+            } else if (correctCount >= 20) {
+                maxCount = 10;
+            } else if (correctCount >= 10) {
+                maxCount = 8;
+            }
+
+            let correctAnswer = 0;
+
+            if (mode === 'counting') {
+                correctAnswer = getRandomInt(1, maxCount);
+                for (let i = 0; i < correctAnswer; i++) {
+                    const el = document.createElement('div');
+                    el.className = 'object';
+                    el.textContent = emoji;
+                    el.style.animationDelay = `${i * 0.1}s`;
+                    qContainer.appendChild(el);
+                }
+            } else {
+                // Addition mode
+                const a = getRandomInt(1, maxCount - 1);
+                const b = getRandomInt(1, maxCount - a);
+                correctAnswer = a + b;
+
+                const g1 = document.createElement('div');
+                g1.className = 'object-group';
+                for(let i=0; i<a; i++) {
+                    const el = document.createElement('div'); el.className = 'object'; el.textContent = emoji;
+                    g1.appendChild(el);
+                }
+                
+                const op = document.createElement('div');
+                op.className = 'operator';
+                op.textContent = '+';
+
+                const g2 = document.createElement('div');
+                g2.className = 'object-group';
+                for(let i=0; i<b; i++) {
+                    const el = document.createElement('div'); el.className = 'object'; el.textContent = emoji;
+                    g2.appendChild(el);
+                }
+
+                qContainer.appendChild(g1);
+                qContainer.appendChild(op);
+                qContainer.appendChild(g2);
+            }
+
+            const choices = generateChoices(correctAnswer, mode === 'addition' ? 10 : maxCount);
+            
+            choices.forEach(c => {
+                const btn = document.createElement('button');
+                btn.className = 'choice-btn';
+                btn.textContent = c;
+                btn.onclick = () => handleChoice(btn, c === correctAnswer);
+                cContainer.appendChild(btn);
+            });
+        }
+
+        function handleChoice(btn, isCorrect) {
+            if (isAnimating) return;
+            initAudio();
+
+            if (isCorrect) {
+                isAnimating = true;
+                playSound('correct');
+                spawnConfetti();
+                btn.style.background = '#1dd1a1';
+                btn.style.color = '#fff';
+                correctCount++;
+                setTimeout(initRound, 2000);
+            } else {
+                playSound('wrong');
+                btn.classList.add('shake');
+                setTimeout(() => {
+                    btn.classList.remove('shake');
+                }, 500);
+            }
+        }
+
+        // Initialize first round interaction required for audio
+        document.body.addEventListener('click', initAudio, { once: true });
+        
+        initRound();
+
+    </script>
+</body>
+</html>

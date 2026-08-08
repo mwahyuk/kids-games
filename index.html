@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#667eea">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="description" content="Kumpulan game edukasi seru untuk anak usia 4-6 tahun. Bermain sambil belajar!">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icons/icon-192.svg">
+    <title>Kiddo Games 🎮 — Ayo Bermain & Belajar!</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Bubblegum Sans', 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 50%, #d4c4fb 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 1rem;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Decorative Background Elements */
+        .decoration {
+            position: absolute;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.5;
+            animation: float-bg linear infinite;
+        }
+
+        @keyframes float-bg {
+            0% { transform: translateY(100vh) rotate(0deg); }
+            100% { transform: translateY(-20vh) rotate(360deg); }
+        }
+
+        /* Mute Button */
+        .mute-btn {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            z-index: 9999;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 3px solid rgba(255,255,255,0.7);
+            background: rgba(255,255,255,0.3);
+            backdrop-filter: blur(10px);
+            font-size: 1.6rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .mute-btn:hover {
+            transform: scale(1.1);
+            background: rgba(255,255,255,0.5);
+        }
+
+        .mute-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* PWA Install Banner */
+        .install-banner {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-family: 'Bubblegum Sans', cursive;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(102,126,234,0.4);
+            border: none;
+            animation: pulse-install 2s ease-in-out infinite;
+            white-space: nowrap;
+        }
+
+        .install-banner:hover {
+            transform: translateX(-50%) scale(1.05);
+        }
+
+        @keyframes pulse-install {
+            0%, 100% { box-shadow: 0 8px 25px rgba(102,126,234,0.4); }
+            50% { box-shadow: 0 8px 35px rgba(102,126,234,0.7); }
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            z-index: 1;
+        }
+
+        h1 {
+            font-size: clamp(2.8rem, 8vw, 5.5rem);
+            margin-bottom: 0.5rem;
+            background: linear-gradient(to right, #ff6b6b, #feca57, #48dbfb, #ff9ff3, #ff6b6b);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));
+            animation: bounce 2s ease-in-out infinite, rainbow-shift 4s linear infinite;
+        }
+
+        @keyframes rainbow-shift {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+
+        h2 {
+            font-size: clamp(1.4rem, 4vw, 2.2rem);
+            color: #4a4a4a;
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        /* Grid Layout */
+        .game-grid {
+            display: grid;
+            gap: 1.5rem;
+            width: 100%;
+            max-width: 1200px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            z-index: 1;
+            margin-bottom: 2rem;
+            padding: 0 0.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .game-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 2rem;
+            }
+        }
+
+        @media (min-width: 1100px) {
+            .game-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* Game Cards */
+        .card {
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1.8rem 1.2rem;
+            border-radius: 28px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1), inset 0 -4px 12px rgba(0,0,0,0.04);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: breathe 4s ease-in-out infinite;
+            border: 3px solid rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(5px);
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .card:nth-child(1) { animation-delay: 0.0s; background: linear-gradient(145deg, #bde0fe, #a2d2ff); }
+        .card:nth-child(2) { animation-delay: 0.15s; background: linear-gradient(145deg, #d8f3dc, #b7e4c7); }
+        .card:nth-child(3) { animation-delay: 0.3s; background: linear-gradient(145deg, #fcf6bd, #fdf09d); }
+        .card:nth-child(4) { animation-delay: 0.45s; background: linear-gradient(145deg, #ffe5d9, #ffcad4); }
+        .card:nth-child(5) { animation-delay: 0.6s; background: linear-gradient(145deg, #e0c3fc, #cbaacb); }
+        .card:nth-child(6) { animation-delay: 0.75s; background: linear-gradient(145deg, #ffc8dd, #ffafcc); }
+        .card:nth-child(7) { animation-delay: 0.9s; background: linear-gradient(145deg, #ffadad, #ff9393); }
+        .card:nth-child(8) { animation-delay: 1.05s; background: linear-gradient(145deg, #b8f3d4, #7ee8b0); }
+        .card:nth-child(9) { animation-delay: 1.2s; background: linear-gradient(145deg, #c9f5d1, #a8e6cf); }
+
+        .card:hover {
+            transform: scale(1.06) translateY(-8px);
+            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.15), inset 0 -4px 12px rgba(0,0,0,0.04);
+            animation-play-state: paused;
+        }
+
+        .card:active {
+            transform: scale(0.96);
+        }
+
+        @keyframes breathe {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+
+        .emoji {
+            font-size: 4.5rem;
+            margin-bottom: 0.8rem;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.15));
+            transition: transform 0.3s;
+        }
+
+        .card:hover .emoji {
+            transform: rotate(8deg) scale(1.1);
+        }
+
+        .game-title {
+            font-size: 1.6rem;
+            color: #333;
+            text-align: center;
+            line-height: 1.2;
+            text-shadow: 1px 1px 0px rgba(255,255,255,0.8);
+        }
+
+        .badge {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: white;
+            text-shadow: none;
+        }
+
+        .badge-new {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            animation: pulse-badge 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse-badge {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        footer {
+            margin-top: auto;
+            text-align: center;
+            font-size: 1.3rem;
+            color: #555;
+            z-index: 1;
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
+        }
+    </style>
+</head>
+<body>
+
+    <button class="mute-btn" id="muteBtn" title="Suara On/Off">🔊</button>
+
+    <button class="install-banner" id="installBanner">
+        📲 Install Kiddo Games!
+    </button>
+
+    <header>
+        <h1>Kiddo Games 🎮</h1>
+        <h2>Ayo Bermain & Belajar!</h2>
+    </header>
+
+    <div class="game-grid">
+        <a href="berhitung.html" class="card">
+            <div class="emoji">🔢</div>
+            <div class="game-title">Berapa Jumlahnya?</div>
+        </a>
+        <a href="bentuk.html" class="card">
+            <div class="emoji">🔷</div>
+            <div class="game-title">Cocokkan Bentuknya!</div>
+        </a>
+        <a href="memory.html" class="card">
+            <div class="emoji">🐾</div>
+            <div class="game-title">Cari Pasangannya!</div>
+        </a>
+        <a href="puzzle.html" class="card">
+            <div class="emoji">🧩</div>
+            <div class="game-title">Susun Gambarnya!</div>
+        </a>
+        <a href="suara.html" class="card">
+            <div class="emoji">🔊</div>
+            <div class="game-title">Suara Siapa Ini?</div>
+        </a>
+        <a href="balon.html" class="card">
+            <div class="emoji">🎈</div>
+            <div class="game-title">Pecahkan Balonnya!</div>
+        </a>
+        <a href="mewarnai.html" class="card">
+            <div class="emoji">🎨</div>
+            <div class="game-title">Ayo Mewarnai!</div>
+        </a>
+        <a href="urutan.html" class="card">
+            <div class="emoji">📊</div>
+            <div class="game-title">Susun Urutannya!</div>
+            <span class="badge badge-new">✨ Baru!</span>
+        </a>
+        <a href="labirin.html" class="card">
+            <div class="emoji">🌟</div>
+            <div class="game-title">Bantu Temannya!</div>
+            <span class="badge badge-new">✨ Baru!</span>
+        </a>
+    </div>
+
+    <footer>
+        Made with ❤️ untuk anak-anak Indonesia
+    </footer>
+
+    <script>
+        // === Audio System ===
+        let audioMuted = false;
+
+        function playSound(type) {
+            if (audioMuted) return;
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                const now = ctx.currentTime;
+
+                if (type === 'hover') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(500, now);
+                    osc.frequency.exponentialRampToValueAtTime(700, now + 0.08);
+                    gain.gain.setValueAtTime(0, now);
+                    gain.gain.linearRampToValueAtTime(0.04, now + 0.03);
+                    gain.gain.linearRampToValueAtTime(0, now + 0.08);
+                    osc.start(now);
+                    osc.stop(now + 0.08);
+                } else if (type === 'click') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(600, now);
+                    osc.frequency.exponentialRampToValueAtTime(900, now + 0.08);
+                    osc.frequency.exponentialRampToValueAtTime(1200, now + 0.15);
+                    gain.gain.setValueAtTime(0, now);
+                    gain.gain.linearRampToValueAtTime(0.08, now + 0.04);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+                    osc.start(now);
+                    osc.stop(now + 0.15);
+                }
+            } catch (e) {}
+        }
+
+        // === Mute Button ===
+        const muteBtn = document.getElementById('muteBtn');
+        muteBtn.addEventListener('click', () => {
+            audioMuted = !audioMuted;
+            muteBtn.textContent = audioMuted ? '🔇' : '🔊';
+            muteBtn.style.opacity = audioMuted ? '0.6' : '1';
+        });
+
+        // === Decorative Background ===
+        function createDecorations() {
+            const symbols = ['⭐', '☁️', '🎈', '✨', '🌈', '🦋', '🌸'];
+            const container = document.body;
+            for (let i = 0; i < 18; i++) {
+                const el = document.createElement('div');
+                el.className = 'decoration';
+                el.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+                el.style.left = Math.random() * 100 + 'vw';
+                el.style.fontSize = (Math.random() * 1.8 + 1) + 'rem';
+                el.style.animationDuration = (Math.random() * 15 + 12) + 's';
+                el.style.animationDelay = (Math.random() * 15) + 's';
+                container.appendChild(el);
+            }
+        }
+
+        // === Card Sounds ===
+        function setupAudio() {
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', () => playSound('hover'));
+                card.addEventListener('click', () => playSound('click'));
+            });
+        }
+
+        // === PWA Install ===
+        let deferredPrompt;
+        const installBanner = document.getElementById('installBanner');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installBanner.style.display = 'block';
+        });
+
+        installBanner.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                deferredPrompt = null;
+                installBanner.style.display = 'none';
+            }
+        });
+
+        window.addEventListener('appinstalled', () => {
+            installBanner.style.display = 'none';
+        });
+
+        // === Service Worker Registration ===
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(reg => console.log('SW registered:', reg.scope))
+                .catch(err => console.log('SW registration failed:', err));
+        }
+
+        // === Init ===
+        document.addEventListener('DOMContentLoaded', () => {
+            createDecorations();
+            setupAudio();
+        });
+    </script>
+</body>
+</html>
