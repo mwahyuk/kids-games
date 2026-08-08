@@ -180,7 +180,7 @@
         .dragging {
             z-index: 1000 !important;
             transition: none !important;
-            filter: drop-shadow(0px 14px 22px rgba(0,0,0,0.35)) scale(1.15);
+            filter: drop-shadow(0px 14px 22px rgba(0,0,0,0.35));
             pointer-events: none; /* Allows underlying target detection */
         }
         
@@ -550,6 +550,10 @@
             offset.x = clientX - rect.left;
             offset.y = clientY - rect.top;
 
+            // Preserve explicit width and height so shape does not expand when appended to body
+            draggingElement.style.width = `${rect.width}px`;
+            draggingElement.style.height = `${rect.height}px`;
+
             document.body.appendChild(draggingElement);
             draggingElement.style.position = 'fixed';
             
@@ -616,6 +620,9 @@
                 playSound('wrong');
                 draggingElement.classList.remove('dragging');
                 draggingElement.classList.add('anim-bounce');
+                
+                draggingElement.style.width = '85%';
+                draggingElement.style.height = '85%';
                 
                 originalPos.parent.appendChild(draggingElement);
                 draggingElement.style.position = 'absolute';
