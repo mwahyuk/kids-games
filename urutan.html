@@ -83,17 +83,17 @@
             margin-top: max(10px, env(safe-area-inset-top));
         }
 
-        /* Mode Selection Cards */
+        /* 3D Mode Selection Cards */
         .mode-cards-container {
             display: flex;
             flex-direction: column;
             gap: 16px;
             width: 100%;
-            max-width: 380px;
+            max-width: 420px;
             align-items: center;
         }
 
-        .mode-card {
+        .mode-card-3d {
             background: white;
             border: 4px solid #fdcb6e;
             border-radius: 26px;
@@ -111,21 +111,21 @@
             gap: 14px;
         }
 
-        .mode-card:hover {
+        .mode-card-3d:hover {
             transform: scale(1.05);
         }
 
-        .mode-card:active {
+        .mode-card-3d:active {
             transform: translateY(6px);
             box-shadow: 0 0 0 #d4af37;
         }
 
         /* Game Board Container */
         #game-board-card {
-            background: rgba(255, 255, 255, 0.85);
-            border-radius: 32px;
+            background: rgba(255, 255, 255, 0.88);
+            border-radius: 36px;
             padding: 30px 20px;
-            box-shadow: 0 12px 35px rgba(0,0,0,0.15);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.18);
             width: 100%;
             max-width: 850px;
             display: flex;
@@ -145,11 +145,11 @@
             min-height: 120px;
         }
 
-        .draggable {
+        .draggable-3d {
             width: clamp(75px, 15vw, 105px);
             height: clamp(75px, 15vw, 105px);
-            background: white;
-            border-radius: 22px;
+            background: linear-gradient(135deg, #ffffff 0%, #f1f2f6 100%);
+            border-radius: 24px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -165,7 +165,7 @@
             color: #2d3436;
         }
         
-        .draggable.dragging {
+        .draggable-3d.dragging {
             box-shadow: 0 16px 30px rgba(0,0,0,0.3);
             z-index: 1000;
             cursor: grabbing;
@@ -177,7 +177,7 @@
             width: clamp(85px, 16vw, 115px);
             height: clamp(85px, 16vw, 115px);
             border: 4px dashed #6c5ce7;
-            border-radius: 26px;
+            border-radius: 28px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -273,16 +273,16 @@
     <div class="star-celebration" id="star-celebration">
         <h2>Luar Biasa! 🎉</h2>
         <div class="stars">⭐⭐⭐⭐⭐</div>
-        <button class="mode-card" style="margin: 0 auto; width: 80%;" onclick="nextRoundAfterStar()">Lanjut Main!</button>
+        <button class="mode-card-3d" style="margin: 0 auto; width: 80%;" onclick="nextRoundAfterStar()">Lanjut Main!</button>
     </div>
 
     <!-- 1. Home Screen -->
     <div id="home-screen" class="screen active">
         <h1>Menyusun Balok! 📊</h1>
         <div class="mode-cards-container">
-            <div class="mode-card" onclick="startGame('number')">🔢 Balok Angka</div>
-            <div class="mode-card" onclick="startGame('size')">📏 Ukuran Balok</div>
-            <div class="mode-card" onclick="startGame('alphabet')">🔤 Balok Alfabet</div>
+            <div class="mode-card-3d" onclick="startGame('number')">🔢 Balok Angka 3D</div>
+            <div class="mode-card-3d" onclick="startGame('size')">📏 Ukuran Balok 3D</div>
+            <div class="mode-card-3d" onclick="startGame('alphabet')">🔤 Balok Alfabet 3D</div>
         </div>
     </div>
 
@@ -499,7 +499,7 @@
 
             shuffled.forEach((item, index) => {
                 let el = document.createElement('div');
-                el.className = 'draggable';
+                el.className = 'draggable-3d';
                 el.innerHTML = item.display;
                 if (item.fontSize) el.style.fontSize = item.fontSize;
                 el.style.border = `4px solid ${item.color}`;

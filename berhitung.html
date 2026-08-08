@@ -100,10 +100,10 @@
             justify-content: center;
             align-items: center;
             min-height: 180px;
-            background: rgba(255, 255, 255, 0.7);
-            border-radius: 30px;
-            padding: 20px 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 36px;
+            padding: 24px 34px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.12);
             margin-bottom: 30px;
             width: 100%;
             gap: 15px;
@@ -138,24 +138,24 @@
             max-width: 700px;
         }
 
-        .choice-btn {
+        .choice-btn-3d {
             background: #fff;
-            border: 3.5px solid #4a69bd;
-            border-radius: 25px;
-            width: clamp(90px, 20vw, 140px);
-            height: clamp(90px, 20vw, 140px);
-            font-size: clamp(40px, 8vw, 64px);
+            border: 4px solid #4a69bd;
+            border-radius: 28px;
+            width: clamp(95px, 20vw, 140px);
+            height: clamp(95px, 20vw, 140px);
+            font-size: clamp(42px, 8.5vw, 68px);
             font-family: 'Bubblegum Sans', cursive;
             color: #4a69bd;
             cursor: pointer;
-            box-shadow: 0 8px 0 #3b5998, 0 10px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 0 #3b5998, 0 12px 20px rgba(0,0,0,0.12);
             transition: all 0.15s;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
-        .choice-btn:active {
+        .choice-btn-3d:active {
             transform: translateY(6px);
             box-shadow: 0 2px 0 #3b5998, 0 4px 10px rgba(0,0,0,0.1);
         }
@@ -248,21 +248,38 @@
                 } else if (type === 'wrong') {
                     osc.type = 'triangle';
                     osc.frequency.setValueAtTime(300, now);
-                    osc.frequency.exponentialRampToValueAtTime(200, now + 0.3);
+                    osc.frequency.linearRampToValueAtTime(150, now + 0.2);
                     gain.gain.setValueAtTime(0, now);
-                    gain.gain.linearRampToValueAtTime(0.3, now + 0.1);
-                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+                    gain.gain.linearRampToValueAtTime(0.3, now + 0.05);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
                     osc.start(now);
-                    osc.stop(now + 0.4);
+                    osc.stop(now + 0.3);
+                } else if (type === 'win') {
+                    const notes = [523.25, 659.25, 783.99, 1046.50];
+                    notes.forEach((freq, index) => {
+                        const oscWin = audioCtx.createOscillator();
+                        const gainWin = audioCtx.createGain();
+                        oscWin.connect(gainWin);
+                        gainWin.connect(audioCtx.destination);
+                        
+                        oscWin.type = 'sine';
+                        oscWin.frequency.setValueAtTime(freq, now + (index * 0.15));
+                        
+                        gainWin.gain.setValueAtTime(0, now + (index * 0.15));
+                        gainWin.gain.linearRampToValueAtTime(0.4, now + (index * 0.15) + 0.05);
+                        gainWin.gain.exponentialRampToValueAtTime(0.01, now + (index * 0.15) + 0.4);
+                        
+                        oscWin.start(now + (index * 0.15));
+                        oscWin.stop(now + (index * 0.15) + 0.4);
+                    });
                 }
-            } catch (e) {}
+            } catch(e) {}
         }
 
         // Confetti System
         const canvas = document.getElementById('confetti-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
-        let confettiActive = false;
 
         function resizeCanvas() {
             canvas.width = window.innerWidth;
@@ -271,181 +288,152 @@
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
-        function spawnConfetti() {
+        function createConfetti() {
             particles = [];
-            const colors = ['#ff6b6b', '#48dbfb', '#1dd1a1', '#feca57', '#ff9ff3'];
-            for (let i = 0; i < 100; i++) {
+            const colors = ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5', '#2196f3', '#00bcd4', '#4CAF50', '#FFEB3B', '#FF9800'];
+            for (let i = 0; i < 80; i++) {
                 particles.push({
                     x: canvas.width / 2,
                     y: canvas.height / 2,
-                    vx: (Math.random() - 0.5) * 20,
-                    vy: (Math.random() - 1) * 20 - 5,
-                    size: Math.random() * 10 + 10,
+                    r: Math.random() * 6 + 4,
+                    dx: Math.random() * 10 - 5,
+                    dy: Math.random() * -12 - 3,
                     color: colors[Math.floor(Math.random() * colors.length)],
-                    rotation: Math.random() * 360,
-                    rs: (Math.random() - 0.5) * 10
+                    tilt: Math.floor(Math.random() * 10) - 10,
+                    tiltAngleInc: (Math.random() * 0.07) + 0.05,
+                    tiltAngle: 0
                 });
             }
-            confettiActive = true;
-            animateConfetti();
+            requestAnimationFrame(renderConfetti);
         }
 
-        function animateConfetti() {
-            if (!confettiActive) return;
+        function renderConfetti() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            let activeParticles = 0;
+            let active = false;
+            for (let i = 0; i < particles.length; i++) {
+                const p = particles[i];
+                p.tiltAngle += p.tiltAngleInc;
+                p.y += (Math.cos(p.tiltAngle) + 1 + p.r / 2) / 2;
+                p.x += Math.sin(p.tiltAngle) * 2;
+                p.dy += 0.2;
+                p.y += p.dy;
+                p.x += p.dx;
 
-            particles.forEach(p => {
-                p.vy += 0.5; // gravity
-                p.x += p.vx;
-                p.y += p.vy;
-                p.rotation += p.rs;
-
-                if (p.y < canvas.height + 50) {
-                    activeParticles++;
-                    ctx.save();
-                    ctx.translate(p.x, p.y);
-                    ctx.rotate(p.rotation * Math.PI / 180);
-                    ctx.fillStyle = p.color;
-                    ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size);
-                    ctx.restore();
+                if (p.y <= canvas.height) {
+                    active = true;
+                    ctx.beginPath();
+                    ctx.lineWidth = p.r;
+                    ctx.strokeStyle = p.color;
+                    ctx.moveTo(p.x + p.tilt + p.r, p.y);
+                    ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r);
+                    ctx.stroke();
                 }
-            });
-
-            if (activeParticles > 0) {
-                requestAnimationFrame(animateConfetti);
-            } else {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                confettiActive = false;
+            }
+            if (active) {
+                requestAnimationFrame(renderConfetti);
             }
         }
 
-        function updateProgressBar() {
-            const starCount = Math.floor(correctCount / 5);
-            const pb = document.getElementById('progress-bar');
-            pb.innerHTML = '';
-            for (let i = 0; i < starCount; i++) {
-                pb.innerHTML += '⭐';
-            }
-        }
-
-        function getRandomInt(min, max) {
-            return Math.floor(Math.random() * (max - min + 1)) + min;
-        }
-
-        function generateChoices(correctAnswer, maxLimit) {
-            let choices = new Set([correctAnswer]);
-            while(choices.size < 3) {
-                let r = getRandomInt(1, Math.max(correctAnswer + 3, maxLimit));
-                if (r > 0) choices.add(r);
-            }
-            return Array.from(choices).sort(() => Math.random() - 0.5);
-        }
-
-        function initRound() {
-            isAnimating = false;
-            updateProgressBar();
-            
-            const qContainer = document.getElementById('question-container');
-            const cContainer = document.getElementById('choices-container');
-            qContainer.innerHTML = '';
-            cContainer.innerHTML = '';
-
-            // Random theme and emoji
+        function generateQuestion() {
+            const isAddition = Math.random() > 0.4;
             const themeKeys = Object.keys(themes);
-            const randomTheme = themeKeys[Math.floor(Math.random() * themeKeys.length)];
-            const emojis = themes[randomTheme];
-            const emoji = emojis[Math.floor(Math.random() * emojis.length)];
+            const selectedThemeKey = themeKeys[Math.floor(Math.random() * themeKeys.length)];
+            const themeItems = themes[selectedThemeKey];
+            const chosenItem = themeItems[Math.floor(Math.random() * themeItems.length)];
 
-            // Determine difficulty
-            let mode = 'counting';
-            let maxCount = 5;
+            let num1, num2, targetAnswer;
+            let questionHTML = '';
 
-            if (correctCount >= 30) {
-                mode = 'addition';
-                maxCount = 10;
-            } else if (correctCount >= 20) {
-                maxCount = 10;
-            } else if (correctCount >= 10) {
-                maxCount = 8;
-            }
+            if (isAddition) {
+                num1 = Math.floor(Math.random() * 4) + 1;
+                num2 = Math.floor(Math.random() * 4) + 1;
+                targetAnswer = num1 + num2;
 
-            let correctAnswer = 0;
+                let group1 = `<div class="object-group">` + Array(num1).fill(`<span class="object">${chosenItem}</span>`).join('') + `</div>`;
+                let operator = `<span class="operator">+</span>`;
+                let group2 = `<div class="object-group">` + Array(num2).fill(`<span class="object">${chosenItem}</span>`).join('') + `</div>`;
 
-            if (mode === 'counting') {
-                correctAnswer = getRandomInt(1, maxCount);
-                for (let i = 0; i < correctAnswer; i++) {
-                    const el = document.createElement('div');
-                    el.className = 'object';
-                    el.textContent = emoji;
-                    el.style.animationDelay = `${i * 0.08}s`;
-                    qContainer.appendChild(el);
-                }
+                questionHTML = group1 + operator + group2;
             } else {
-                // Addition mode
-                const a = getRandomInt(1, maxCount - 1);
-                const b = getRandomInt(1, maxCount - a);
-                correctAnswer = a + b;
-
-                const g1 = document.createElement('div');
-                g1.className = 'object-group';
-                for(let i=0; i<a; i++) {
-                    const el = document.createElement('div'); el.className = 'object'; el.textContent = emoji;
-                    g1.appendChild(el);
-                }
-                
-                const op = document.createElement('div');
-                op.className = 'operator';
-                op.textContent = '+';
-
-                const g2 = document.createElement('div');
-                g2.className = 'object-group';
-                for(let i=0; i<b; i++) {
-                    const el = document.createElement('div'); el.className = 'object'; el.textContent = emoji;
-                    g2.appendChild(el);
-                }
-
-                qContainer.appendChild(g1);
-                qContainer.appendChild(op);
-                qContainer.appendChild(g2);
+                targetAnswer = Math.floor(Math.random() * 6) + 1;
+                let group = `<div class="object-group">` + Array(targetAnswer).fill(`<span class="object">${chosenItem}</span>`).join('') + `</div>`;
+                questionHTML = group;
             }
 
-            const choices = generateChoices(correctAnswer, mode === 'addition' ? 10 : maxCount);
-            
-            choices.forEach(c => {
+            const questionContainer = document.getElementById('question-container');
+            questionContainer.innerHTML = questionHTML;
+
+            let choices = [targetAnswer];
+            while (choices.length < 3) {
+                let wrongChoice = Math.floor(Math.random() * 8) + 1;
+                if (!choices.includes(wrongChoice)) {
+                    choices.push(wrongChoice);
+                }
+            }
+            choices.sort(() => Math.random() - 0.5);
+
+            const choicesContainer = document.getElementById('choices-container');
+            choicesContainer.innerHTML = '';
+
+            choices.forEach(val => {
                 const btn = document.createElement('button');
-                btn.className = 'choice-btn';
-                btn.textContent = c;
-                btn.onclick = () => handleChoice(btn, c === correctAnswer);
-                cContainer.appendChild(btn);
+                btn.className = 'choice-btn-3d';
+                btn.innerText = val;
+                btn.onclick = () => checkAnswer(val, targetAnswer, btn);
+                choicesContainer.appendChild(btn);
             });
         }
 
-        function handleChoice(btn, isCorrect) {
+        function checkAnswer(selected, correct, btnElement) {
             if (isAnimating) return;
-            initAudio();
 
-            if (isCorrect) {
+            if (selected === correct) {
                 isAnimating = true;
                 playSound('correct');
-                spawnConfetti();
-                btn.style.background = '#1dd1a1';
-                btn.style.color = '#fff';
-                btn.style.borderColor = '#10ac84';
+                createConfetti();
                 correctCount++;
-                setTimeout(initRound, 1800);
+                updateProgress();
+
+                btnElement.style.background = '#4cd137';
+                btnElement.style.color = '#fff';
+                btnElement.style.borderColor = '#44bd32';
+
+                setTimeout(() => {
+                    isAnimating = false;
+                    generateQuestion();
+                }, 1200);
             } else {
                 playSound('wrong');
-                btn.classList.add('shake');
+                btnElement.classList.add('shake');
+                btnElement.style.background = '#e74c3c';
+                btnElement.style.color = '#fff';
+                btnElement.style.borderColor = '#c0392b';
+
                 setTimeout(() => {
-                    btn.classList.remove('shake');
+                    btnElement.classList.remove('shake');
+                    btnElement.style.background = '#fff';
+                    btnElement.style.color = '#4a69bd';
+                    btnElement.style.borderColor = '#4a69bd';
                 }, 500);
             }
         }
 
-        document.body.addEventListener('click', initAudio, { once: true });
-        
-        initRound();
+        function updateProgress() {
+            const progressBar = document.getElementById('progress-bar');
+            progressBar.innerHTML = '';
+            for (let i = 0; i < 5; i++) {
+                const star = document.createElement('span');
+                star.innerText = i < (correctCount % 5) ? '⭐' : '⚪';
+                progressBar.appendChild(star);
+            }
+
+            if (correctCount > 0 && correctCount % 5 === 0) {
+                playSound('win');
+            }
+        }
+
+        updateProgress();
+        generateQuestion();
     </script>
 </body>
 </html>
