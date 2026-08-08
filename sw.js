@@ -1,4 +1,4 @@
-const CACHE_NAME = 'kiddo-games-v1';
+const CACHE_NAME = 'kiddo-games-v2';
 const ASSETS = [
   './',
   './index.html',
@@ -13,7 +13,16 @@ const ASSETS = [
   './labirin.html',
   './manifest.json',
   './icons/icon-192.svg',
-  './icons/icon-512.svg'
+  './icons/icon-512.svg',
+  './images/counting.jpg',
+  './images/shapes.jpg',
+  './images/memory.jpg',
+  './images/puzzle.jpg',
+  './images/sound.jpg',
+  './images/balloon.jpg',
+  './images/coloring.jpg',
+  './images/sorting.jpg',
+  './images/maze.jpg'
 ];
 
 // Install: pre-cache all game files
