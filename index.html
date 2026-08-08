@@ -11,7 +11,7 @@
     <link rel="apple-touch-icon" href="icons/icon-192.svg">
     <title>Kiddo Games 🎮 — Ayo Bermain & Belajar!</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700;900&family=Nunito:wght@700;800;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700;900&family=Nunito:wght@800;900&display=swap');
 
         * {
             box-sizing: border-box;
@@ -22,406 +22,252 @@
 
         body {
             font-family: 'Fredoka', 'Nunito', 'Comic Sans MS', cursive, sans-serif;
-            background: linear-gradient(180deg, #cde5ff 0%, #f5e6ff 100%);
-            color: #2d3436;
+            background: linear-gradient(180deg, #bfe3ff 0%, #eef7ff 100%);
+            color: #2c3e50;
             min-height: 100vh;
-            padding-bottom: 90px;
-            overflow-x: hidden;
+            padding: 16px 16px 80px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            overflow-x: hidden;
         }
 
-        /* ===== HERO BANNER BACKGROUND WITH CLOUDS / CASTLE ===== */
-        .hero-banner {
+        /* ===== BACKGROUND DECORATIONS ===== */
+        .sky-elements {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            background: linear-gradient(180deg, #3ab0ff 0%, #8ac9ff 100%);
-            padding: 16px 16px 40px;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            border-bottom-left-radius: 40px;
-            border-bottom-right-radius: 40px;
-            box-shadow: 0 10px 30px rgba(58, 176, 255, 0.25);
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
             overflow: hidden;
         }
 
-        /* Decorative sky elements */
-        .sky-cloud {
+        .cloud {
             position: absolute;
-            background: white;
-            border-radius: 100px;
-            opacity: 0.85;
-            pointer-events: none;
-            filter: blur(1px);
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 50px;
+            width: 100px;
+            height: 30px;
+            animation: float-cloud 30s linear infinite;
         }
 
-        .sky-cloud::before, .sky-cloud::after {
+        .cloud::before, .cloud::after {
             content: '';
             position: absolute;
-            background: white;
+            background: rgba(255, 255, 255, 0.7);
             border-radius: 50%;
         }
 
-        .cloud-1 { width: 120px; height: 40px; top: 15%; left: -30px; animation: float-cloud 25s linear infinite; }
-        .cloud-1::before { width: 50px; height: 50px; top: -20px; left: 20px; }
-        .cloud-1::after { width: 60px; height: 60px; top: -25px; left: 50px; }
+        .cloud::before { width: 40px; height: 40px; top: -15px; left: 15px; }
+        .cloud::after { width: 50px; height: 50px; top: -20px; left: 40px; }
 
-        .cloud-2 { width: 140px; height: 45px; top: 25%; right: -40px; animation: float-cloud 30s linear infinite reverse; }
-        .cloud-2::before { width: 60px; height: 60px; top: -25px; left: 25px; }
-        .cloud-2::after { width: 70px; height: 70px; top: -30px; left: 60px; }
+        .c1 { top: 10%; left: -100px; animation-duration: 40s; }
+        .c2 { top: 25%; left: -100px; animation-duration: 25s; animation-delay: 10s; }
+        .c3 { top: 40%; left: -100px; animation-duration: 35s; animation-delay: 5s; }
 
         @keyframes float-cloud {
             0% { transform: translateX(0); }
-            100% { transform: translateX(100vw); }
+            100% { transform: translateX(calc(100vw + 120px)); }
         }
 
-        .sky-deco {
-            position: absolute;
-            font-size: 2rem;
-            opacity: 0.8;
-            pointer-events: none;
-            animation: float-deco 4s ease-in-out infinite alternate;
-        }
-
-        @keyframes float-deco {
-            0% { transform: translateY(0) rotate(0deg); }
-            100% { transform: translateY(-10px) rotate(8deg); }
-        }
-
-        /* ===== TOP HEADER ROW ===== */
-        .header-row {
+        /* ===== HEADER / TOP CONTROL BAR ===== */
+        .header {
             width: 100%;
-            max-width: 900px;
+            max-width: 650px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-bottom: 20px;
             z-index: 10;
-            margin-bottom: 24px;
         }
 
         .profile-pill {
             background: white;
             border-radius: 30px;
-            padding: 6px 20px 6px 10px;
+            padding: 6px 16px;
             display: flex;
             align-items: center;
-            gap: 12px;
-            box-shadow: 0 6px 0 rgba(0,0,0,0.1);
-            border: 3px solid #fff;
+            gap: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+            border: 2px solid #fff;
         }
 
         .profile-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: #ffeaa7;
-            border: 2px solid #fdcb6e;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
+            font-size: 1.4rem;
         }
 
-        .profile-text-name {
+        .profile-name {
             font-size: 0.95rem;
-            font-weight: 900;
-            color: #2c3e50;
-            line-height: 1.1;
-        }
-
-        .profile-text-stars {
-            font-size: 0.8rem;
             font-weight: 700;
-            color: #fd9644;
-            display: flex;
-            align-items: center;
-            gap: 3px;
+            color: #2c3e50;
         }
 
-        .header-buttons {
-            display: flex;
-            gap: 10px;
-        }
-
-        .h-btn {
-            width: 44px;
-            height: 44px;
+        .mute-btn {
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
-            border: 3px solid white;
+            background: white;
+            border: 2px solid #fff;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+            cursor: pointer;
+            font-size: 1.2rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.3rem;
-            cursor: pointer;
-            box-shadow: 0 6px 0 rgba(0,0,0,0.1);
             transition: transform 0.1s;
         }
 
-        .h-btn:active {
-            transform: translateY(3px);
+        .mute-btn:active {
+            transform: scale(0.9);
         }
 
-        .h-btn-gift { background: linear-gradient(135deg, #a29bfe, #6c5ce7); color: white; }
-        .h-btn-trophy { background: linear-gradient(135deg, #ffeaa7, #fdcb6e); color: white; }
-        .h-btn-sound { background: linear-gradient(135deg, #81ecec, #00cec9); color: white; }
-
-        /* ===== HERO CONTENT PANEL ===== */
-        .hero-panel {
-            width: 100%;
-            max-width: 900px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        /* ===== MENU TITLE ===== */
+        .title-container {
+            text-align: center;
+            margin-bottom: 24px;
             z-index: 10;
-            position: relative;
         }
 
-        .hero-title-group {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-        }
-
-        .title-bubble {
-            font-size: clamp(2.5rem, 8vw, 4.5rem);
+        .main-title {
+            font-size: 2.2rem;
             font-weight: 900;
-            line-height: 0.95;
-            letter-spacing: -2px;
-            color: white;
-            text-shadow: 
-                -4px -4px 0 #2c3e50,  
-                 4px -4px 0 #2c3e50,
-                -4px  4px 0 #2c3e50,
-                 4px  4px 0 #2c3e50,
-                 0px  8px 0px rgba(0,0,0,0.15);
-            margin-bottom: 12px;
+            color: #2f3640;
+            letter-spacing: -1px;
+            text-shadow: 2px 2px 0 white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
-        .title-bubble span {
-            display: block;
+        .sub-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #7f8c8d;
+            margin-top: 4px;
         }
 
-        .tb-play { color: #ffeaa7; }
-        .tb-learn { color: #ff7675; }
-        .tb-grow { color: #55efc4; }
+        /* ===== CATEGORY NAV ===== */
+        .category-nav {
+            width: 100%;
+            max-width: 650px;
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            margin-bottom: 20px;
+            z-index: 10;
+            scrollbar-width: none;
+        }
 
-        .hero-badge-pill {
-            background: #6c5ce7;
-            color: white;
-            border-radius: 30px;
-            padding: 6px 20px;
-            font-size: 0.85rem;
-            font-weight: 800;
-            box-shadow: 0 6px 0 #473fa3;
+        .category-nav::-webkit-scrollbar { display: none; }
+
+        .cat-chip {
+            background: white;
             border: 2px solid white;
-            display: inline-flex;
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-family: inherit;
+            font-weight: 700;
+            font-size: 0.8rem;
+            color: #7f8c8d;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+            display: flex;
             align-items: center;
             gap: 6px;
+            transition: all 0.2s;
         }
 
-        /* Giant Mascots SVGs */
-        .hero-mascots-wrap {
-            display: flex;
-            align-items: flex-end;
-            gap: 20px;
-            height: 200px;
-        }
-
-        .mascot-svg {
-            filter: drop-shadow(0 8px 15px rgba(0,0,0,0.15));
-            animation: bounce-mascot 3s ease-in-out infinite alternate;
-        }
-
-        .mascot-svg:nth-child(2) {
-            animation-delay: 0.5s;
-        }
-
-        @keyframes bounce-mascot {
-            0% { transform: translateY(0) rotate(0deg); }
-            100% { transform: translateY(-15px) rotate(5deg); }
-        }
-
-        @media (max-width: 700px) {
-            .hero-panel {
-                flex-direction: column;
-                gap: 30px;
-                text-align: center;
-                align-items: center;
-            }
-            .hero-title-group {
-                align-items: center;
-            }
-            .hero-mascots-wrap {
-                height: 150px;
-            }
-        }
-
-        /* ===== CATEGORY SECTION ===== */
-        .category-wrapper {
-            width: calc(100% - 32px);
-            max-width: 900px;
-            background: white;
-            border-radius: 30px;
-            padding: 16px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-            margin-top: -30px;
-            z-index: 20;
-            overflow-x: auto;
-            white-space: nowrap;
-            border: 3px solid #fff;
-        }
-
-        .category-list {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            gap: 16px;
-            min-width: 600px;
-        }
-
-        .cat-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-family: inherit;
-        }
-
-        .cat-circle {
-            width: 56px;
-            height: 56px;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-            box-shadow: 0 6px 0 rgba(0,0,0,0.1);
-            transition: transform 0.1s;
-            border: 2px solid white;
-        }
-
-        .cat-item:active .cat-circle {
-            transform: translateY(3px);
-        }
-
-        .cat-label {
-            font-size: 0.8rem;
-            font-weight: 800;
-            color: #7f8c8d;
-        }
-
-        /* ===== MAIN TWO COLUMN CONTENT ===== */
-        .main-container {
-            width: 100%;
-            max-width: 900px;
-            padding: 24px 16px;
-            display: grid;
-            grid-template-columns: 1.6fr 1fr;
-            gap: 24px;
-        }
-
-        @media (max-width: 768px) {
-            .main-container {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-        }
-
-        .section-title-text {
-            font-size: 1.4rem;
-            font-weight: 900;
-            color: #2c3e50;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .see-all-btn {
+        .cat-chip.active {
             background: #6c5ce7;
             color: white;
-            border: none;
-            border-radius: 20px;
-            padding: 4px 16px;
-            font-size: 0.75rem;
-            font-weight: 800;
-            cursor: pointer;
-            box-shadow: 0 4px 0 #473fa3;
+            box-shadow: 0 4px 12px rgba(108, 92, 231, 0.2);
         }
 
-        /* Left Side Games Grid */
-        .popular-grid {
+        /* ===== MAIN GAMES GRID ===== */
+        .games-container {
+            width: 100%;
+            max-width: 650px;
+            z-index: 10;
+        }
+
+        .games-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(2, 1fr);
             gap: 16px;
         }
 
-        @media (max-width: 480px) {
-            .popular-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 12px;
+        @media (min-width: 500px) {
+            .games-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 20px;
             }
         }
 
-        .game-pill-card {
+        .game-card {
             background: white;
             border-radius: 28px;
-            overflow: hidden;
+            border: 3.5px solid #2f3542;
+            padding: 14px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 12px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.04);
             text-decoration: none;
             color: inherit;
-            border: 3px solid #fff;
-            transition: transform 0.2s;
+            box-shadow: 0 8px 0 #2f3542;
+            transition: transform 0.15s, box-shadow 0.15s;
             position: relative;
         }
 
-        .game-pill-card:active {
-            transform: scale(0.95);
+        .game-card:active {
+            transform: translateY(4px);
+            box-shadow: 0 4px 0 #2f3542;
         }
 
-        .game-pill-art {
+        .game-art-box {
             width: 100%;
-            aspect-ratio: 1.15;
+            aspect-ratio: 1.1;
             border-radius: 20px;
-            background: #f0f3f6;
-            margin-bottom: 10px;
+            background: #f1f2f6;
             display: flex;
             align-items: center;
             justify-content: center;
+            margin-bottom: 12px;
             position: relative;
             overflow: hidden;
+            border: 2px solid #2f3542;
         }
 
-        .play-circle {
+        /* Large emoji graphics */
+        .game-emoji {
+            font-size: 3.2rem;
+            filter: drop-shadow(2px 3px 0 rgba(0,0,0,0.1));
+            transition: transform 0.2s;
+        }
+
+        .game-card:active .game-emoji {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .game-play-overlay {
             position: absolute;
-            bottom: 8px;
             width: 32px;
             height: 32px;
             border-radius: 50%;
             background: #2ecc71;
+            border: 2px solid #2f3542;
+            bottom: 6px;
+            right: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 2px solid white;
-            box-shadow: 0 3px 0 rgba(0,0,0,0.1);
+            box-shadow: 0 2px 0 #2f3542;
         }
 
-        .play-triangle {
+        .play-arrow {
             width: 0;
             height: 0;
             border-top: 5px solid transparent;
@@ -430,580 +276,227 @@
             margin-left: 2px;
         }
 
-        .game-pill-title {
+        .game-label {
             font-size: 0.85rem;
             font-weight: 900;
-            color: #2c3e50;
+            color: #2f3542;
             text-align: center;
-            line-height: 1.2;
+            line-height: 1.25;
         }
 
-        /* Right Side Widgets */
-        .right-column {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .widget-box {
-            border-radius: 28px;
-            padding: 16px;
-            border: 3px solid white;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
-
-        .wb-daily { background: linear-gradient(135deg, #a29bfe 0%, #c2beff 100%); color: white; }
-        .wb-progress { background: linear-gradient(135deg, #74b9ff 0%, #a2d2ff 100%); color: white; }
-        .wb-tip { background: linear-gradient(135deg, #ffbe76 0%, #ffdfba 100%); color: #4a3f35; }
-
-        .wb-title {
-            font-size: 0.9rem;
+        .card-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: #fdcb6e;
+            color: #2f3542;
+            border: 2px solid #2f3542;
+            border-radius: 12px;
+            font-size: 0.6rem;
             font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            padding: 2px 8px;
+            box-shadow: 0 2px 0 #2f3542;
+            transform: rotate(6deg);
         }
 
-        .wb-desc {
-            font-size: 0.8rem;
-            font-weight: 700;
-            margin-bottom: 12px;
-            opacity: 0.95;
-        }
+        /* Card theme backgrounds */
+        .gc-1 { background: #bde0fe; }
+        .gc-2 { background: #d8f3dc; }
+        .gc-3 { background: #fcf6bd; }
+        .gc-4 { background: #ffe5d9; }
+        .gc-5 { background: #e0c3fc; }
+        .gc-6 { background: #ffc8dd; }
+        .gc-7 { background: #ffadad; }
+        .gc-8 { background: #b8f3d4; }
+        .gc-9 { background: #c9f5d1; }
 
-        /* Gift box elements */
-        .gift-box-art {
-            align-self: center;
-            margin: 10px 0;
-        }
-
-        .wb-btn {
-            width: 100%;
-            background: #2ecc71;
-            color: white;
-            border: 3px solid white;
-            border-radius: 20px;
-            padding: 10px;
-            font-family: inherit;
-            font-weight: 900;
-            font-size: 0.95rem;
+        /* ===== FLOATING INSTALL PWA BUTTON ===== */
+        .floating-install-btn {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+            border: 3.5px solid #2f3542;
+            box-shadow: 0 8px 0 #2f3542;
             cursor: pointer;
-            box-shadow: 0 4px 0 #27ae60;
+            z-index: 999;
+            display: none; /* Controlled by JS beforeinstallprompt */
+            align-items: center;
+            justify-content: center;
+            animation: breathe-btn 2.5s ease-in-out infinite;
             transition: transform 0.1s;
         }
 
-        .wb-btn:active {
-            transform: translateY(3px);
+        .floating-install-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 4px 0 #2f3542;
         }
 
-        /* Level progress info */
-        .progress-stat-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 8px;
-        }
-
-        .lvl-badge {
-            width: 32px;
-            height: 32px;
-            background: #fdcb6e;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 900;
-            border: 2px solid white;
-        }
-
-        .lvl-text {
-            font-size: 0.85rem;
-            font-weight: 800;
-        }
-
-        .lvl-progress-bar {
-            width: 100%;
-            height: 14px;
-            background: rgba(255,255,255,0.4);
-            border-radius: 10px;
-            overflow: hidden;
-            border: 2px solid white;
-            margin-bottom: 6px;
-        }
-
-        .lvl-progress-fill {
-            height: 100%;
-            background: #2ecc71;
-            width: 70%;
-        }
-
-        .lvl-score {
-            font-size: 0.75rem;
-            font-weight: 800;
-            text-align: right;
-        }
-
-        .monster-tip-row {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .monster-tip-bubble {
-            flex: 1;
-            background: white;
-            border-radius: 16px;
-            padding: 10px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            line-height: 1.35;
+        .install-controller-icon {
+            font-size: 2rem;
             position: relative;
         }
 
-        .monster-tip-bubble::before {
-            content: '';
+        .install-arrow-badge {
             position: absolute;
-            right: -8px;
-            top: 50%;
-            transform: translateY(-50%);
-            border-top: 8px solid transparent;
-            border-bottom: 8px solid transparent;
-            border-left: 8px solid white;
-        }
-
-        /* Bottom status list */
-        .status-row {
-            width: 100%;
-            max-width: 900px;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            padding: 0 16px;
-            margin-bottom: 24px;
-        }
-
-        @media (max-width: 600px) {
-            .status-row {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .status-pill {
-            background: white;
-            border-radius: 20px;
-            padding: 10px 16px;
+            bottom: -2px;
+            right: -2px;
+            background: #fdcb6e;
+            border: 2px solid #2f3542;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
             display: flex;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 6px 0 rgba(0,0,0,0.03);
-            border: 2px solid #fff;
-        }
-
-        .status-icon {
-            font-size: 1.6rem;
-        }
-
-        .status-text {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .status-title {
-            font-size: 0.75rem;
-            font-weight: 900;
-            color: #2c3e50;
-        }
-
-        .status-desc {
-            font-size: 0.65rem;
-            color: #7f8c8d;
-            font-weight: 700;
-        }
-
-        /* ===== BOTTOM NAVIGATION ===== */
-        .bottom-nav {
-            position: fixed;
-            bottom: 12px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: calc(100% - 32px);
-            max-width: 600px;
-            height: 64px;
-            background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%);
-            border-radius: 35px;
-            display: flex;
-            align-items: center;
-            justify-content: space-around;
-            z-index: 100;
-            box-shadow: 0 10px 25px rgba(108, 92, 231, 0.3);
-            border: 3px solid white;
-            padding: 0 10px;
-        }
-
-        .nav-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            color: white;
-            opacity: 0.8;
-            transition: opacity 0.2s, transform 0.2s;
-            font-family: inherit;
+            font-size: 0.8rem;
+            font-weight: bold;
         }
 
-        .nav-btn.active {
-            opacity: 1;
-            transform: scale(1.1);
+        @keyframes breathe-btn {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
         }
 
-        .nav-icon {
-            font-size: 1.5rem;
-        }
-
-        .nav-label {
-            font-size: 0.65rem;
-            font-weight: 900;
-            margin-top: 1px;
-        }
-
-        .footer-logo {
+        /* ===== FOOTER INFO ===== */
+        .footer-credit {
+            margin-top: 30px;
             text-align: center;
             font-size: 0.75rem;
             color: #7f8c8d;
-            margin-bottom: 24px;
             font-weight: 700;
+            z-index: 10;
         }
     </style>
 </head>
 <body>
 
-    <!-- HERO / SKY SECTION -->
-    <div class="hero-banner">
-        <!-- Floating sky decorations -->
-        <div class="sky-cloud cloud-1"></div>
-        <div class="sky-cloud cloud-2"></div>
-        <div class="sky-deco" style="top: 10%; left: 30%;">⭐</div>
-        <div class="sky-deco" style="top: 40%; right: 25%;">✨</div>
-        <div class="sky-deco" style="top: 15%; right: 40%;">🚀</div>
-        <div class="sky-deco" style="top: 35%; left: 45%;">☁️</div>
-
-        <!-- Header Controls Row -->
-        <div class="header-row">
-            <div class="profile-pill">
-                <div class="profile-avatar">👦</div>
-                <div class="profile-text">
-                    <div class="profile-text-name">Hi, Buddy! 👋</div>
-                    <div class="profile-text-stars">⭐ 1250</div>
-                </div>
-            </div>
-            <div class="header-buttons">
-                <button class="h-btn h-btn-gift" id="installAction" title="Install App">🎁</button>
-                <button class="h-btn h-btn-trophy" title="Trophy">🏆</button>
-                <button class="h-btn h-btn-sound" id="muteBtn" title="Suara">🔊</button>
-            </div>
-        </div>
-
-        <!-- Main Banner Content -->
-        <div class="hero-panel">
-            <div class="hero-title-group">
-                <h1 class="title-bubble">
-                    <span class="tb-play">PLAY</span>
-                    <span class="tb-learn">LEARN</span>
-                    <span class="tb-grow">GROW!</span>
-                </h1>
-                <div class="hero-badge-pill">Fun Games For Smart Kids ⭐</div>
-            </div>
-
-            <!-- Custom chibi vectors -->
-            <div class="hero-mascots-wrap">
-                <!-- Panda Mascot -->
-                <svg class="mascot-svg" width="90" height="90" viewBox="0 0 100 100">
-                    <!-- Ears -->
-                    <circle cx="25" cy="25" r="14" fill="#2d3436"/>
-                    <circle cx="75" cy="25" r="14" fill="#2d3436"/>
-                    <!-- Head -->
-                    <circle cx="50" cy="55" r="35" fill="white" stroke="#2d3436" stroke-width="3"/>
-                    <!-- Eyes patch -->
-                    <ellipse cx="38" cy="52" rx="10" ry="12" fill="#2d3436"/>
-                    <ellipse cx="62" cy="52" rx="10" ry="12" fill="#2d3436"/>
-                    <!-- Eyes pupil -->
-                    <circle cx="38" cy="52" r="3" fill="white"/>
-                    <circle cx="62" cy="52" r="3" fill="white"/>
-                    <!-- Nose -->
-                    <polygon points="47,65 53,65 50,68" fill="#2d3436"/>
-                    <!-- Cheeks -->
-                    <circle cx="28" cy="62" r="4" fill="#ff7675" opacity="0.6"/>
-                    <circle cx="72" cy="62" r="4" fill="#ff7675" opacity="0.6"/>
-                </svg>
-
-                <!-- Boy Waving Mascot -->
-                <svg class="mascot-svg" width="100" height="110" viewBox="0 0 100 110">
-                    <!-- Hair -->
-                    <path d="M25,50 C20,25 80,25 75,50 Z" fill="#e17055" stroke="#2d3436" stroke-width="3"/>
-                    <!-- Ears -->
-                    <circle cx="22" cy="52" r="6" fill="#ffe0b2" stroke="#2d3436" stroke-width="2.5"/>
-                    <circle cx="78" cy="52" r="6" fill="#ffe0b2" stroke="#2d3436" stroke-width="2.5"/>
-                    <!-- Face -->
-                    <circle cx="50" cy="52" r="28" fill="#ffe0b2" stroke="#2d3436" stroke-width="3"/>
-                    <!-- Hair bangs -->
-                    <path d="M25,36 C35,25 45,35 50,30 C55,35 65,25 75,36" fill="#e17055" stroke="#2d3436" stroke-width="2.5"/>
-                    <!-- Eyes -->
-                    <circle cx="40" cy="48" r="3.5" fill="#2d3436"/>
-                    <circle cx="60" cy="48" r="3.5" fill="#2d3436"/>
-                    <!-- Smile -->
-                    <path d="M44,60 Q50,66 56,60" fill="none" stroke="#2d3436" stroke-width="3" stroke-linecap="round"/>
-                    <!-- Hand waving -->
-                    <circle cx="85" cy="40" r="8" fill="#ffe0b2" stroke="#2d3436" stroke-width="2.5"/>
-                </svg>
-            </div>
-        </div>
+    <!-- Sky Clouds -->
+    <div class="sky-elements">
+        <div class="cloud c1"></div>
+        <div class="cloud c2"></div>
+        <div class="cloud c3"></div>
     </div>
 
-    <!-- CATEGORY CARD -->
-    <div class="category-wrapper">
-        <div class="category-list">
-            <button class="cat-item">
-                <div class="cat-circle" style="background: #a29bfe;">🎮</div>
-                <span class="cat-label">Adventure</span>
-            </button>
-            <button class="cat-item">
-                <div class="cat-circle" style="background: #ff7675;">🧠</div>
-                <span class="cat-label">Puzzle</span>
-            </button>
-            <button class="cat-item">
-                <div class="cat-circle" style="background: #fdcb6e;">1️⃣2️⃣3️⃣</div>
-                <span class="cat-label">Learning</span>
-            </button>
-            <button class="cat-item">
-                <div class="cat-circle" style="background: #55efc4;">🎨</div>
-                <span class="cat-label">Creativity</span>
-            </button>
-            <button class="cat-item">
-                <div class="cat-circle" style="background: #74b9ff;">⚽</div>
-                <span class="cat-label">Sports</span>
-            </button>
-            <button class="cat-item">
-                <div class="cat-circle" style="background: #ff7675;">🌟</div>
-                <span class="cat-label">More</span>
-            </button>
+    <!-- Header bar -->
+    <div class="header">
+        <div class="profile-pill">
+            <span class="profile-avatar">👦</span>
+            <span class="profile-name">Hi, Kiddo!</span>
         </div>
+        <button class="mute-btn" id="muteBtn">🔊</button>
     </div>
 
-    <!-- MAIN TWO COLUMN GRID -->
-    <div class="main-container">
-        
-        <!-- Left Side: Games Grid -->
-        <div>
-            <div class="section-header">
-                <div class="section-title-text">POPULAR GAMES ⭐</div>
-                <button class="see-all-btn">See All</button>
-            </div>
+    <!-- Title menu -->
+    <div class="title-container">
+        <h1 class="main-title">Ayo Main! 🎮</h1>
+        <p class="sub-title">Pilih game favoritmu di bawah ini</p>
+    </div>
 
-            <div class="popular-grid">
-                
-                <a href="labirin.html" class="game-pill-card">
-                    <div class="game-pill-art" style="background: #ffeaa7;">
-                        <!-- Jungle Adventure -->
-                        <svg viewBox="0 0 100 100" width="80" height="80">
-                            <text x="50" y="55" font-size="40" text-anchor="middle">🦁</text>
-                            <text x="75" y="80" font-size="20">🌴</text>
-                        </svg>
-                        <div class="play-circle"><div class="play-triangle"></div></div>
-                    </div>
-                    <span class="game-pill-title">Jungle Adventure</span>
-                </a>
+    <!-- Category Quick Filters -->
+    <div class="category-nav">
+        <button class="cat-chip active" data-filter="all">🌟 Semua</button>
+        <button class="cat-chip" data-filter="angka">🔢 Angka</button>
+        <button class="cat-chip" data-filter="bentuk">🔷 Bentuk</button>
+        <button class="cat-chip" data-filter="puzzle">🧩 Puzzle</button>
+        <button class="cat-chip" data-filter="kreatif">🎨 Kreatif</button>
+    </div>
 
-                <a href="bentuk.html" class="game-pill-card">
-                    <div class="game-pill-art" style="background: #ff7675;">
-                        <!-- Block Puzzle -->
-                        <svg viewBox="0 0 100 100" width="80" height="80">
-                            <rect x="25" y="25" width="22" height="22" rx="4" fill="#a29bfe" stroke="#4a3f35" stroke-width="2"/>
-                            <rect x="52" y="25" width="22" height="22" rx="4" fill="#55efc4" stroke="#4a3f35" stroke-width="2"/>
-                            <rect x="38" y="52" width="22" height="22" rx="4" fill="#fdcb6e" stroke="#4a3f35" stroke-width="2"/>
-                        </svg>
-                        <div class="play-circle"><div class="play-triangle"></div></div>
-                    </div>
-                    <span class="game-pill-title">Block Puzzle</span>
-                </a>
-
-                <a href="puzzle.html" class="game-pill-card">
-                    <div class="game-pill-art" style="background: #74b9ff;">
-                        <!-- Space Mission -->
-                        <svg viewBox="0 0 100 100" width="80" height="80">
-                            <text x="50" y="55" font-size="40" text-anchor="middle">🚀</text>
-                        </svg>
-                        <div class="play-circle"><div class="play-triangle"></div></div>
-                    </div>
-                    <span class="game-pill-title">Space Mission</span>
-                </a>
-
-                <a href="berhitung.html" class="game-pill-card">
-                    <div class="game-pill-art" style="background: #55efc4;">
-                        <!-- Number Fun -->
-                        <svg viewBox="0 0 100 100" width="80" height="80">
-                            <text x="50" y="60" font-family="Fredoka" font-weight="bold" font-size="36" fill="#2d3436" text-anchor="middle">123</text>
-                        </svg>
-                        <div class="play-circle"><div class="play-triangle"></div></div>
-                    </div>
-                    <span class="game-pill-title">Number Fun</span>
-                </a>
-
-                <a href="mewarnai.html" class="game-pill-card">
-                    <div class="game-pill-art" style="background: #a29bfe;">
-                        <!-- Color World -->
-                        <svg viewBox="0 0 100 100" width="80" height="80">
-                            <text x="50" y="55" font-size="40" text-anchor="middle">🎨</text>
-                        </svg>
-                        <div class="play-circle"><div class="play-triangle"></div></div>
-                    </div>
-                    <span class="game-pill-title">Color World</span>
-                </a>
-
-                <a href="balon.html" class="game-pill-card">
-                    <div class="game-pill-art" style="background: #ffe3e3;">
-                        <!-- Dino Run -->
-                        <svg viewBox="0 0 100 100" width="80" height="80">
-                            <text x="50" y="55" font-size="40" text-anchor="middle">🦖</text>
-                        </svg>
-                        <div class="play-circle"><div class="play-triangle"></div></div>
-                    </div>
-                    <span class="game-pill-title">Dino Run</span>
-                </a>
-
-            </div>
-        </div>
-
-        <!-- Right Side: Chibi Sideboards -->
-        <div class="right-column">
+    <!-- Games Container Grid -->
+    <div class="games-container">
+        <div class="games-grid">
             
-            <!-- Daily Reward -->
-            <div class="widget-box wb-daily">
-                <span class="wb-title">🎁 DAILY REWARD</span>
-                <span class="wb-desc">Collect your gift!</span>
-                
-                <div class="gift-box-art">
-                    <!-- High quality gift box vector -->
-                    <svg width="70" height="70" viewBox="0 0 100 100">
-                        <rect x="20" y="40" width="60" height="45" rx="6" fill="#ff7675" stroke="white" stroke-width="3"/>
-                        <rect x="15" y="30" width="70" height="15" rx="4" fill="#ff7675" stroke="white" stroke-width="3"/>
-                        <!-- Gold Ribbon -->
-                        <rect x="45" y="30" width="10" height="55" fill="#ffeaa7"/>
-                        <!-- Bow -->
-                        <circle cx="50" cy="22" r="10" fill="none" stroke="#ffeaa7" stroke-width="6"/>
-                        <circle cx="38" cy="22" r="10" fill="none" stroke="#ffeaa7" stroke-width="6"/>
-                    </svg>
+            <a href="berhitung.html" class="game-card" data-category="angka">
+                <div class="game-art-box gc-1">
+                    <span class="game-emoji">🔢</span>
+                    <div class="game-play-overlay"><div class="play-arrow"></div></div>
                 </div>
+                <span class="game-label">Menghitung Jari</span>
+            </a>
 
-                <button class="wb-btn" id="installBannerAction">CLAIM</button>
-            </div>
-
-            <!-- Level progress -->
-            <div class="widget-box wb-progress">
-                <span class="wb-title">🏆 LEVEL PROGRESS</span>
-                
-                <div class="progress-stat-row">
-                    <div class="lvl-badge">7</div>
-                    <span class="lvl-text">Super Player!</span>
-                    <span class="lvl-text">👑</span>
+            <a href="bentuk.html" class="game-card" data-category="bentuk">
+                <div class="game-art-box gc-2">
+                    <span class="game-emoji">🔷</span>
+                    <div class="game-play-overlay"><div class="play-arrow"></div></div>
                 </div>
-                
-                <div class="lvl-progress-bar">
-                    <div class="lvl-progress-fill"></div>
+                <span class="game-label">Mencocokkan Bentuk</span>
+            </a>
+
+            <a href="memory.html" class="game-card" data-category="puzzle">
+                <div class="game-art-box gc-3">
+                    <span class="game-emoji">🐾</span>
+                    <div class="game-play-overlay"><div class="play-arrow"></div></div>
                 </div>
-                
-                <span class="lvl-score">450 / 700</span>
-            </div>
+                <span class="game-label">Mengingat Teman</span>
+            </a>
 
-            <!-- Parent Tip -->
-            <div class="widget-box wb-tip">
-                <span class="wb-title" style="color:#ff7675;">❤️ PARENT TIP</span>
-                
-                <div class="monster-tip-row">
-                    <div class="monster-tip-bubble">
-                        Encourage play, inspire curiosity and watch your child grow! 💖
-                    </div>
-                    
-                    <!-- Cute purple monster vector -->
-                    <svg width="60" height="60" viewBox="0 0 100 100" style="flex-shrink:0;">
-                        <!-- Body -->
-                        <rect x="20" y="20" width="60" height="60" rx="20" fill="#a29bfe" stroke="#4a3f35" stroke-width="3"/>
-                        <!-- Horns -->
-                        <polygon points="25,20 15,10 30,15" fill="#ff7675" stroke="#4a3f35" stroke-width="2.5"/>
-                        <polygon points="75,20 85,10 70,15" fill="#ff7675" stroke="#4a3f35" stroke-width="2.5"/>
-                        <!-- One big eye -->
-                        <circle cx="50" cy="45" r="12" fill="white" stroke="#4a3f35" stroke-width="2.5"/>
-                        <circle cx="50" cy="45" r="5" fill="#2d3436"/>
-                        <!-- Cute mouth -->
-                        <path d="M40,65 Q50,72 60,65" fill="none" stroke="#4a3f35" stroke-width="3" stroke-linecap="round"/>
-                        <!-- Little hands -->
-                        <circle cx="15" cy="55" r="6" fill="#a29bfe" stroke="#4a3f35" stroke-width="2"/>
-                        <circle cx="85" cy="55" r="6" fill="#a29bfe" stroke="#4a3f35" stroke-width="2"/>
-                    </svg>
+            <a href="puzzle.html" class="game-card" data-category="puzzle">
+                <div class="game-art-box gc-4">
+                    <span class="game-emoji">🧩</span>
+                    <div class="game-play-overlay"><div class="play-arrow"></div></div>
                 </div>
-            </div>
+                <span class="game-label">Teka-teki Hewan</span>
+                <span class="card-badge">BARU</span>
+            </a>
 
-        </div>
+            <a href="suara.html" class="game-card" data-category="puzzle">
+                <div class="game-art-box gc-5">
+                    <span class="game-emoji">🔊</span>
+                    <div class="game-play-overlay"><div class="play-arrow"></div></div>
+                </div>
+                <span class="game-label">Siapa Suaranya?</span>
+                <span class="card-badge">BARU</span>
+            </a>
 
-    </div>
+            <a href="balon.html" class="game-card" data-category="angka">
+                <div class="game-art-box gc-6">
+                    <span class="game-emoji">🎈</span>
+                    <div class="game-play-overlay"><div class="play-arrow"></div></div>
+                </div>
+                <span class="game-label">Menjatuhkan Balon</span>
+                <span class="card-badge">BARU</span>
+            </a>
 
-    <!-- Bottom Status Row -->
-    <div class="status-row">
-        <div class="status-pill">
-            <span class="status-icon">🛡️</span>
-            <div class="status-text">
-                <span class="status-title">SAFE & SECURE</span>
-                <span class="status-desc">100% Kids Friendly Environment</span>
-            </div>
-        </div>
-        <div class="status-pill">
-            <span class="status-icon">🧠</span>
-            <div class="status-text">
-                <span class="status-title">LEARN & GROW</span>
-                <span class="status-desc">Fun games that teach new skills</span>
-            </div>
-        </div>
-        <div class="status-pill">
-            <span class="status-icon">😊</span>
-            <div class="status-text">
-                <span class="status-title">PLAY & ENJOY</span>
-                <span class="status-desc">Endless fun for everyone!</span>
-            </div>
+            <a href="mewarnai.html" class="game-card" data-category="kreatif">
+                <div class="game-art-box gc-7">
+                    <span class="game-emoji">🎨</span>
+                    <div class="game-play-overlay"><div class="play-arrow"></div></div>
+                </div>
+                <span class="game-label">Ayo Melukis</span>
+            </a>
+
+            <a href="urutan.html" class="game-card" data-category="angka">
+                <div class="game-art-box gc-8">
+                    <span class="game-emoji">📊</span>
+                    <div class="game-play-overlay"><div class="play-arrow"></div></div>
+                </div>
+                <span class="game-label">Menyusun Balok</span>
+            </a>
+
+            <a href="labirin.html" class="game-card" data-category="puzzle">
+                <div class="game-art-box gc-9">
+                    <span class="game-emoji">🌟</span>
+                    <div class="game-play-overlay"><div class="play-arrow"></div></div>
+                </div>
+                <span class="game-label">Mari Berbagi</span>
+                <span class="card-badge">BARU</span>
+            </a>
+
         </div>
     </div>
 
-    <!-- FOOTER LOGO -->
-    <div class="footer-logo">
+    <!-- PWA Floating Controller Install Button -->
+    <button class="floating-install-btn" id="floatingInstallBtn" title="Install App ke Tablet">
+        <span class="install-controller-icon">🎮</span>
+        <span class="install-arrow-badge">📥</span>
+    </button>
+
+    <div class="footer-credit">
         Made with ❤️ untuk anak-anak Indonesia 😊
     </div>
-
-    <!-- BOTTOM NAVIGATION -->
-    <nav class="bottom-nav">
-        <button class="nav-btn active">
-            <span class="nav-icon">🏠</span>
-            <span class="nav-label">Home</span>
-        </button>
-        <button class="nav-btn" onclick="document.querySelector('.popular-grid').scrollIntoView({behavior:'smooth'})">
-            <span class="nav-icon">🎮</span>
-            <span class="nav-label">Games</span>
-        </button>
-        <button class="nav-btn">
-            <span class="nav-icon">🏆</span>
-            <span class="nav-label">Achievements</span>
-        </button>
-        <button class="nav-btn">
-            <span class="nav-icon">👤</span>
-            <span class="nav-label">Profile</span>
-        </button>
-    </nav>
 
     <script>
         // ===== Audio System =====
@@ -1022,77 +515,84 @@
                 if (type === 'tap') {
                     osc.type = 'sine';
                     osc.frequency.setValueAtTime(500, now);
-                    osc.frequency.exponentialRampToValueAtTime(800, now + 0.08);
-                    gain.gain.setValueAtTime(0.06, now);
-                    gain.gain.linearRampToValueAtTime(0, now + 0.08);
+                    osc.frequency.exponentialRampToValueAtTime(850, now + 0.07);
+                    gain.gain.setValueAtTime(0.05, now);
+                    gain.gain.linearRampToValueAtTime(0, now + 0.07);
                     osc.start(now);
-                    osc.stop(now + 0.08);
+                    osc.stop(now + 0.07);
                 } else if (type === 'click') {
                     osc.type = 'triangle';
                     osc.frequency.setValueAtTime(600, now);
-                    osc.frequency.exponentialRampToValueAtTime(1000, now + 0.1);
-                    osc.frequency.exponentialRampToValueAtTime(1300, now + 0.18);
-                    gain.gain.setValueAtTime(0.08, now);
-                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+                    osc.frequency.exponentialRampToValueAtTime(1100, now + 0.15);
+                    gain.gain.setValueAtTime(0.07, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
                     osc.start(now);
-                    osc.stop(now + 0.18);
+                    osc.stop(now + 0.15);
                 }
             } catch (e) {}
         }
 
-        // ===== Mute Button =====
+        // Mute Button
         const muteBtn = document.getElementById('muteBtn');
         muteBtn.addEventListener('click', () => {
             audioMuted = !audioMuted;
             muteBtn.textContent = audioMuted ? '🔇' : '🔊';
         });
 
-        // ===== Card Sounds =====
-        document.querySelectorAll('.game-pill-card').forEach(card => {
+        // Filter functionality
+        const chips = document.querySelectorAll('.cat-chip');
+        const cards = document.querySelectorAll('.game-card');
+
+        chips.forEach(chip => {
+            chip.addEventListener('click', () => {
+                playSound('tap');
+                chips.forEach(c => c.classList.remove('active'));
+                chip.classList.add('active');
+
+                const filter = chip.getAttribute('data-filter');
+
+                cards.forEach(card => {
+                    const cat = card.getAttribute('data-category');
+                    if (filter === 'all' || cat === filter) {
+                        card.style.display = 'flex';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Card sounds
+        cards.forEach(card => {
             card.addEventListener('click', () => playSound('click'));
-        });
-
-        document.querySelectorAll('.cat-item').forEach(item => {
-            item.addEventListener('click', (e) => {
-                e.preventDefault();
-                playSound('tap');
-            });
-        });
-
-        // ===== Bottom Nav Active State =====
-        document.querySelectorAll('.nav-btn').forEach(item => {
-            item.addEventListener('click', function() {
-                document.querySelectorAll('.nav-btn').forEach(n => n.classList.remove('active'));
-                this.classList.add('active');
-                playSound('tap');
-            });
         });
 
         // ===== PWA Install =====
         let deferredPrompt;
-        const installAction = document.getElementById('installAction');
-        const claimBtn = document.getElementById('installBannerAction');
+        const floatingInstallBtn = document.getElementById('floatingInstallBtn');
 
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
+            floatingInstallBtn.style.display = 'flex';
         });
 
-        function handleInstallClick() {
+        floatingInstallBtn.addEventListener('click', () => {
+            playSound('click');
             if (deferredPrompt) {
                 deferredPrompt.prompt();
                 deferredPrompt.userChoice.then(() => {
                     deferredPrompt = null;
+                    floatingInstallBtn.style.display = 'none';
                 });
-            } else {
-                alert('Aplikasi sudah terinstall atau browser Anda belum mendukung instalasi PWA.');
             }
-        }
+        });
 
-        if (installAction) installAction.addEventListener('click', handleInstallClick);
-        if (claimBtn) claimBtn.addEventListener('click', handleInstallClick);
+        window.addEventListener('appinstalled', () => {
+            floatingInstallBtn.style.display = 'none';
+        });
 
-        // ===== Service Worker Registration =====
+        // Service Worker
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js')
                 .then(reg => console.log('SW registered:', reg.scope))
