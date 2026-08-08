@@ -2,8 +2,8 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#667eea">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
+    <meta name="theme-color" content="#6C5CE7">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="description" content="Kumpulan game edukasi seru untuk anak usia 4-6 tahun. Bermain sambil belajar!">
@@ -11,231 +11,451 @@
     <link rel="apple-touch-icon" href="icons/icon-192.svg">
     <title>Kiddo Games 🎮 — Ayo Bermain & Belajar!</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap');
+
+        :root {
+            --purple: #6C5CE7;
+            --purple-dark: #5541d4;
+            --purple-light: #a29bfe;
+            --pink: #fd79a8;
+            --pink-light: #fab1c9;
+            --blue: #74b9ff;
+            --blue-dark: #0984e3;
+            --green: #55efc4;
+            --green-dark: #00b894;
+            --yellow: #ffeaa7;
+            --yellow-dark: #fdcb6e;
+            --orange: #fab1a0;
+            --orange-dark: #e17055;
+            --red: #ff7675;
+            --bg-main: #f0e6ff;
+            --bg-card: #ffffff;
+            --text-dark: #2d3436;
+            --text-mid: #636e72;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-card: 0 4px 15px rgba(108,92,231,0.12);
+            --shadow-lg: 0 8px 30px rgba(108,92,231,0.18);
+        }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            font-family: 'Bubblegum Sans', 'Comic Sans MS', cursive, sans-serif;
-            background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 50%, #d4c4fb 100%);
+            font-family: 'Nunito', 'Comic Sans MS', cursive, sans-serif;
+            background: var(--bg-main);
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 2rem 1rem;
-            position: relative;
             overflow-x: hidden;
+            padding-bottom: 80px; /* space for bottom nav */
+            color: var(--text-dark);
         }
 
-        /* Decorative Background Elements */
-        .decoration {
-            position: absolute;
-            pointer-events: none;
-            z-index: 0;
-            opacity: 0.5;
-            animation: float-bg linear infinite;
+        /* ===== TOP BAR ===== */
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            background: linear-gradient(135deg, #6C5CE7 0%, #a29bfe 100%);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        @keyframes float-bg {
-            0% { transform: translateY(100vh) rotate(0deg); }
-            100% { transform: translateY(-20vh) rotate(360deg); }
+        .top-bar-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        /* Mute Button */
-        .mute-btn {
-            position: fixed;
-            top: 15px;
-            right: 15px;
-            z-index: 9999;
-            width: 50px;
-            height: 50px;
+        .avatar {
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
-            border: 3px solid rgba(255,255,255,0.7);
-            background: rgba(255,255,255,0.3);
-            backdrop-filter: blur(10px);
+            background: linear-gradient(135deg, #ffeaa7, #fab1a0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 1.6rem;
+            border: 3px solid rgba(255,255,255,0.7);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+
+        .greeting {
+            color: white;
+        }
+
+        .greeting-name {
+            font-size: 1.05rem;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        .greeting-stars {
+            font-size: 0.8rem;
+            font-weight: 700;
+            opacity: 0.9;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .top-bar-right {
+            display: flex;
+            gap: 8px;
+        }
+
+        .top-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(255,255,255,0.25);
+            backdrop-filter: blur(10px);
+            font-size: 1.2rem;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: all 0.2s;
+            color: white;
         }
 
-        .mute-btn:hover {
-            transform: scale(1.1);
-            background: rgba(255,255,255,0.5);
+        .top-btn:active {
+            transform: scale(0.9);
         }
 
-        .mute-btn:active {
-            transform: scale(0.95);
+        /* ===== HERO SECTION ===== */
+        .hero {
+            background: linear-gradient(180deg, #a29bfe 0%, #dfe6e9 50%, var(--bg-main) 100%);
+            padding: 20px 16px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
         }
 
-        /* PWA Install Banner */
+        .hero-decorations {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .hero-deco {
+            position: absolute;
+            animation: float-hero 3s ease-in-out infinite;
+            font-size: 2rem;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        }
+
+        .hero-deco:nth-child(1) { top: 5%; left: 5%; animation-delay: 0s; font-size: 2.2rem; }
+        .hero-deco:nth-child(2) { top: 8%; right: 8%; animation-delay: 0.5s; font-size: 1.8rem; }
+        .hero-deco:nth-child(3) { top: 15%; left: 15%; animation-delay: 1s; font-size: 1.5rem; }
+        .hero-deco:nth-child(4) { top: 20%; right: 15%; animation-delay: 1.5s; font-size: 2rem; }
+        .hero-deco:nth-child(5) { bottom: 25%; left: 8%; animation-delay: 0.3s; font-size: 1.6rem; }
+        .hero-deco:nth-child(6) { bottom: 20%; right: 5%; animation-delay: 0.8s; font-size: 2.5rem; }
+        .hero-deco:nth-child(7) { top: 35%; left: 2%; animation-delay: 1.2s; font-size: 1.3rem; }
+        .hero-deco:nth-child(8) { top: 40%; right: 3%; animation-delay: 0.6s; font-size: 1.4rem; }
+
+        @keyframes float-hero {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(5deg); }
+        }
+
+        .hero-characters {
+            position: relative;
+            z-index: 1;
+            font-size: 5rem;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 8px;
+        }
+
+        .hero-char {
+            animation: hero-bounce 2s ease-in-out infinite;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+        }
+
+        .hero-char:nth-child(1) { font-size: 3.5rem; animation-delay: 0.2s; }
+        .hero-char:nth-child(2) { font-size: 5.5rem; animation-delay: 0s; }
+        .hero-char:nth-child(3) { font-size: 3.5rem; animation-delay: 0.4s; }
+
+        @keyframes hero-bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+
+        .hero-title {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-title h1 {
+            font-size: clamp(2.2rem, 7vw, 3.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            letter-spacing: -1px;
+            margin-bottom: 6px;
+        }
+
+        .hero-title .line1 { color: #e17055; text-shadow: 2px 2px 0 rgba(0,0,0,0.08); }
+        .hero-title .line2 { color: #0984e3; text-shadow: 2px 2px 0 rgba(0,0,0,0.08); }
+        .hero-title .line3 { color: #00b894; text-shadow: 2px 2px 0 rgba(0,0,0,0.08); }
+
+        .hero-subtitle {
+            position: relative;
+            z-index: 1;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-mid);
+            margin-top: 4px;
+            background: rgba(255,255,255,0.6);
+            display: inline-block;
+            padding: 4px 16px;
+            border-radius: 20px;
+        }
+
+        /* ===== INSTALL BANNER (non-intrusive) ===== */
         .install-banner {
             display: none;
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 9999;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            margin: 0 16px;
+            margin-top: -10px;
+            padding: 10px 16px;
+            background: linear-gradient(135deg, #6C5CE7, #a29bfe);
+            border-radius: var(--radius-md);
             color: white;
-            padding: 12px 28px;
-            border-radius: 50px;
-            font-size: 1.2rem;
-            font-family: 'Bubblegum Sans', cursive;
+            font-weight: 800;
+            font-size: 0.95rem;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            z-index: 10;
             cursor: pointer;
-            box-shadow: 0 8px 25px rgba(102,126,234,0.4);
             border: none;
-            animation: pulse-install 2s ease-in-out infinite;
+            font-family: inherit;
+            width: calc(100% - 32px);
+            text-align: left;
+        }
+
+        .install-banner-content {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .install-banner .install-icon {
+            font-size: 1.8rem;
+        }
+
+        .install-banner .install-btn-action {
+            background: white;
+            color: var(--purple);
+            border: none;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 800;
+            font-size: 0.85rem;
+            font-family: inherit;
+            cursor: pointer;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .install-banner .install-close {
+            position: absolute;
+            top: 6px;
+            right: 8px;
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.7);
+            font-size: 1rem;
+            cursor: pointer;
+            padding: 2px;
+        }
+
+        /* ===== CATEGORY BAR ===== */
+        .category-section {
+            padding: 18px 0 8px;
+        }
+
+        .category-scroll {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding: 0 16px 8px;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+
+        .category-scroll::-webkit-scrollbar { display: none; }
+
+        .category-item {
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            scroll-snap-align: start;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .category-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            box-shadow: var(--shadow-card);
+            transition: all 0.2s;
+            border: 3px solid rgba(255,255,255,0.8);
+        }
+
+        .category-item:active .category-icon {
+            transform: scale(0.9);
+        }
+
+        .category-label {
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: var(--text-mid);
+            text-align: center;
             white-space: nowrap;
         }
 
-        .install-banner:hover {
-            transform: translateX(-50%) scale(1.05);
+        /* ===== SECTION HEADERS ===== */
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 16px 10px;
         }
 
-        @keyframes pulse-install {
-            0%, 100% { box-shadow: 0 8px 25px rgba(102,126,234,0.4); }
-            50% { box-shadow: 0 8px 35px rgba(102,126,234,0.7); }
+        .section-title {
+            font-size: 1.15rem;
+            font-weight: 900;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
-        header {
-            text-align: center;
-            margin-bottom: 2.5rem;
-            z-index: 1;
-        }
-
-        h1 {
-            font-size: clamp(2.8rem, 8vw, 5.5rem);
-            margin-bottom: 0.5rem;
-            background: linear-gradient(to right, #ff6b6b, #feca57, #48dbfb, #ff9ff3, #ff6b6b);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));
-            animation: bounce 2s ease-in-out infinite, rainbow-shift 4s linear infinite;
-        }
-
-        @keyframes rainbow-shift {
-            0% { background-position: 0% center; }
-            100% { background-position: 200% center; }
-        }
-
-        h2 {
-            font-size: clamp(1.4rem, 4vw, 2.2rem);
-            color: #4a4a4a;
-            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
-        }
-
-        /* Grid Layout */
-        .game-grid {
+        /* ===== POPULAR GAMES GRID ===== */
+        .games-scroll {
             display: grid;
-            gap: 1.5rem;
-            width: 100%;
-            max-width: 1200px;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            z-index: 1;
-            margin-bottom: 2rem;
-            padding: 0 0.5rem;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            padding: 0 16px 8px;
         }
 
-        @media (min-width: 768px) {
-            .game-grid {
+        @media (max-width: 420px) {
+            .games-scroll {
                 grid-template-columns: repeat(3, 1fr);
-                gap: 2rem;
+                gap: 8px;
             }
         }
 
-        @media (min-width: 1100px) {
-            .game-grid {
+        @media (min-width: 600px) {
+            .games-scroll {
                 grid-template-columns: repeat(3, 1fr);
+                gap: 16px;
+                max-width: 600px;
+                margin: 0 auto;
             }
         }
 
-        /* Game Cards */
-        .card {
+        .game-card {
+            position: relative;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
             text-decoration: none;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 1.8rem 1.2rem;
-            border-radius: 28px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1), inset 0 -4px 12px rgba(0,0,0,0.04);
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            animation: breathe 4s ease-in-out infinite;
-            border: 3px solid rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(5px);
-            -webkit-tap-highlight-color: transparent;
+            aspect-ratio: 1;
+            padding: 10px 6px 8px;
+            box-shadow: var(--shadow-card);
+            transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 3px solid rgba(255,255,255,0.5);
         }
 
-        .card:nth-child(1) { animation-delay: 0.0s; background: linear-gradient(145deg, #bde0fe, #a2d2ff); }
-        .card:nth-child(2) { animation-delay: 0.15s; background: linear-gradient(145deg, #d8f3dc, #b7e4c7); }
-        .card:nth-child(3) { animation-delay: 0.3s; background: linear-gradient(145deg, #fcf6bd, #fdf09d); }
-        .card:nth-child(4) { animation-delay: 0.45s; background: linear-gradient(145deg, #ffe5d9, #ffcad4); }
-        .card:nth-child(5) { animation-delay: 0.6s; background: linear-gradient(145deg, #e0c3fc, #cbaacb); }
-        .card:nth-child(6) { animation-delay: 0.75s; background: linear-gradient(145deg, #ffc8dd, #ffafcc); }
-        .card:nth-child(7) { animation-delay: 0.9s; background: linear-gradient(145deg, #ffadad, #ff9393); }
-        .card:nth-child(8) { animation-delay: 1.05s; background: linear-gradient(145deg, #b8f3d4, #7ee8b0); }
-        .card:nth-child(9) { animation-delay: 1.2s; background: linear-gradient(145deg, #c9f5d1, #a8e6cf); }
-
-        .card:hover {
-            transform: scale(1.06) translateY(-8px);
-            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.15), inset 0 -4px 12px rgba(0,0,0,0.04);
-            animation-play-state: paused;
+        .game-card:active {
+            transform: scale(0.93);
         }
 
-        .card:active {
-            transform: scale(0.96);
+        @media (hover: hover) {
+            .game-card:hover {
+                transform: translateY(-4px) scale(1.03);
+                box-shadow: var(--shadow-lg);
+            }
         }
 
-        @keyframes breathe {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-6px); }
-        }
-
-        .emoji {
-            font-size: 4.5rem;
-            margin-bottom: 0.8rem;
-            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.15));
+        .game-card-emoji {
+            font-size: clamp(2rem, 8vw, 3rem);
+            filter: drop-shadow(0 3px 6px rgba(0,0,0,0.15));
+            margin-bottom: 4px;
             transition: transform 0.3s;
         }
 
-        .card:hover .emoji {
-            transform: rotate(8deg) scale(1.1);
+        .game-card:active .game-card-emoji {
+            transform: rotate(-10deg) scale(1.15);
         }
 
-        .game-title {
-            font-size: 1.6rem;
-            color: #333;
-            text-align: center;
-            line-height: 1.2;
-            text-shadow: 1px 1px 0px rgba(255,255,255,0.8);
-        }
-
-        .badge {
-            display: inline-block;
-            margin-top: 8px;
-            padding: 3px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
+        .game-card-name {
+            font-size: clamp(0.6rem, 2.5vw, 0.78rem);
+            font-weight: 800;
             color: white;
-            text-shadow: none;
+            text-align: center;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.25);
+            line-height: 1.15;
+            padding: 0 2px;
+        }
+
+        .game-card-play {
+            position: absolute;
+            bottom: 6px;
+            right: 6px;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.35);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: white;
+            border: 2px solid rgba(255,255,255,0.5);
         }
 
         .badge-new {
-            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            background: linear-gradient(135deg, #ff7675, #e17055);
+            color: white;
+            font-size: 0.55rem;
+            font-weight: 900;
+            padding: 2px 6px;
+            border-radius: 8px;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 6px rgba(225,112,85,0.4);
             animation: pulse-badge 1.5s ease-in-out infinite;
         }
 
@@ -244,79 +464,398 @@
             50% { transform: scale(1.1); }
         }
 
-        footer {
-            margin-top: auto;
-            text-align: center;
-            font-size: 1.3rem;
-            color: #555;
-            z-index: 1;
-            padding: 0.8rem 1.5rem;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 20px;
-            backdrop-filter: blur(5px);
+        /* Game card colors */
+        .gc-1 { background: linear-gradient(145deg, #74b9ff, #0984e3); }
+        .gc-2 { background: linear-gradient(145deg, #a29bfe, #6C5CE7); }
+        .gc-3 { background: linear-gradient(145deg, #ffeaa7, #fdcb6e); }
+        .gc-4 { background: linear-gradient(145deg, #fab1a0, #e17055); }
+        .gc-5 { background: linear-gradient(145deg, #81ecec, #00cec9); }
+        .gc-6 { background: linear-gradient(145deg, #fd79a8, #e84393); }
+        .gc-7 { background: linear-gradient(145deg, #55efc4, #00b894); }
+        .gc-8 { background: linear-gradient(145deg, #ffeaa7, #e17055); }
+        .gc-9 { background: linear-gradient(145deg, #dfe6e9, #6C5CE7); }
+
+        /* ===== INFO CARDS ROW ===== */
+        .info-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            padding: 0 16px 12px;
         }
+
+        @media (min-width: 600px) {
+            .info-row {
+                max-width: 600px;
+                margin: 0 auto;
+            }
+        }
+
+        .info-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 14px;
+            box-shadow: var(--shadow-card);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info-card-title {
+            font-size: 0.72rem;
+            font-weight: 900;
+            color: var(--purple);
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .info-card-emoji {
+            font-size: 2.5rem;
+            position: absolute;
+            bottom: 6px;
+            right: 8px;
+            opacity: 0.9;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        }
+
+        .tip-text {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--text-mid);
+            line-height: 1.4;
+            max-width: 70%;
+        }
+
+        .progress-bar-wrap {
+            margin-top: 8px;
+            background: #eee;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            width: 70%;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            background: linear-gradient(90deg, var(--green), var(--green-dark));
+            transition: width 0.5s;
+        }
+
+        .progress-text {
+            font-size: 0.7rem;
+            font-weight: 800;
+            color: var(--green-dark);
+            margin-top: 3px;
+        }
+
+        /* ===== PARENT SECTION ===== */
+        .parent-card {
+            margin: 0 16px 16px;
+            background: linear-gradient(135deg, #fff5f5, #ffeaa7);
+            border-radius: var(--radius-lg);
+            padding: 16px;
+            box-shadow: var(--shadow-card);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        @media (min-width: 600px) {
+            .parent-card {
+                max-width: 568px;
+                margin: 0 auto 16px;
+            }
+        }
+
+        .parent-card-icon {
+            font-size: 2.5rem;
+            flex-shrink: 0;
+        }
+
+        .parent-card-text {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--text-mid);
+            line-height: 1.4;
+        }
+
+        .parent-card-label {
+            font-size: 0.72rem;
+            font-weight: 900;
+            color: var(--pink);
+            margin-bottom: 2px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* ===== BOTTOM NAV ===== */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 68px;
+            background: white;
+            border-top: 1px solid rgba(0,0,0,0.06);
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            z-index: 200;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
+            padding-bottom: env(safe-area-inset-bottom, 0);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            text-decoration: none;
+            cursor: pointer;
+            padding: 4px 12px;
+            border-radius: 12px;
+            transition: all 0.2s;
+            background: none;
+            border: none;
+            font-family: inherit;
+        }
+
+        .nav-item.active {
+            background: rgba(108,92,231,0.1);
+        }
+
+        .nav-item-icon {
+            font-size: 1.5rem;
+            line-height: 1;
+        }
+
+        .nav-item-label {
+            font-size: 0.65rem;
+            font-weight: 800;
+            color: var(--text-mid);
+        }
+
+        .nav-item.active .nav-item-label {
+            color: var(--purple);
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            text-align: center;
+            padding: 16px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-mid);
+            opacity: 0.7;
+        }
+
+        /* ===== SCROLLBAR HIDE ===== */
+        ::-webkit-scrollbar { width: 0; height: 0; }
     </style>
 </head>
 <body>
 
-    <button class="mute-btn" id="muteBtn" title="Suara On/Off">🔊</button>
+    <!-- TOP BAR -->
+    <div class="top-bar">
+        <div class="top-bar-left">
+            <div class="avatar">👦</div>
+            <div class="greeting">
+                <div class="greeting-name">Hi, Kiddo! 👋</div>
+                <div class="greeting-stars">⭐ Ayo bermain!</div>
+            </div>
+        </div>
+        <div class="top-bar-right">
+            <button class="top-btn" id="muteBtn" title="Suara">🔊</button>
+        </div>
+    </div>
 
-    <button class="install-banner" id="installBanner">
-        📲 Install Kiddo Games!
-    </button>
+    <!-- HERO SECTION -->
+    <div class="hero">
+        <div class="hero-decorations">
+            <div class="hero-deco">🏰</div>
+            <div class="hero-deco">🚀</div>
+            <div class="hero-deco">☁️</div>
+            <div class="hero-deco">⭐</div>
+            <div class="hero-deco">🐼</div>
+            <div class="hero-deco">🌈</div>
+            <div class="hero-deco">🦋</div>
+            <div class="hero-deco">✨</div>
+        </div>
+        <div class="hero-characters">
+            <span class="hero-char">🐱</span>
+            <span class="hero-char">🧒</span>
+            <span class="hero-char">🐶</span>
+        </div>
+        <div class="hero-title">
+            <h1>
+                <span class="line1">BERMAIN</span><br>
+                <span class="line2">BELAJAR</span><br>
+                <span class="line3">TUMBUH!</span>
+            </h1>
+        </div>
+        <div class="hero-subtitle">🎮 Game Seru untuk Anak Cerdas</div>
+    </div>
 
-    <header>
-        <h1>Kiddo Games 🎮</h1>
-        <h2>Ayo Bermain & Belajar!</h2>
-    </header>
+    <!-- INSTALL BANNER (inline, not blocking) -->
+    <div class="install-banner" id="installBanner">
+        <div class="install-banner-content">
+            <span class="install-icon">📲</span>
+            <div>
+                <div style="font-size:0.85rem;">Install Kiddo Games</div>
+                <div style="font-size:0.7rem;opacity:0.85;font-weight:600;">Main offline di tablet!</div>
+            </div>
+        </div>
+        <button class="install-btn-action" id="installAction">Install</button>
+        <button class="install-close" id="installClose">✕</button>
+    </div>
 
-    <div class="game-grid">
-        <a href="berhitung.html" class="card">
-            <div class="emoji">🔢</div>
-            <div class="game-title">Berapa Jumlahnya?</div>
+    <!-- CATEGORY BAR -->
+    <div class="category-section">
+        <div class="category-scroll">
+            <a href="#angka" class="category-item" data-filter="angka">
+                <div class="category-icon" style="background: linear-gradient(145deg, #74b9ff, #a29bfe);">🔢</div>
+                <span class="category-label">Angka</span>
+            </a>
+            <a href="#bentuk" class="category-item" data-filter="bentuk">
+                <div class="category-icon" style="background: linear-gradient(145deg, #a29bfe, #6C5CE7);">🔷</div>
+                <span class="category-label">Bentuk</span>
+            </a>
+            <a href="#memori" class="category-item" data-filter="memori">
+                <div class="category-icon" style="background: linear-gradient(145deg, #ffeaa7, #fdcb6e);">🧠</div>
+                <span class="category-label">Memori</span>
+            </a>
+            <a href="#puzzle" class="category-item" data-filter="puzzle">
+                <div class="category-icon" style="background: linear-gradient(145deg, #fab1a0, #e17055);">🧩</div>
+                <span class="category-label">Puzzle</span>
+            </a>
+            <a href="#suara" class="category-item" data-filter="suara">
+                <div class="category-icon" style="background: linear-gradient(145deg, #81ecec, #00cec9);">🔊</div>
+                <span class="category-label">Suara</span>
+            </a>
+            <a href="#kreativitas" class="category-item" data-filter="kreativitas">
+                <div class="category-icon" style="background: linear-gradient(145deg, #55efc4, #00b894);">🎨</div>
+                <span class="category-label">Kreatif</span>
+            </a>
+            <a href="#lainnya" class="category-item" data-filter="lainnya">
+                <div class="category-icon" style="background: linear-gradient(145deg, #fd79a8, #e84393);">🌟</div>
+                <span class="category-label">Lainnya</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- POPULAR GAMES -->
+    <div class="section-header">
+        <div class="section-title">🔥 Semua Game</div>
+    </div>
+
+    <div class="games-scroll">
+        <a href="berhitung.html" class="game-card gc-1">
+            <div class="game-card-emoji">🔢</div>
+            <div class="game-card-name">Berapa Jumlahnya?</div>
+            <div class="game-card-play">▶</div>
         </a>
-        <a href="bentuk.html" class="card">
-            <div class="emoji">🔷</div>
-            <div class="game-title">Cocokkan Bentuknya!</div>
+        <a href="bentuk.html" class="game-card gc-2">
+            <div class="game-card-emoji">🔷</div>
+            <div class="game-card-name">Cocokkan Bentuk</div>
+            <div class="game-card-play">▶</div>
         </a>
-        <a href="memory.html" class="card">
-            <div class="emoji">🐾</div>
-            <div class="game-title">Cari Pasangannya!</div>
+        <a href="memory.html" class="game-card gc-3">
+            <div class="game-card-emoji">🐾</div>
+            <div class="game-card-name">Cari Pasangan</div>
+            <div class="game-card-play">▶</div>
         </a>
-        <a href="puzzle.html" class="card">
-            <div class="emoji">🧩</div>
-            <div class="game-title">Susun Gambarnya!</div>
+        <a href="puzzle.html" class="game-card gc-4">
+            <div class="game-card-emoji">🧩</div>
+            <div class="game-card-name">Susun Gambar</div>
+            <div class="game-card-play">▶</div>
         </a>
-        <a href="suara.html" class="card">
-            <div class="emoji">🔊</div>
-            <div class="game-title">Suara Siapa Ini?</div>
+        <a href="suara.html" class="game-card gc-5">
+            <div class="game-card-emoji">🔊</div>
+            <div class="game-card-name">Suara Siapa?</div>
+            <div class="game-card-play">▶</div>
         </a>
-        <a href="balon.html" class="card">
-            <div class="emoji">🎈</div>
-            <div class="game-title">Pecahkan Balonnya!</div>
+        <a href="balon.html" class="game-card gc-6">
+            <div class="game-card-emoji">🎈</div>
+            <div class="game-card-name">Pop Balon</div>
+            <div class="game-card-play">▶</div>
         </a>
-        <a href="mewarnai.html" class="card">
-            <div class="emoji">🎨</div>
-            <div class="game-title">Ayo Mewarnai!</div>
+        <a href="mewarnai.html" class="game-card gc-7">
+            <div class="game-card-emoji">🎨</div>
+            <div class="game-card-name">Ayo Mewarnai</div>
+            <div class="game-card-play">▶</div>
         </a>
-        <a href="urutan.html" class="card">
-            <div class="emoji">📊</div>
-            <div class="game-title">Susun Urutannya!</div>
-            <span class="badge badge-new">✨ Baru!</span>
+        <a href="urutan.html" class="game-card gc-8">
+            <div class="game-card-emoji">📊</div>
+            <div class="game-card-name">Susun Urutan</div>
+            <div class="game-card-play">▶</div>
+            <span class="badge-new">BARU</span>
         </a>
-        <a href="labirin.html" class="card">
-            <div class="emoji">🌟</div>
-            <div class="game-title">Bantu Temannya!</div>
-            <span class="badge badge-new">✨ Baru!</span>
+        <a href="labirin.html" class="game-card gc-9">
+            <div class="game-card-emoji">🌟</div>
+            <div class="game-card-name">Bantu Teman</div>
+            <div class="game-card-play">▶</div>
+            <span class="badge-new">BARU</span>
         </a>
     </div>
 
-    <footer>
+    <!-- INFO CARDS -->
+    <div class="section-header">
+        <div class="section-title">📊 Info</div>
+    </div>
+
+    <div class="info-row">
+        <div class="info-card">
+            <div class="info-card-title">🎮 TOTAL GAME</div>
+            <div style="font-size: 1.8rem; font-weight: 900; color: var(--purple);">9</div>
+            <div class="tip-text">game edukasi siap dimainkan!</div>
+            <div class="info-card-emoji">🎯</div>
+        </div>
+        <div class="info-card">
+            <div class="info-card-title">📱 OFFLINE</div>
+            <div style="font-size: 1rem; font-weight: 900; color: var(--green-dark); margin-top: 4px;">Tersedia!</div>
+            <div class="tip-text">Install untuk main tanpa internet</div>
+            <div class="info-card-emoji">📶</div>
+        </div>
+    </div>
+
+    <!-- PARENT TIP -->
+    <div class="parent-card">
+        <div class="parent-card-icon">💡</div>
+        <div>
+            <div class="parent-card-label">💖 TIPS ORANG TUA</div>
+            <div class="parent-card-text">Dampingi anak saat bermain. Berikan pujian di setiap pencapaian untuk membangun rasa percaya diri! 🌟</div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
         Made with ❤️ untuk anak-anak Indonesia
-    </footer>
+    </div>
+
+    <!-- BOTTOM NAVIGATION -->
+    <nav class="bottom-nav">
+        <button class="nav-item active" onclick="scrollTo({top:0,behavior:'smooth'})">
+            <span class="nav-item-icon">🏠</span>
+            <span class="nav-item-label">Home</span>
+        </button>
+        <button class="nav-item" onclick="document.querySelector('.games-scroll').scrollIntoView({behavior:'smooth'})">
+            <span class="nav-item-icon">🎮</span>
+            <span class="nav-item-label">Games</span>
+        </button>
+        <button class="nav-item" id="navInstall" style="display:none;" onclick="handleInstallClick()">
+            <span class="nav-item-icon">📲</span>
+            <span class="nav-item-label">Install</span>
+        </button>
+        <button class="nav-item" onclick="document.querySelector('.parent-card').scrollIntoView({behavior:'smooth'})">
+            <span class="nav-item-icon">👨‍👩‍👧</span>
+            <span class="nav-item-label">Info</span>
+        </button>
+    </nav>
 
     <script>
-        // === Audio System ===
+        // ===== Audio System =====
         let audioMuted = false;
 
         function playSound(type) {
@@ -329,97 +868,98 @@
                 gain.connect(ctx.destination);
                 const now = ctx.currentTime;
 
-                if (type === 'hover') {
+                if (type === 'tap') {
                     osc.type = 'sine';
                     osc.frequency.setValueAtTime(500, now);
-                    osc.frequency.exponentialRampToValueAtTime(700, now + 0.08);
-                    gain.gain.setValueAtTime(0, now);
-                    gain.gain.linearRampToValueAtTime(0.04, now + 0.03);
+                    osc.frequency.exponentialRampToValueAtTime(800, now + 0.08);
+                    gain.gain.setValueAtTime(0.06, now);
                     gain.gain.linearRampToValueAtTime(0, now + 0.08);
                     osc.start(now);
                     osc.stop(now + 0.08);
                 } else if (type === 'click') {
                     osc.type = 'triangle';
                     osc.frequency.setValueAtTime(600, now);
-                    osc.frequency.exponentialRampToValueAtTime(900, now + 0.08);
-                    osc.frequency.exponentialRampToValueAtTime(1200, now + 0.15);
-                    gain.gain.setValueAtTime(0, now);
-                    gain.gain.linearRampToValueAtTime(0.08, now + 0.04);
-                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+                    osc.frequency.exponentialRampToValueAtTime(1000, now + 0.1);
+                    osc.frequency.exponentialRampToValueAtTime(1300, now + 0.18);
+                    gain.gain.setValueAtTime(0.08, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
                     osc.start(now);
-                    osc.stop(now + 0.15);
+                    osc.stop(now + 0.18);
                 }
             } catch (e) {}
         }
 
-        // === Mute Button ===
+        // ===== Mute Button =====
         const muteBtn = document.getElementById('muteBtn');
         muteBtn.addEventListener('click', () => {
             audioMuted = !audioMuted;
             muteBtn.textContent = audioMuted ? '🔇' : '🔊';
-            muteBtn.style.opacity = audioMuted ? '0.6' : '1';
         });
 
-        // === Decorative Background ===
-        function createDecorations() {
-            const symbols = ['⭐', '☁️', '🎈', '✨', '🌈', '🦋', '🌸'];
-            const container = document.body;
-            for (let i = 0; i < 18; i++) {
-                const el = document.createElement('div');
-                el.className = 'decoration';
-                el.innerText = symbols[Math.floor(Math.random() * symbols.length)];
-                el.style.left = Math.random() * 100 + 'vw';
-                el.style.fontSize = (Math.random() * 1.8 + 1) + 'rem';
-                el.style.animationDuration = (Math.random() * 15 + 12) + 's';
-                el.style.animationDelay = (Math.random() * 15) + 's';
-                container.appendChild(el);
-            }
-        }
+        // ===== Card Sounds =====
+        document.querySelectorAll('.game-card').forEach(card => {
+            card.addEventListener('click', () => playSound('click'));
+        });
 
-        // === Card Sounds ===
-        function setupAudio() {
-            const cards = document.querySelectorAll('.card');
-            cards.forEach(card => {
-                card.addEventListener('mouseenter', () => playSound('hover'));
-                card.addEventListener('click', () => playSound('click'));
+        document.querySelectorAll('.category-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                playSound('tap');
             });
-        }
+        });
 
-        // === PWA Install ===
+        // ===== Bottom Nav Active State =====
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+                this.classList.add('active');
+                playSound('tap');
+            });
+        });
+
+        // ===== PWA Install =====
         let deferredPrompt;
         const installBanner = document.getElementById('installBanner');
+        const installAction = document.getElementById('installAction');
+        const installClose = document.getElementById('installClose');
+        const navInstall = document.getElementById('navInstall');
 
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            installBanner.style.display = 'block';
+            installBanner.style.display = 'flex';
+            navInstall.style.display = 'flex';
         });
 
-        installBanner.addEventListener('click', async () => {
+        function handleInstallClick() {
             if (deferredPrompt) {
                 deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                deferredPrompt = null;
-                installBanner.style.display = 'none';
+                deferredPrompt.userChoice.then(() => {
+                    deferredPrompt = null;
+                    installBanner.style.display = 'none';
+                    navInstall.style.display = 'none';
+                });
             }
+        }
+
+        installAction.addEventListener('click', handleInstallClick);
+
+        installClose.addEventListener('click', (e) => {
+            e.stopPropagation();
+            installBanner.style.display = 'none';
         });
 
         window.addEventListener('appinstalled', () => {
             installBanner.style.display = 'none';
+            navInstall.style.display = 'none';
         });
 
-        // === Service Worker Registration ===
+        // ===== Service Worker Registration =====
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js')
                 .then(reg => console.log('SW registered:', reg.scope))
                 .catch(err => console.log('SW registration failed:', err));
         }
-
-        // === Init ===
-        document.addEventListener('DOMContentLoaded', () => {
-            createDecorations();
-            setupAudio();
-        });
     </script>
 </body>
 </html>
