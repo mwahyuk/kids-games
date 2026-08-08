@@ -1,4 +1,4 @@
-const CACHE_NAME = 'kiddo-games-v3';
+const CACHE_NAME = 'kiddo-games-v4';
 const ASSETS = [
   './',
   './index.html',
@@ -12,8 +12,12 @@ const ASSETS = [
   './urutan.html',
   './labirin.html',
   './manifest.json',
+  './icons/favicon.svg',
+  './icons/app-icon.jpg',
   './icons/icon-192.svg',
   './icons/icon-512.svg',
+  './icons/icon-192.jpg',
+  './icons/icon-512.jpg',
   './images/counting.jpg',
   './images/shapes.jpg',
   './images/memory.jpg',

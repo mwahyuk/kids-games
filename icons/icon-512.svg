@@ -1,10 +1,62 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
   <defs>
-    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#667eea"/>
-      <stop offset="100%" style="stop-color:#764ba2"/>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3ab0ff"/>
+      <stop offset="50%" stop-color="#6c5ce7"/>
+      <stop offset="100%" stop-color="#ff7675"/>
     </linearGradient>
+    <linearGradient id="padGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#f0f3f8"/>
+    </linearGradient>
+    <filter id="dropShadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#1e272e" flood-opacity="0.3"/>
+    </filter>
   </defs>
-  <rect width="512" height="512" rx="100" fill="url(#bg)"/>
-  <text x="256" y="305" text-anchor="middle" font-size="260" font-family="sans-serif">🎮</text>
+
+  <!-- Background Card -->
+  <rect width="512" height="512" rx="120" fill="url(#bgGrad)"/>
+  
+  <!-- Floating Stars & Dots -->
+  <circle cx="90" cy="110" r="14" fill="#fdcb6e" opacity="0.9"/>
+  <circle cx="420" cy="100" r="18" fill="#ffeaa7" opacity="0.9"/>
+  <circle cx="430" cy="400" r="12" fill="#55efc4" opacity="0.9"/>
+  <circle cx="80" cy="410" r="16" fill="#ff7675" opacity="0.8"/>
+  
+  <path d="M 120 70 L 128 88 L 148 90 L 132 104 L 138 124 L 120 112 L 102 124 L 108 104 L 92 90 L 112 88 Z" fill="#fdcb6e"/>
+  <path d="M 380 340 L 386 354 L 402 355 L 390 366 L 394 382 L 380 372 L 366 382 L 370 366 L 358 355 L 374 354 Z" fill="#ffeaa7"/>
+
+  <!-- Gamepad Body -->
+  <g filter="url(#dropShadow)">
+    <rect x="76" y="160" width="360" height="220" rx="90" fill="url(#padGrad)" stroke="#2d3436" stroke-width="10"/>
+  </g>
+
+  <!-- D-PAD (Left Control) -->
+  <g fill="#00b894" stroke="#2d3436" stroke-width="6" stroke-linejoin="round">
+    <rect x="145" y="235" width="24" height="70" rx="6"/>
+    <rect x="122" y="258" width="70" height="24" rx="6"/>
+  </g>
+
+  <!-- Action Buttons (Right Control) -->
+  <circle cx="340" cy="235" r="16" fill="#ff7675" stroke="#2d3436" stroke-width="5"/>
+  <circle cx="375" cy="270" r="16" fill="#fdcb6e" stroke="#2d3436" stroke-width="5"/>
+  <circle cx="305" cy="270" r="16" fill="#74b9ff" stroke="#2d3436" stroke-width="5"/>
+  <circle cx="340" cy="305" r="16" fill="#55efc4" stroke="#2d3436" stroke-width="5"/>
+
+  <!-- Cute Face in Middle of Gamepad -->
+  <!-- Cute Eyes -->
+  <ellipse cx="230" cy="250" rx="9" ry="12" fill="#2d3436"/>
+  <ellipse cx="282" cy="250" rx="9" ry="12" fill="#2d3436"/>
+  <circle cx="227" cy="246" r="3" fill="#ffffff"/>
+  <circle cx="279" cy="246" r="3" fill="#ffffff"/>
+
+  <!-- Cheeks -->
+  <ellipse cx="216" cy="264" rx="10" ry="6" fill="#ff7675" opacity="0.6"/>
+  <ellipse cx="296" cy="264" rx="10" ry="6" fill="#ff7675" opacity="0.6"/>
+
+  <!-- Happy Smile -->
+  <path d="M 244 265 Q 256 278 268 265" fill="none" stroke="#2d3436" stroke-width="6" stroke-linecap="round"/>
+
+  <!-- Play Button Accent Top Middle -->
+  <path d="M 246 195 L 268 207 L 246 219 Z" fill="#e84393"/>
 </svg>
