@@ -11,16 +11,15 @@
     <link rel="icon" type="image/svg+xml" href="icons/favicon.svg">
     <link rel="icon" type="image/jpeg" href="icons/app-icon.jpg">
     <link rel="apple-touch-icon" href="icons/app-icon.jpg">
-
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap');
 
         :root {
-            --bg-start: #a1c4fd;
-            --bg-end: #c2e9fb;
-            --primary: #4facfe;
-            --secondary: #6c5ce7;
-            --text: #2d3436;
+            --bg-start: #a8c0ff;
+            --bg-end: #3f2b96;
+            --primary: #ff7675;
+            --secondary: #fdcb6e;
+            --text: #ffffff;
         }
 
         * {
@@ -85,58 +84,50 @@
         h1 {
             font-size: clamp(32px, 6vw, 56px);
             margin: 0 0 15px 0;
-            color: #6c5ce7;
-            text-shadow: 3px 3px 0px white, -3px -3px 0px white, 3px -3px 0px white, -3px 3px 0px white;
+            color: #ffeaa7;
+            text-shadow: 3px 3px 0px #d63031, -3px -3px 0px #d63031, 3px -3px 0px #d63031, -3px 3px 0px #d63031;
             animation: bounce 2s infinite ease-in-out;
-        }
-
-        h2 {
-            font-size: clamp(22px, 3.8vw, 32px);
-            color: #0984e3;
-            margin: 8px 0 12px;
-            text-shadow: 1px 1px 0 #fff;
         }
 
         .picker-grid {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: clamp(10px, 2.5vw, 18px);
-            max-width: 680px;
-            margin-bottom: 20px;
+            gap: clamp(12px, 3vw, 20px);
+            max-width: 720px;
+            margin-bottom: 25px;
         }
 
         .picker-card {
-            width: clamp(75px, 16vw, 105px);
-            height: clamp(75px, 16vw, 105px);
+            width: clamp(90px, 18vw, 130px);
+            height: clamp(90px, 18vw, 130px);
             background: white;
-            border: 4px solid #74b9ff;
-            border-radius: 24px;
-            font-size: clamp(38px, 8vw, 56px);
+            border: 4px solid #fdcb6e;
+            border-radius: 28px;
+            font-size: clamp(45px, 9vw, 65px);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+            box-shadow: 0 8px 0 #d4af37, 0 12px 20px rgba(0,0,0,0.15);
             transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             padding: 5px;
         }
 
         .picker-card span {
-            font-size: clamp(12px, 2.2vw, 15px);
+            font-size: clamp(14px, 2.4vw, 17px);
             font-weight: bold;
             color: #2d3436;
-            margin-top: 2px;
+            margin-top: 4px;
         }
 
         .picker-card:hover { transform: scale(1.08); }
-
         .picker-card.selected {
             background: #ffe082;
-            border-color: #ff4081;
+            border-color: #ff7675;
             transform: scale(1.15);
-            box-shadow: 0 0 20px rgba(255, 64, 129, 0.4);
+            box-shadow: 0 8px 0 #e17055, 0 0 25px rgba(255, 118, 117, 0.5);
         }
 
         .btn {
@@ -146,72 +137,76 @@
             padding: 12px 28px;
             font-size: clamp(22px, 4vw, 32px);
             font-family: inherit;
-            color: var(--text);
+            color: #2d3436;
             cursor: pointer;
             margin: 8px;
             box-shadow: 0 6px 0 var(--secondary);
-            transition: transform 0.1s, box-shadow 0.1s;
+            transition: transform 0.1s;
             width: clamp(200px, 55vw, 280px);
         }
 
-        .btn:active {
-            transform: translateY(6px);
-            box-shadow: 0 0 0 var(--secondary);
-        }
+        .btn:active { transform: translateY(6px); box-shadow: 0 0 0 var(--secondary); }
 
-        .btn.btn-primary {
-            background: #6c5ce7;
-            color: white;
-            border-color: #a29bfe;
-            box-shadow: 0 6px 0 #3c40c6;
-        }
-        .btn.btn-primary:active { box-shadow: 0 0 0 #3c40c6; }
-
-        /* Memory Card Grid */
-        #game-grid {
-            display: grid;
-            gap: 12px;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.7);
-            border-radius: 28px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
-            max-width: 900px;
+        #cards-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: clamp(10px, 2.5vw, 18px);
+            max-width: 680px;
             width: 100%;
             margin-top: max(10px, env(safe-area-inset-top));
         }
 
-        .memory-card {
-            aspect-ratio: 1;
-            background: white;
-            border: 3.5px solid #74b9ff;
-            border-radius: 20px;
-            font-size: clamp(32px, 7vw, 54px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .card-3d {
+            width: clamp(75px, 16vw, 110px);
+            height: clamp(75px, 16vw, 110px);
+            perspective: 1000px;
             cursor: pointer;
-            box-shadow: 0 6px 0 #0984e3;
-            transition: transform 0.3s ease, background-color 0.2s;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             transform-style: preserve-3d;
         }
 
-        .memory-card:active {
-            transform: scale(0.95);
-        }
-
-        .memory-card.flipped {
-            background: #ffeaa7;
-            border-color: #fdcb6e;
-            box-shadow: 0 6px 0 #e1b12c;
+        .card-3d.flipped .card-inner {
             transform: rotateY(180deg);
         }
 
-        .memory-card.matched {
-            background: #55efc4;
-            border-color: #00b894;
-            box-shadow: 0 2px 0 #00b894;
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+        }
+
+        .card-back {
+            background: linear-gradient(135deg, #fdcb6e, #e17055);
+            border: 4px solid white;
+            font-size: clamp(35px, 7vw, 50px);
+        }
+
+        .card-front {
+            background: white;
+            border: 4px solid #74b9ff;
+            font-size: clamp(40px, 8vw, 60px);
+            transform: rotateY(180deg);
+        }
+
+        .card-3d.matched {
             pointer-events: none;
-            opacity: 0.9;
+            opacity: 0.85;
+            animation: pulse 0.5s;
         }
 
         #confetti-canvas {
@@ -222,21 +217,14 @@
             z-index: 100;
         }
 
-        .celeb-text {
-            font-size: clamp(50px, 10vw, 75px);
-            color: #00b894;
-            margin-bottom: 15px;
-            text-shadow: 3px 3px 0 white;
-            animation: pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
         @keyframes bounce {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-15px); }
         }
-        @keyframes pop {
-            0% { transform: scale(0); }
-            80% { transform: scale(1.1); }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
             100% { transform: scale(1); }
         }
     </style>
@@ -250,27 +238,23 @@
         <div id="start-screen" class="screen active">
             <h1>Mengingat Teman! 🧠</h1>
 
-            <h2>1. Pilih Tema Gambar:</h2>
+            <h2 style="color: #ffeaa7;">Pilih Tema Kartu 3D:</h2>
             <div class="picker-grid" id="theme-grid"></div>
 
-            <h2>2. Pilih Jumlah Kartu:</h2>
-            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;">
-                <button class="btn" onclick="startGame(6)">⭐ 6 Kartu</button>
-                <button class="btn" onclick="startGame(12)">⭐⭐ 12 Kartu</button>
-                <button class="btn" onclick="startGame(16)">⭐⭐⭐ 16 Kartu</button>
-            </div>
+            <button class="btn" style="background: #fdcb6e; font-weight: bold;" onclick="startGame()">Mulai Main! 🧠</button>
         </div>
 
         <!-- 2. Game Screen -->
         <div id="game-screen" class="screen">
-            <div id="game-grid"></div>
+            <h2 style="color: #ffeaa7; margin-top: max(10px, env(safe-area-inset-top));">Cari Pasangan Kartu Yang Sama!</h2>
+            <div id="cards-grid"></div>
         </div>
 
         <!-- 3. Celebration Screen -->
         <div id="celeb-screen" class="screen">
-            <div class="celeb-text">Ingatanmu Hebat! 🎉</div>
-            <div style="font-size: 80px; margin: 15px 0;">⭐ 🧠 ⭐</div>
-            <button class="btn btn-primary" onclick="showScreen('start-screen')">Main Lagi!</button>
+            <h1 style="color: #00b894;">Ingatan Luar Biasa! 🎉</h1>
+            <div style="font-size: 90px; margin: 15px 0;">⭐ 🧠 ⭐</div>
+            <button class="btn" style="background: #00b894; color: white;" onclick="showScreen('start-screen')">Main Lagi!</button>
         </div>
     </div>
 
@@ -278,14 +262,16 @@
 
     <script>
         const themes = [
-            { id: 'animals', name: 'Hewan', emoji: '🐱', items: ['🐱', '🐶', '🐰', '🐸', '🐼', '🐻', '🦊', '🦁', '🦖', '🦄'] },
-            { id: 'fruits', name: 'Buah', emoji: '🍎', items: ['🍎', '🍌', '🍇', '🍓', '🍉', '🍍', '🍒', '🍑', '🥑', '🍋'] },
-            { id: 'dinos', name: 'Dino', emoji: '🦖', items: ['🦖', '🦕', '🐊', '🦎', '🐍', '🐢', '🐉', '🐲', '🥚', '🌋'] },
-            { id: 'vehicles', name: 'Mobil', emoji: '🚗', items: ['🚗', '🚀', '✈️', '⛵', '🚂', '🚁', '🚜', '🚑', '🚒', '🚲'] },
-            { id: 'numbers', name: 'Angka', emoji: '🔢', items: ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟'] }
+            { id: 'animal', name: 'Hewan 3D', icon: '🦁', items: ['🦁', '🐱', '🐶', '🐰', '🐼', '🦖'] },
+            { id: 'fruit', name: 'Buah 3D', icon: '🍎', items: ['🍎', '🍌', '🍓', '🍇', '🍉', '🍍'] },
+            { id: 'toy', name: 'Mainan 3D', icon: '🚗', items: ['🚗', '🚀', '🎁', '⭐', '🎈', '🏆'] },
+            { id: 'number', name: 'Angka 3D', icon: '🔢', items: ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣'] }
         ];
 
         let selectedTheme = themes[0];
+        let cards = [];
+        let flippedCards = [];
+        let matchedPairs = 0;
 
         function renderThemePicker() {
             const grid = document.getElementById('theme-grid');
@@ -293,7 +279,7 @@
             themes.forEach(t => {
                 const card = document.createElement('div');
                 card.className = `picker-card ${t.id === selectedTheme.id ? 'selected' : ''}`;
-                card.innerHTML = `${t.emoji}<span>${t.name}</span>`;
+                card.innerHTML = `${t.icon}<span>${t.name}</span>`;
                 card.onclick = () => {
                     playAudioTone(600, 0.1);
                     selectedTheme = t;
@@ -303,7 +289,6 @@
             });
         }
 
-        // Audio
         function playAudioTone(freq, dur) {
             try {
                 const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -317,80 +302,71 @@
             } catch(e) {}
         }
 
-        // Game State
-        let cardsCount = 6;
-        let flippedCards = [];
-        let matchedPairs = 0;
-
         function showScreen(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
         }
 
-        function startGame(count) {
-            cardsCount = count;
+        function startGame() {
+            showScreen('game-screen');
             matchedPairs = 0;
             flippedCards = [];
-            showScreen('game-screen');
-            initCards();
-        }
 
-        function initCards() {
-            const grid = document.getElementById('game-grid');
+            // Duplicate items to make pairs & shuffle
+            let items = [...selectedTheme.items, ...selectedTheme.items];
+            items.sort(() => Math.random() - 0.5);
+
+            const grid = document.getElementById('cards-grid');
             grid.innerHTML = '';
-            
-            const cols = cardsCount <= 6 ? 3 : (cardsCount <= 12 ? 4 : 4);
-            grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
 
-            const numPairs = cardsCount / 2;
-            let deck = selectedTheme.items.slice(0, numPairs);
-            deck = [...deck, ...deck];
-            deck.sort(() => Math.random() - 0.5);
-
-            deck.forEach((item, idx) => {
+            items.forEach((item, index) => {
                 const card = document.createElement('div');
-                card.className = 'memory-card';
-                card.dataset.val = item;
-                card.dataset.idx = idx;
-                card.innerText = '❓';
-
-                card.onclick = () => flipCard(card);
+                card.className = 'card-3d';
+                card.innerHTML = `
+                    <div class="card-inner">
+                        <div class="card-back">❓</div>
+                        <div class="card-front">${item}</div>
+                    </div>
+                `;
+                card.onclick = () => flipCard(card, item);
                 grid.appendChild(card);
             });
         }
 
-        function flipCard(card) {
+        function flipCard(card, item) {
             if (flippedCards.length >= 2 || card.classList.contains('flipped') || card.classList.contains('matched')) return;
 
-            playAudioTone(500, 0.1);
+            playAudioTone(800, 0.1);
             card.classList.add('flipped');
-            card.innerText = card.dataset.val;
-            flippedCards.push(card);
+            flippedCards.push({ card, item });
 
             if (flippedCards.length === 2) {
-                const [c1, c2] = flippedCards;
-                if (c1.dataset.val === c2.dataset.val) {
-                    playAudioTone(800, 0.2);
-                    c1.classList.add('matched');
-                    c2.classList.add('matched');
-                    flippedCards = [];
-                    matchedPairs++;
-                    if (matchedPairs === cardsCount / 2) {
-                        setTimeout(() => {
-                            playAudioTone(1000, 0.4);
-                            showScreen('celeb-screen');
-                        }, 500);
-                    }
-                } else {
+                checkMatch();
+            }
+        }
+
+        function checkMatch() {
+            const [c1, c2] = flippedCards;
+            if (c1.item === c2.item) {
+                playAudioTone(1200, 0.2);
+                c1.card.classList.add('matched');
+                c2.card.classList.add('matched');
+                matchedPairs++;
+                flippedCards = [];
+
+                if (matchedPairs === selectedTheme.items.length) {
                     setTimeout(() => {
-                        playAudioTone(250, 0.2);
-                        c1.classList.remove('flipped');
-                        c2.classList.remove('flipped');
-                        c1.innerText = '❓';
-                        c2.innerText = '❓';
-                        flippedCards = [];
-                    }, 900);
+                        playAudioTone(1500, 0.4);
+                        showScreen('celeb-screen');
+                    }, 600);
                 }
+            } else {
+                setTimeout(() => {
+                    playAudioTone(300, 0.2);
+                    c1.card.classList.remove('flipped');
+                    c2.card.classList.remove('flipped');
+                    flippedCards = [];
+                }, 900);
             }
         }
 

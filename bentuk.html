@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Cocokkan Bentuknya!</title>
+    <title>Mencocokkan Bentuk! 🔷</title>
     <meta name="theme-color" content="#667eea">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -126,12 +126,12 @@
             flex-wrap: wrap;
             gap: clamp(12px, 3.5vw, 28px);
             width: 100%;
-            max-width: 700px;
+            max-width: 750px;
         }
 
         .shape-container {
-            width: clamp(75px, 12vw, 115px);
-            height: clamp(75px, 12vw, 115px);
+            width: clamp(80px, 13vw, 120px);
+            height: clamp(80px, 13vw, 120px);
             position: relative;
             display: flex;
             justify-content: center;
@@ -141,27 +141,29 @@
         .target-slot {
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.08);
-            border: 4px dashed rgba(255,255,255,0.85);
-            border-radius: 22px;
+            background-color: rgba(255,255,255,0.4);
+            border: 4px dashed rgba(255,107,107,0.6);
+            border-radius: 26px;
             display: flex;
             justify-content: center;
             align-items: center;
             transition: transform 0.2s, background-color 0.2s, border-color 0.2s;
             position: relative;
             overflow: hidden;
+            box-shadow: inset 0 4px 10px rgba(0,0,0,0.08);
         }
         .target-slot.highlight {
-            background-color: rgba(255,255,255,0.6);
-            transform: scale(1.12);
-            border-color: #ff6b6b;
-            box-shadow: 0 0 15px rgba(255, 107, 107, 0.4);
+            background-color: rgba(255,255,255,0.85);
+            transform: scale(1.1);
+            border-color: #00b894;
+            box-shadow: 0 0 20px rgba(0, 184, 148, 0.4);
         }
         
-        .target-shape {
+        .target-shape-svg {
             width: 75%;
             height: 75%;
-            background-color: rgba(0,0,0,0.15);
+            opacity: 0.25;
+            filter: grayscale(100%);
         }
 
         .draggable {
@@ -170,29 +172,25 @@
             position: absolute;
             cursor: grab;
             z-index: 10;
-            filter: drop-shadow(0px 6px 10px rgba(0,0,0,0.25));
+            filter: drop-shadow(0px 8px 14px rgba(0,0,0,0.22));
             transition: transform 0.1s;
             touch-action: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .draggable:active {
             cursor: grabbing;
         }
+        .draggable svg {
+            width: 100%;
+            height: 100%;
+        }
         .dragging {
             z-index: 1000 !important;
             transition: none !important;
-            filter: drop-shadow(0px 14px 22px rgba(0,0,0,0.35));
-            pointer-events: none; /* Allows underlying target detection */
-        }
-        
-        .shape-circle { border-radius: 50%; }
-        .shape-square { border-radius: 18px; }
-        .shape-triangle { clip-path: polygon(50% 0%, 0% 100%, 100% 100%); }
-        .shape-star { clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); }
-        .shape-diamond { clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); }
-        .shape-hexagon { clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%); }
-        .shape-oval { border-radius: 50% / 100px 50px; height: 75% !important; margin-top: 5px; }
-        .shape-heart {
-            clip-path: path('M45 90 C 20 60, 0 35, 0 25 C 0 10, 10 0, 25 0 C 35 0, 42 5, 45 10 C 48 5, 55 0, 65 0 C 80 0, 90 10, 90 25 C 90 35, 70 60, 45 90 Z');
+            filter: drop-shadow(0px 16px 25px rgba(0,0,0,0.35));
+            pointer-events: none;
         }
 
         .anim-pop {
@@ -237,7 +235,7 @@
         .overlay {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(255,255,255,0.9);
+            background: rgba(255,255,255,0.92);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -269,7 +267,7 @@
     <a id="back-btn" href="index.html" onclick="window.location.href='index.html'; return true;">🏠</a>
 
     <div id="header">
-        <h1>Cocokkan Bentuknya!</h1>
+        <h1>Mencocokkan Bentuk! 🔷</h1>
         <div id="stars-container">
             <div class="star" id="star-1">⭐</div>
             <div class="star" id="star-2">⭐</div>
@@ -292,6 +290,82 @@
     </div>
 
     <script>
+        // 3D Glossy Vector SVG Generators
+        const SHAPE_SVGS = {
+            circle: (color) => `
+                <svg viewBox="0 0 100 100" width="100%" height="100%">
+                    <defs>
+                        <radialGradient id="grad-circle-${color.replace('#','')}" cx="35%" cy="30%" r="65%">
+                            <stop offset="0%" stop-color="#ffffff" stop-opacity="0.8"/>
+                            <stop offset="30%" stop-color="${color}"/>
+                            <stop offset="100%" stop-color="#2d3436"/>
+                        </radialGradient>
+                    </defs>
+                    <circle cx="50" cy="50" r="44" fill="url(#grad-circle-${color.replace('#','')})" stroke="#2d3436" stroke-width="4"/>
+                    <ellipse cx="38" cy="32" rx="12" ry="7" fill="#ffffff" opacity="0.65"/>
+                </svg>`,
+            square: (color) => `
+                <svg viewBox="0 0 100 100" width="100%" height="100%">
+                    <defs>
+                        <linearGradient id="grad-sq-${color.replace('#','')}" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#ffffff" stop-opacity="0.7"/>
+                            <stop offset="40%" stop-color="${color}"/>
+                            <stop offset="100%" stop-color="#1e272e"/>
+                        </linearGradient>
+                    </defs>
+                    <rect x="8" y="8" width="84" height="84" rx="20" fill="url(#grad-sq-${color.replace('#','')})" stroke="#2d3436" stroke-width="4"/>
+                    <path d="M 18 20 L 82 20 C 82 20 70 34 20 34 Z" fill="#ffffff" opacity="0.45"/>
+                </svg>`,
+            triangle: (color) => `
+                <svg viewBox="0 0 100 100" width="100%" height="100%">
+                    <defs>
+                        <linearGradient id="grad-tri-${color.replace('#','')}" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#ffffff" stop-opacity="0.8"/>
+                            <stop offset="50%" stop-color="${color}"/>
+                            <stop offset="100%" stop-color="#2d3436"/>
+                        </linearGradient>
+                    </defs>
+                    <polygon points="50,6 94,90 6,90" fill="url(#grad-tri-${color.replace('#','')})" stroke="#2d3436" stroke-width="4" stroke-linejoin="round"/>
+                    <polygon points="50,14 78,80 22,80" fill="#ffffff" opacity="0.3"/>
+                </svg>`,
+            star: (color) => `
+                <svg viewBox="0 0 100 100" width="100%" height="100%">
+                    <defs>
+                        <radialGradient id="grad-star-${color.replace('#','')}" cx="40%" cy="30%" r="70%">
+                            <stop offset="0%" stop-color="#ffffff"/>
+                            <stop offset="40%" stop-color="${color}"/>
+                            <stop offset="100%" stop-color="#d4af37"/>
+                        </radialGradient>
+                    </defs>
+                    <path d="M 50 5 L 63 35 L 96 38 L 71 61 L 78 94 L 50 77 L 22 94 L 29 61 L 4 38 L 37 35 Z" fill="url(#grad-star-${color.replace('#','')})" stroke="#2d3436" stroke-width="4" stroke-linejoin="round"/>
+                    <circle cx="38" cy="32" r="6" fill="#ffffff" opacity="0.7"/>
+                </svg>`,
+            diamond: (color) => `
+                <svg viewBox="0 0 100 100" width="100%" height="100%">
+                    <defs>
+                        <linearGradient id="grad-dia-${color.replace('#','')}" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#ffffff" stop-opacity="0.8"/>
+                            <stop offset="50%" stop-color="${color}"/>
+                            <stop offset="100%" stop-color="#1e272e"/>
+                        </linearGradient>
+                    </defs>
+                    <polygon points="50,6 94,50 50,94 6,50" fill="url(#grad-dia-${color.replace('#','')})" stroke="#2d3436" stroke-width="4" stroke-linejoin="round"/>
+                    <polygon points="50,14 78,50 50,86 22,50" fill="#ffffff" opacity="0.3"/>
+                </svg>`,
+            heart: (color) => `
+                <svg viewBox="0 0 100 100" width="100%" height="100%">
+                    <defs>
+                        <radialGradient id="grad-heart-${color.replace('#','')}" cx="35%" cy="30%" r="70%">
+                            <stop offset="0%" stop-color="#ffffff"/>
+                            <stop offset="40%" stop-color="${color}"/>
+                            <stop offset="100%" stop-color="#800000"/>
+                        </radialGradient>
+                    </defs>
+                    <path d="M 50 88 C 20 60, 4 38, 4 24 C 4 10, 16 2, 30 2 C 40 2, 47 8, 50 14 C 53 8, 60 2, 70 2 C 84 2, 96 10, 96 24 C 96 38, 80 60, 50 88 Z" fill="url(#grad-heart-${color.replace('#','')})" stroke="#2d3436" stroke-width="4" stroke-linejoin="round"/>
+                    <ellipse cx="30" cy="20" rx="8" ry="5" fill="#ffffff" opacity="0.75"/>
+                </svg>`
+        };
+
         // Audio System
         function playSound(type) {
             try {
@@ -420,8 +494,8 @@
         }
 
         // Game Variables
-        const ALL_SHAPES = ['circle', 'square', 'triangle', 'star', 'diamond', 'hexagon', 'oval', 'heart'];
-        const ALL_COLORS = ['#ff4757', '#1e90ff', '#2ed573', '#eccc68', '#ff7f50', '#9b59b6', '#00cec9', '#ffa502'];
+        const ALL_SHAPES = ['circle', 'square', 'triangle', 'star', 'diamond', 'heart'];
+        const ALL_COLORS = ['#ff4757', '#1e90ff', '#2ed573', '#f1c40f', '#ff7f50', '#9b59b6'];
         const LEVEL_COUNTS = [3, 4, 5, 6];
         let currentLevel = 1;
         let matchedCount = 0;
@@ -473,7 +547,7 @@
                 });
             }
 
-            // Create Targets
+            // Create 3D Target Slots
             currentLevelShapes.forEach(shape => {
                 const container = document.createElement('div');
                 container.className = 'shape-container';
@@ -483,14 +557,15 @@
                 slot.dataset.type = shape.type;
                 
                 const inner = document.createElement('div');
-                inner.className = `target-shape shape-${shape.type}`;
+                inner.className = `target-shape-svg`;
+                inner.innerHTML = SHAPE_SVGS[shape.type]('#333333');
                 slot.appendChild(inner);
                 
                 container.appendChild(slot);
                 targetsDiv.appendChild(container);
             });
 
-            // Create Draggables (Shuffled)
+            // Create Draggables with 3D Glossy Vector SVGs
             let shuffledShapes = shuffle([...currentLevelShapes]);
             
             shuffledShapes.forEach(shape => {
@@ -498,9 +573,9 @@
                 container.className = 'shape-container';
                 
                 const drag = document.createElement('div');
-                drag.className = `draggable shape-${shape.type}`;
+                drag.className = `draggable`;
                 drag.dataset.type = shape.type;
-                drag.style.backgroundColor = shape.color;
+                drag.innerHTML = SHAPE_SVGS[shape.type](shape.color);
                 
                 drag.addEventListener('mousedown', startDrag);
                 drag.addEventListener('touchstart', startDrag, {passive: false});
@@ -550,7 +625,7 @@
             offset.x = clientX - rect.left;
             offset.y = clientY - rect.top;
 
-            // Preserve explicit width and height so shape does not expand when appended to body
+            // PRESERVE EXPLICIT WIDTH & HEIGHT TO PREVENT SHAPE RESIZING
             draggingElement.style.width = `${rect.width}px`;
             draggingElement.style.height = `${rect.height}px`;
 
@@ -602,8 +677,9 @@
                 draggingElement.style.left = '0';
                 draggingElement.style.top = '0';
                 draggingElement.style.position = 'relative';
+                draggingElement.style.width = '85%';
+                draggingElement.style.height = '85%';
                 
-                // Replace ghost shape with real color shape
                 target.innerHTML = '';
                 target.appendChild(draggingElement);
                 
@@ -623,7 +699,7 @@
                 
                 draggingElement.style.width = '85%';
                 draggingElement.style.height = '85%';
-                
+
                 originalPos.parent.appendChild(draggingElement);
                 draggingElement.style.position = 'absolute';
                 draggingElement.style.left = originalPos.left;
@@ -643,7 +719,7 @@
             document.removeEventListener('touchend', stopDrag);
         }
 
-        // ACCURATE FORGIVING DISTANCE & BOUNDING-BOX COLLISION MATCHING FOR KIDS
+        // ACCURATE FORGIVING DISTANCE MATCHING FOR KIDS
         function findBestMatchingTarget(dragEl) {
             const dragRect = dragEl.getBoundingClientRect();
             const dragCenter = {
@@ -653,7 +729,6 @@
             
             let bestTarget = null;
             let minDistance = Infinity;
-            // Forgiving distance threshold (approx 90px around slot)
             const threshold = Math.max(dragRect.width, dragRect.height) * 1.1;
 
             document.querySelectorAll('.target-slot').forEach(slot => {

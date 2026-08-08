@@ -90,18 +90,18 @@
         }
 
         .play-sound-btn {
-            width: clamp(130px, 25vw, 170px);
-            height: clamp(130px, 25vw, 170px);
+            width: clamp(140px, 26vw, 180px);
+            height: clamp(140px, 26vw, 180px);
             border-radius: 50%;
             background: linear-gradient(135deg, #e84393, #d63031);
             border: 6px solid white;
             color: white;
-            font-size: clamp(55px, 11vw, 85px);
+            font-size: clamp(60px, 12vw, 90px);
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            box-shadow: 0 10px 25px rgba(232, 67, 147, 0.4);
+            box-shadow: 0 12px 30px rgba(232, 67, 147, 0.45);
             transition: transform 0.15s;
             margin: 20px 0;
             animation: pulse 1.5s infinite alternate;
@@ -116,39 +116,43 @@
             flex-wrap: wrap;
             justify-content: center;
             gap: clamp(14px, 3.5vw, 24px);
-            max-width: 680px;
+            max-width: 720px;
             width: 100%;
         }
 
-        .option-card {
-            width: clamp(95px, 20vw, 135px);
-            height: clamp(95px, 20vw, 135px);
+        .option-card-3d {
+            width: clamp(100px, 21vw, 140px);
+            height: clamp(100px, 21vw, 140px);
             background: white;
             border: 4px solid #fd79a8;
-            border-radius: 28px;
-            font-size: clamp(48px, 9.5vw, 70px);
+            border-radius: 30px;
+            font-size: clamp(52px, 10vw, 75px);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            box-shadow: 0 8px 18px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 0 #e84393, 0 12px 20px rgba(0,0,0,0.12);
             transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            padding: 5px;
+            padding: 6px;
         }
 
-        .option-card span {
-            font-size: clamp(13px, 2.3vw, 16px);
+        .option-card-3d span {
+            font-size: clamp(14px, 2.5vw, 18px);
             font-weight: bold;
             color: #2d3436;
-            margin-top: 2px;
+            margin-top: 4px;
+            background: #ffeaa7;
+            padding: 3px 12px;
+            border-radius: 12px;
+            border: 2px solid #fdcb6e;
         }
 
-        .option-card:hover {
+        .option-card-3d:hover {
             transform: scale(1.08);
         }
 
-        .option-card:active {
+        .option-card-3d:active {
             transform: scale(0.95);
         }
 
@@ -222,42 +226,42 @@
         // Real Animal Sound Sample URLs (Wikimedia Commons open audio files)
         const animals = [
             { 
-                id: 'cow', name: 'Sapi', emoji: '🐮', 
+                id: 'cow', name: 'Sapi 3D', emoji: '🐮', 
                 soundUrl: 'https://upload.wikimedia.org/wikipedia/commons/e/e0/Cow_moo.ogg',
                 speech: 'Moo! Sapi!'
             },
             { 
-                id: 'cat', name: 'Kucing', emoji: '🐱', 
+                id: 'cat', name: 'Kucing 3D', emoji: '🐱', 
                 soundUrl: 'https://upload.wikimedia.org/wikipedia/commons/3/3a/Cat_meow.ogg',
                 speech: 'Meow! Kucing!'
             },
             { 
-                id: 'dog', name: 'Anjing', emoji: '🐶', 
+                id: 'dog', name: 'Anjing 3D', emoji: '🐶', 
                 soundUrl: 'https://upload.wikimedia.org/wikipedia/commons/0/05/Dog_barking.ogg',
                 speech: 'Woof woof! Anjing!'
             },
             { 
-                id: 'duck', name: 'Bebek', emoji: '🦆', 
+                id: 'duck', name: 'Bebek 3D', emoji: '🦆', 
                 soundUrl: 'https://upload.wikimedia.org/wikipedia/commons/8/87/Mallard_duck_quack.ogg',
                 speech: 'Kwek kwek! Bebek!'
             },
             { 
-                id: 'rooster', name: 'Ayam', emoji: '🐓', 
+                id: 'rooster', name: 'Ayam 3D', emoji: '🐓', 
                 soundUrl: 'https://upload.wikimedia.org/wikipedia/commons/5/52/Rooster_crowing.ogg',
                 speech: 'Kukuruyuk! Ayam!'
             },
             { 
-                id: 'sheep', name: 'Domba', emoji: '🐑', 
+                id: 'sheep', name: 'Domba 3D', emoji: '🐑', 
                 soundUrl: 'https://upload.wikimedia.org/wikipedia/commons/a/a5/Sheep_bleat.ogg',
                 speech: 'Mbee! Domba!'
             },
             { 
-                id: 'lion', name: 'Singa', emoji: '🦁', 
+                id: 'lion', name: 'Singa 3D', emoji: '🦁', 
                 soundUrl: 'https://upload.wikimedia.org/wikipedia/commons/4/4b/Lion_roar.ogg',
                 speech: 'Roar! Singa!'
             },
             { 
-                id: 'bird', name: 'Burung', emoji: '🐦', 
+                id: 'bird', name: 'Burung 3D', emoji: '🐦', 
                 soundUrl: 'https://upload.wikimedia.org/wikipedia/commons/9/9b/Bird_chirping.ogg',
                 speech: 'Cip cip! Burung!'
             }
@@ -281,7 +285,6 @@
             showScreen('game-screen');
             currentTarget = animals[Math.floor(Math.random() * animals.length)];
             
-            // Pick 3 distractor animals
             let pool = animals.filter(a => a.id !== currentTarget.id);
             pool.sort(() => Math.random() - 0.5);
             options = [currentTarget, pool[0], pool[1], pool[2]];
@@ -297,10 +300,8 @@
                 currentAudio.currentTime = 0;
             }
 
-            // Try playing REAL ANIMAL AUDIO SAMPLE
             currentAudio = new Audio(currentTarget.soundUrl);
             currentAudio.play().catch(() => {
-                // Fallback to SpeechSynthesis voice if offline or network blocked
                 speakFallback(currentTarget.speech);
             });
         }
@@ -320,7 +321,7 @@
             grid.innerHTML = '';
             options.forEach(opt => {
                 const card = document.createElement('div');
-                card.className = 'option-card';
+                card.className = 'option-card-3d';
                 card.innerHTML = `${opt.emoji}<span>${opt.name}</span>`;
                 card.onclick = () => checkAnswer(opt);
                 grid.appendChild(card);
