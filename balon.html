@@ -323,8 +323,13 @@
             const list = modeData[currentMode];
             currentTarget = list[Math.floor(Math.random() * list.length)];
             
-            document.getElementById('target-label').innerText = currentTarget.label;
-            document.getElementById('target-icon').innerText = currentTarget.val;
+            if (currentMode === 'number') {
+                document.getElementById('target-label').innerText = 'Angka';
+                document.getElementById('target-icon').innerText = currentTarget.val;
+            } else {
+                document.getElementById('target-label').innerText = currentTarget.label;
+                document.getElementById('target-icon').innerText = currentTarget.val;
+            }
         }
 
         function spawnBalloons() {
