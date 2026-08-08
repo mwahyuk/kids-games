@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Berapa Jumlahnya?</title>
     
     <!-- PWA Meta Tags -->
@@ -25,29 +25,33 @@
             font-family: 'Bubblegum Sans', 'Comic Sans MS', cursive, sans-serif;
             background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
             min-height: 100vh;
+            min-height: -webkit-fill-available;
             display: flex;
             flex-direction: column;
             align-items: center;
-            overflow: hidden;
+            overflow-x: hidden;
             color: #444;
         }
 
         #home-button {
             position: fixed;
-            top: 20px;
-            left: 20px;
-            z-index: 9999;
+            top: max(15px, env(safe-area-inset-top));
+            left: max(15px, env(safe-area-inset-left));
+            z-index: 99999;
             text-decoration: none;
-            font-size: 40px;
-            background: white;
-            width: 70px;
-            height: 70px;
+            font-size: 32px;
+            background: #ffffff;
+            border: 3px solid #ff6b6b;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
-            transition: transform 0.2s;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+            transition: transform 0.15s;
+            cursor: pointer;
+            pointer-events: auto;
         }
 
         #home-button:active {
@@ -55,20 +59,20 @@
         }
 
         #progress-bar {
-            margin-top: 20px;
-            font-size: 32px;
+            margin-top: max(15px, env(safe-area-inset-top));
+            font-size: clamp(24px, 4vw, 36px);
             min-height: 40px;
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             gap: 5px;
-            padding: 0 100px; /* avoid home button */
+            padding: 0 80px;
             z-index: 10;
         }
 
         h1 {
-            font-size: 48px;
-            margin: 10px 0;
+            font-size: clamp(32px, 6vw, 52px);
+            margin: 5px 0 15px;
             color: #ff6b6b;
             text-shadow: 2px 2px 0 #fff, -2px -2px 0 #fff, 2px -2px 0 #fff, -2px 2px 0 #fff;
             text-align: center;
@@ -82,7 +86,8 @@
             justify-content: center;
             align-items: center;
             width: 100%;
-            padding: 20px;
+            max-width: 900px;
+            padding: 10px 20px 30px;
             z-index: 10;
         }
 
@@ -91,26 +96,26 @@
             flex-wrap: wrap;
             justify-content: center;
             align-items: center;
-            min-height: 200px;
-            background: rgba(255, 255, 255, 0.6);
+            min-height: 180px;
+            background: rgba(255, 255, 255, 0.7);
             border-radius: 30px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            margin-bottom: 40px;
-            max-width: 90%;
+            padding: 20px 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+            margin-bottom: 30px;
+            width: 100%;
             gap: 15px;
         }
 
         .object {
-            font-size: 64px;
+            font-size: clamp(48px, 10vw, 72px);
             animation: bounceIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
         }
 
         .operator {
-            font-size: 64px;
+            font-size: clamp(48px, 10vw, 72px);
             color: #4a69bd;
             font-weight: bold;
-            margin: 0 20px;
+            margin: 0 15px;
             animation: bounceIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
         }
 
@@ -124,33 +129,32 @@
         #choices-container {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: clamp(15px, 3vw, 30px);
             flex-wrap: wrap;
             width: 100%;
-            max-width: 600px;
+            max-width: 700px;
         }
 
         .choice-btn {
             background: #fff;
-            border: none;
+            border: 3.5px solid #4a69bd;
             border-radius: 25px;
-            min-width: 120px;
-            min-height: 120px;
-            font-size: 56px;
+            width: clamp(90px, 20vw, 140px);
+            height: clamp(90px, 20vw, 140px);
+            font-size: clamp(40px, 8vw, 64px);
             font-family: 'Bubblegum Sans', cursive;
             color: #4a69bd;
             cursor: pointer;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1), 0 10px 0 #d1d8e0;
-            transition: all 0.2s;
+            box-shadow: 0 8px 0 #3b5998, 0 10px 20px rgba(0,0,0,0.1);
+            transition: all 0.15s;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
         }
 
         .choice-btn:active {
-            transform: translateY(10px);
-            box-shadow: 0 0 10px rgba(0,0,0,0.1), 0 0 0 #d1d8e0;
+            transform: translateY(6px);
+            box-shadow: 0 2px 0 #3b5998, 0 4px 10px rgba(0,0,0,0.1);
         }
 
         .shake {
@@ -161,8 +165,8 @@
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
+            width: 100vw;
+            height: 100vh;
             pointer-events: none;
             z-index: 9999;
         }
@@ -178,20 +182,11 @@
             30%, 50%, 70% { transform: translate3d(-8px, 0, 0); }
             40%, 60% { transform: translate3d(8px, 0, 0); }
         }
-
-        @media (max-width: 600px) {
-            h1 { font-size: 36px; }
-            .object { font-size: 48px; }
-            .operator { font-size: 48px; margin: 0 10px; }
-            .choice-btn { min-width: 90px; min-height: 90px; font-size: 40px; }
-            #home-button { top: 10px; left: 10px; width: 50px; height: 50px; font-size: 24px; }
-            #progress-bar { padding: 0 70px; }
-        }
     </style>
 </head>
 <body>
 
-    <a href="index.html" id="home-button">🏠</a>
+    <a href="index.html" id="home-button" onclick="window.location.href='index.html'; return true;">🏠</a>
 
     <div id="progress-bar"></div>
 
@@ -230,32 +225,34 @@
 
         function playSound(type) {
             initAudio();
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
 
-            const now = audioCtx.currentTime;
-            
-            if (type === 'correct') {
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(400, now);
-                osc.frequency.exponentialRampToValueAtTime(800, now + 0.3);
-                gain.gain.setValueAtTime(0, now);
-                gain.gain.linearRampToValueAtTime(0.5, now + 0.1);
-                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
-                osc.start(now);
-                osc.stop(now + 0.5);
-            } else if (type === 'wrong') {
-                osc.type = 'triangle';
-                osc.frequency.setValueAtTime(300, now);
-                osc.frequency.exponentialRampToValueAtTime(200, now + 0.3);
-                gain.gain.setValueAtTime(0, now);
-                gain.gain.linearRampToValueAtTime(0.3, now + 0.1);
-                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
-                osc.start(now);
-                osc.stop(now + 0.4);
-            }
+                const now = audioCtx.currentTime;
+                
+                if (type === 'correct') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(400, now);
+                    osc.frequency.exponentialRampToValueAtTime(800, now + 0.3);
+                    gain.gain.setValueAtTime(0, now);
+                    gain.gain.linearRampToValueAtTime(0.5, now + 0.1);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+                    osc.start(now);
+                    osc.stop(now + 0.5);
+                } else if (type === 'wrong') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(300, now);
+                    osc.frequency.exponentialRampToValueAtTime(200, now + 0.3);
+                    gain.gain.setValueAtTime(0, now);
+                    gain.gain.linearRampToValueAtTime(0.3, now + 0.1);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+                    osc.start(now);
+                    osc.stop(now + 0.4);
+                }
+            } catch (e) {}
         }
 
         // Confetti System
@@ -378,7 +375,7 @@
                     const el = document.createElement('div');
                     el.className = 'object';
                     el.textContent = emoji;
-                    el.style.animationDelay = `${i * 0.1}s`;
+                    el.style.animationDelay = `${i * 0.08}s`;
                     qContainer.appendChild(el);
                 }
             } else {
@@ -431,8 +428,9 @@
                 spawnConfetti();
                 btn.style.background = '#1dd1a1';
                 btn.style.color = '#fff';
+                btn.style.borderColor = '#10ac84';
                 correctCount++;
-                setTimeout(initRound, 2000);
+                setTimeout(initRound, 1800);
             } else {
                 playSound('wrong');
                 btn.classList.add('shake');
@@ -442,11 +440,9 @@
             }
         }
 
-        // Initialize first round interaction required for audio
         document.body.addEventListener('click', initAudio, { once: true });
         
         initRound();
-
     </script>
 </body>
 </html>

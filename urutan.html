@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="#667eea">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -23,7 +23,8 @@
             padding: 0;
             font-family: 'Bubblegum Sans', 'Comic Sans MS', cursive, sans-serif;
             background: linear-gradient(135deg, #00c6ff, #0072ff);
-            height: 100vh;
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
             display: flex;
             flex-direction: column;
             overflow: hidden;
@@ -32,25 +33,27 @@
 
         #home-btn {
             position: fixed;
-            top: 15px;
-            left: 15px;
-            font-size: 40px;
-            text-decoration: none;
-            z-index: 9999;
-            background: white;
-            border-radius: 50%;
+            top: max(15px, env(safe-area-inset-top));
+            left: max(15px, env(safe-area-inset-left));
             width: 60px;
             height: 60px;
+            font-size: 32px;
+            text-decoration: none;
+            z-index: 99999;
+            background: white;
+            border: 3px solid #ff6b6b;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            transition: transform 0.2s;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+            transition: transform 0.15s;
             cursor: pointer;
+            pointer-events: auto;
         }
 
-        #home-btn:hover {
-            transform: scale(1.1);
+        #home-btn:active {
+            transform: scale(0.9);
         }
 
         .screen {
@@ -69,31 +72,33 @@
         }
 
         h1 {
-            font-size: 50px;
+            font-size: clamp(32px, 6vw, 52px);
             color: white;
             text-shadow: 3px 3px 0 #0056b3, -1px -1px 0 #0056b3, 1px -1px 0 #0056b3, -1px 1px 0 #0056b3, 1px 1px 0 #0056b3;
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
+            margin-top: max(20px, env(safe-area-inset-top));
         }
 
         .mode-btn {
             background: white;
             border: 4px solid #ffd700;
             border-radius: 20px;
-            padding: 20px 40px;
-            font-size: 36px;
+            padding: 16px 36px;
+            font-size: clamp(24px, 5vw, 36px);
             font-family: inherit;
-            margin: 15px;
+            margin: 12px;
             cursor: pointer;
-            box-shadow: 0 8px 0 #d4af37, 0 15px 20px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 0 #d4af37, 0 12px 18px rgba(0,0,0,0.2);
             transition: all 0.1s;
             color: #333;
-            min-width: 280px;
+            width: clamp(250px, 70vw, 320px);
+            text-align: center;
         }
 
         .mode-btn:active {
-            transform: translateY(8px);
-            box-shadow: 0 0 0 #d4af37, 0 5px 10px rgba(0,0,0,0.2);
+            transform: translateY(6px);
+            box-shadow: 0 0 0 #d4af37, 0 4px 8px rgba(0,0,0,0.2);
         }
 
         #game-area {
@@ -103,48 +108,50 @@
             align-items: center;
             justify-content: space-evenly;
             width: 100%;
-            max-width: 800px;
+            max-width: 900px;
             position: relative;
         }
 
         .container {
             display: flex;
             justify-content: center;
-            gap: 15px;
+            gap: clamp(10px, 2.5vw, 20px);
             flex-wrap: wrap;
             width: 100%;
-            min-height: 120px;
+            min-height: 110px;
         }
 
         .draggable {
-            width: 90px;
-            height: 90px;
+            width: clamp(70px, 14vw, 100px);
+            height: clamp(70px, 14vw, 100px);
             background: white;
             border-radius: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 50px;
+            font-size: clamp(36px, 8vw, 54px);
             font-weight: bold;
             box-shadow: 0 6px 0 #ddd, 0 10px 15px rgba(0,0,0,0.2);
             cursor: grab;
-            position: absolute; /* Absolute for dragging */
+            position: absolute;
             z-index: 100;
             transition: transform 0.1s;
             border: 3px solid transparent;
+            touch-action: none;
         }
         
         .draggable.dragging {
             box-shadow: 0 15px 25px rgba(0,0,0,0.3);
             z-index: 1000;
             cursor: grabbing;
+            pointer-events: none;
         }
 
         .slot {
-            width: 100px;
-            height: 100px;
-            border: 4px dashed rgba(255, 255, 255, 0.8);
-            border-radius: 25px;
+            width: clamp(80px, 15vw, 110px);
+            height: clamp(80px, 15vw, 110px);
+            border: 4px dashed rgba(255, 255, 255, 0.85);
+            border-radius: 22px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -155,8 +162,8 @@
         .slot::before {
             content: attr(data-index);
             position: absolute;
-            bottom: -35px;
-            font-size: 24px;
+            bottom: -32px;
+            font-size: clamp(18px, 3.5vw, 24px);
             color: white;
             font-weight: bold;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
@@ -186,26 +193,24 @@
 
         #confetti-canvas {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
             pointer-events: none;
             z-index: 999;
         }
 
         .star-celebration {
             position: fixed;
-            top: 50%;
-            left: 50%;
+            top: 50%; left: 50%;
             transform: translate(-50%, -50%) scale(0);
             background: white;
-            padding: 40px;
+            padding: 30px 40px;
             border-radius: 30px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             text-align: center;
             z-index: 2000;
             transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            width: clamp(280px, 80vw, 400px);
         }
 
         .star-celebration.show {
@@ -213,14 +218,14 @@
         }
 
         .star-celebration h2 {
-            font-size: 40px;
+            font-size: clamp(28px, 6vw, 40px);
             color: #ffaa00;
-            margin: 0 0 20px 0;
+            margin: 0 0 15px 0;
         }
         
         .stars {
-            font-size: 60px;
-            margin-bottom: 20px;
+            font-size: clamp(40px, 8vw, 60px);
+            margin-bottom: 15px;
         }
 
         .pop-anim {
@@ -235,33 +240,19 @@
 
         #round-indicator {
             position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 28px;
+            top: max(15px, env(safe-area-inset-top));
+            right: max(15px, env(safe-area-inset-right));
+            font-size: clamp(20px, 4vw, 28px);
             color: white;
-            background: rgba(0,0,0,0.2);
-            padding: 10px 20px;
+            background: rgba(0,0,0,0.25);
+            padding: 8px 18px;
             border-radius: 20px;
-        }
-
-        /* Prevent scrolling on touch */
-        html, body {
-            overflow: hidden;
-            position: fixed;
-            width: 100%;
-            height: 100%;
-        }
-
-        @media (max-width: 600px) {
-            .draggable { width: 70px; height: 70px; font-size: 40px; }
-            .slot { width: 80px; height: 80px; }
-            .container { gap: 10px; }
         }
     </style>
 </head>
 <body>
 
-    <a href="index.html" id="home-btn">🏠</a>
+    <a href="index.html" id="home-btn" onclick="window.location.href='index.html'; return true;">🏠</a>
     <canvas id="confetti-canvas"></canvas>
 
     <div class="star-celebration" id="star-celebration">
@@ -288,7 +279,6 @@
     </div>
 
     <script>
-        /* --- Audio System --- */
         const AudioContext = window.AudioContext || window.webkitAudioContext;
         let audioCtx;
 
@@ -299,65 +289,68 @@
 
         function playSound(type) {
             if (!audioCtx) initAudio();
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
 
-            const now = audioCtx.currentTime;
+                const now = audioCtx.currentTime;
 
-            if (type === 'ding') {
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(600, now);
-                osc.frequency.exponentialRampToValueAtTime(1200, now + 0.1);
-                gain.gain.setValueAtTime(0, now);
-                gain.gain.linearRampToValueAtTime(0.5, now + 0.05);
-                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
-                osc.start(now);
-                osc.stop(now + 0.5);
-            } else if (type === 'yeay') {
-                osc.type = 'triangle';
-                osc.frequency.setValueAtTime(400, now);
-                osc.frequency.linearRampToValueAtTime(600, now + 0.2);
-                osc.frequency.linearRampToValueAtTime(800, now + 0.4);
-                
-                gain.gain.setValueAtTime(0, now);
-                gain.gain.linearRampToValueAtTime(0.3, now + 0.1);
-                gain.gain.linearRampToValueAtTime(0.3, now + 0.4);
-                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.8);
-                
-                osc.start(now);
-                osc.stop(now + 0.8);
-                
-                // Arpeggio
-                setTimeout(() => playTone(600, 0.1), 100);
-                setTimeout(() => playTone(800, 0.1), 200);
-                setTimeout(() => playTone(1000, 0.3), 300);
-            } else if (type === 'pop') {
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(800, now);
-                osc.frequency.exponentialRampToValueAtTime(200, now + 0.1);
-                gain.gain.setValueAtTime(0.5, now);
-                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
-                osc.start(now);
-                osc.stop(now + 0.1);
-            }
+                if (type === 'ding') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(600, now);
+                    osc.frequency.exponentialRampToValueAtTime(1200, now + 0.1);
+                    gain.gain.setValueAtTime(0, now);
+                    gain.gain.linearRampToValueAtTime(0.5, now + 0.05);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+                    osc.start(now);
+                    osc.stop(now + 0.5);
+                } else if (type === 'yeay') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(400, now);
+                    osc.frequency.linearRampToValueAtTime(600, now + 0.2);
+                    osc.frequency.linearRampToValueAtTime(800, now + 0.4);
+                    
+                    gain.gain.setValueAtTime(0, now);
+                    gain.gain.linearRampToValueAtTime(0.3, now + 0.1);
+                    gain.gain.linearRampToValueAtTime(0.3, now + 0.4);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.8);
+                    
+                    osc.start(now);
+                    osc.stop(now + 0.8);
+                    
+                    setTimeout(() => playTone(600, 0.1), 100);
+                    setTimeout(() => playTone(800, 0.1), 200);
+                    setTimeout(() => playTone(1000, 0.3), 300);
+                } else if (type === 'pop') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(800, now);
+                    osc.frequency.exponentialRampToValueAtTime(200, now + 0.1);
+                    gain.gain.setValueAtTime(0.5, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+                    osc.start(now);
+                    osc.stop(now + 0.1);
+                }
+            } catch(e) {}
         }
         
         function playTone(freq, dur) {
             if (!audioCtx) return;
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.frequency.value = freq;
-            gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + dur);
-            osc.start();
-            osc.stop(audioCtx.currentTime + dur);
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.frequency.value = freq;
+                gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + dur);
+                osc.start();
+                osc.stop(audioCtx.currentTime + dur);
+            } catch(e) {}
         }
 
-        /* --- Confetti System --- */
+        // Confetti System
         const canvas = document.getElementById('confetti-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -397,7 +390,7 @@
             particles.forEach(p => {
                 p.x += p.vx;
                 p.y += p.vy;
-                p.vy += 0.5; // gravity
+                p.vy += 0.5;
                 p.rot += p.rotSpeed;
                 
                 if (p.y < canvas.height) activeCount++;
@@ -418,7 +411,7 @@
             }
         }
 
-        /* --- Game Logic --- */
+        // Game Logic
         let currentMode = '';
         let roundsCompleted = 0;
         let itemsCount = 3;
@@ -454,7 +447,7 @@
                     seq.push({ val: start + i, display: start + i, color: colors[i % colors.length] });
                 }
             } else if (currentMode === 'alphabet') {
-                let start = Math.floor(Math.random() * 21); // A to U
+                let start = Math.floor(Math.random() * 21);
                 for (let i = 0; i < count; i++) {
                     let char = String.fromCharCode(65 + start + i);
                     seq.push({ val: i, display: char, color: colors[i % colors.length] });
@@ -462,7 +455,7 @@
             } else if (currentMode === 'size') {
                 let emoji = sizeEmojis[Math.floor(Math.random() * sizeEmojis.length)];
                 let baseSize = 20;
-                let step = 15;
+                let step = 12;
                 for (let i = 0; i < count; i++) {
                     seq.push({ 
                         val: i, 
@@ -492,7 +485,6 @@
             source.innerHTML = '';
             target.innerHTML = '';
 
-            // Update difficulty
             if (roundsCompleted >= 10) itemsCount = 5;
             else if (roundsCompleted >= 5) itemsCount = 4;
             else itemsCount = 3;
@@ -501,22 +493,14 @@
 
             currentSequence = getSequence(itemsCount);
             
-            // Create Slots
             for (let i = 0; i < itemsCount; i++) {
                 let slot = document.createElement('div');
                 slot.className = 'slot';
-                slot.setAttribute('data-index', (i+1) + (i==0?'st':i==1?'nd':i==2?'rd':'th')); // 1st, 2nd, 3rd, 4th
-                if (i===0) slot.setAttribute('data-index', 'ke-1');
-                if (i===1) slot.setAttribute('data-index', 'ke-2');
-                if (i===2) slot.setAttribute('data-index', 'ke-3');
-                if (i===3) slot.setAttribute('data-index', 'ke-4');
-                if (i===4) slot.setAttribute('data-index', 'ke-5');
-                
+                slot.setAttribute('data-index', `ke-${i+1}`);
                 slot.setAttribute('data-val', currentSequence[i].val);
                 target.appendChild(slot);
             }
 
-            // Create Draggables
             let shuffled = shuffle([...currentSequence]);
             
             let sourceWidth = Math.min(window.innerWidth - 40, 800);
@@ -530,19 +514,18 @@
                 el.style.border = `4px solid ${item.color}`;
                 el.setAttribute('data-val', item.val);
                 
-                // Position absolutely in source
-                let leftPos = (index * itemSpace) + (itemSpace/2) - 45; // 45 is half width
+                let leftPos = (index * itemSpace) + (itemSpace/2) - 40;
                 el.style.left = leftPos + 'px';
-                el.style.top = '15px';
+                el.style.top = '10px';
                 el.setAttribute('data-orig-left', leftPos);
-                el.setAttribute('data-orig-top', '15px');
+                el.setAttribute('data-orig-top', '10px');
 
                 setupDrag(el);
                 source.appendChild(el);
             });
         }
 
-        /* --- Drag and Drop Logic --- */
+        // Drag & Drop
         let activeEl = null;
         let startX, startY;
         let initialX, initialY;
@@ -566,7 +549,6 @@
                 startY = e.clientY;
             }
 
-            // Bring to front and relative to body for smooth drag
             const rect = activeEl.getBoundingClientRect();
             initialX = rect.left;
             initialY = rect.top;
@@ -613,7 +595,6 @@
 
             activeEl.classList.remove('dragging');
 
-            // Check collision with slots
             const rect = activeEl.getBoundingClientRect();
             const centerX = rect.left + rect.width / 2;
             const centerY = rect.top + rect.height / 2;
@@ -626,16 +607,13 @@
                 const sCenterX = sRect.left + sRect.width / 2;
                 const sCenterY = sRect.top + sRect.height / 2;
                 
-                // Distance
                 const dist = Math.hypot(centerX - sCenterX, centerY - sCenterY);
                 
-                if (dist < 60) { // generous radius
+                if (dist < 60) {
                     if (slot.getAttribute('data-val') === activeEl.getAttribute('data-val')) {
-                        // Correct!
                         matched = true;
                         playSound('ding');
                         
-                        // Move to slot visually
                         slot.appendChild(activeEl);
                         activeEl.style.position = 'static';
                         activeEl.style.left = 'auto';
@@ -652,8 +630,7 @@
             }
 
             if (!matched) {
-                // Return to original
-                playSound('pop'); // soft fail sound
+                playSound('pop');
                 const source = document.getElementById('items-source');
                 source.appendChild(activeEl);
                 activeEl.style.position = 'absolute';
@@ -676,7 +653,7 @@
                     } else {
                         startRound();
                     }
-                }, 3000);
+                }, 2500);
             }
         }
 
