@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-    <meta name="theme-color" content="#6C5CE7">
+    <meta name="theme-color" content="#b4a7d6">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="description" content="Kumpulan game edukasi seru untuk anak usia 4-6 tahun. Bermain sambil belajar!">
@@ -11,32 +11,12 @@
     <link rel="apple-touch-icon" href="icons/icon-192.svg">
     <title>Kiddo Games 🎮 — Ayo Bermain & Belajar!</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@600;800;900&display=swap');
 
         :root {
-            --purple: #6C5CE7;
-            --purple-dark: #5541d4;
-            --purple-light: #a29bfe;
-            --pink: #fd79a8;
-            --pink-light: #fab1c9;
-            --blue: #74b9ff;
-            --blue-dark: #0984e3;
-            --green: #55efc4;
-            --green-dark: #00b894;
-            --yellow: #ffeaa7;
-            --yellow-dark: #fdcb6e;
-            --orange: #fab1a0;
-            --orange-dark: #e17055;
-            --red: #ff7675;
-            --bg-main: #f0e6ff;
-            --bg-card: #ffffff;
-            --text-dark: #2d3436;
-            --text-mid: #636e72;
-            --radius-lg: 24px;
-            --radius-md: 16px;
-            --radius-sm: 12px;
-            --shadow-card: 0 4px 15px rgba(108,92,231,0.12);
-            --shadow-lg: 0 8px 30px rgba(108,92,231,0.18);
+            --border-color: #4a3f35;
+            --bg-color: #f1f2f6;
+            --text-color: #4a3f35;
         }
 
         * {
@@ -47,810 +27,989 @@
         }
 
         body {
-            font-family: 'Nunito', 'Comic Sans MS', cursive, sans-serif;
-            background: var(--bg-main);
+            font-family: 'Fredoka', 'Nunito', 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(180deg, #d3cce3 0%, #e9e4f0 30%, #fff6e5 60%, #e8f5e9 100%);
+            color: var(--text-color);
             min-height: 100vh;
+            padding-bottom: 80px;
             overflow-x: hidden;
-            padding-bottom: 80px; /* space for bottom nav */
-            color: var(--text-dark);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        /* ===== TOP BAR ===== */
+        /* ===== HEADER / TOP BAR ===== */
         .top-bar {
+            width: 100%;
+            max-width: 800px;
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            padding: 12px 16px;
-            background: linear-gradient(135deg, #6C5CE7 0%, #a29bfe 100%);
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            align-items: center;
+            padding: 16px;
+            z-index: 10;
         }
 
-        .top-bar-left {
+        .user-profile-wrap {
             display: flex;
             align-items: center;
-            gap: 10px;
-        }
-
-        .avatar {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #ffeaa7, #fab1a0);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.6rem;
-            border: 3px solid rgba(255,255,255,0.7);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-        }
-
-        .greeting {
-            color: white;
-        }
-
-        .greeting-name {
-            font-size: 1.05rem;
-            font-weight: 800;
-            line-height: 1.2;
-        }
-
-        .greeting-stars {
-            font-size: 0.8rem;
-            font-weight: 700;
-            opacity: 0.9;
-            display: flex;
-            align-items: center;
-            gap: 3px;
-        }
-
-        .top-bar-right {
-            display: flex;
             gap: 8px;
         }
 
-        .top-btn {
+        .kid-avatar-pill {
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: 30px;
+            padding: 4px 16px 4px 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 0 rgba(74,63,53,0.15);
+        }
+
+        .kid-avatar {
+            font-size: 1.5rem;
+            background: #ffeaa7;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1.5px solid var(--border-color);
+        }
+
+        .kid-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .kid-name {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #4a3f35;
+        }
+
+        .kid-stars {
+            font-size: 0.7rem;
+            color: #e17055;
+            font-weight: 600;
+        }
+
+        .profile-btn {
+            background: #b4a7d6;
+            color: white;
+            border: 2px solid var(--border-color);
+            border-radius: 30px;
+            padding: 6px 16px;
+            font-family: inherit;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 0 rgba(74,63,53,0.15);
+            transition: transform 0.1s;
+        }
+
+        .profile-btn:active {
+            transform: translateY(2px);
+        }
+
+        .sound-toggle-btn {
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            border: none;
-            background: rgba(255,255,255,0.25);
-            backdrop-filter: blur(10px);
+            background: #b4a7d6;
+            border: 2px solid var(--border-color);
+            color: white;
             font-size: 1.2rem;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s;
-            color: white;
+            box-shadow: 0 4px 0 rgba(74,63,53,0.15);
+            transition: transform 0.1s;
         }
 
-        .top-btn:active {
-            transform: scale(0.9);
+        .sound-toggle-btn:active {
+            transform: translateY(2px);
         }
 
-        /* ===== HERO SECTION ===== */
-        .hero {
-            background: linear-gradient(180deg, #a29bfe 0%, #dfe6e9 50%, var(--bg-main) 100%);
-            padding: 20px 16px 30px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero-decorations {
-            position: absolute;
-            top: 0;
-            left: 0;
+        /* ===== HERO / BANNER AREA ===== */
+        .hero-section {
             width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .hero-deco {
-            position: absolute;
-            animation: float-hero 3s ease-in-out infinite;
-            font-size: 2rem;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
-        }
-
-        .hero-deco:nth-child(1) { top: 5%; left: 5%; animation-delay: 0s; font-size: 2.2rem; }
-        .hero-deco:nth-child(2) { top: 8%; right: 8%; animation-delay: 0.5s; font-size: 1.8rem; }
-        .hero-deco:nth-child(3) { top: 15%; left: 15%; animation-delay: 1s; font-size: 1.5rem; }
-        .hero-deco:nth-child(4) { top: 20%; right: 15%; animation-delay: 1.5s; font-size: 2rem; }
-        .hero-deco:nth-child(5) { bottom: 25%; left: 8%; animation-delay: 0.3s; font-size: 1.6rem; }
-        .hero-deco:nth-child(6) { bottom: 20%; right: 5%; animation-delay: 0.8s; font-size: 2.5rem; }
-        .hero-deco:nth-child(7) { top: 35%; left: 2%; animation-delay: 1.2s; font-size: 1.3rem; }
-        .hero-deco:nth-child(8) { top: 40%; right: 3%; animation-delay: 0.6s; font-size: 1.4rem; }
-
-        @keyframes float-hero {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-8px) rotate(5deg); }
-        }
-
-        .hero-characters {
-            position: relative;
-            z-index: 1;
-            font-size: 5rem;
-            margin-bottom: 8px;
+            max-width: 800px;
+            padding: 0 16px 20px;
             display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            gap: 8px;
-        }
-
-        .hero-char {
-            animation: hero-bounce 2s ease-in-out infinite;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
-        }
-
-        .hero-char:nth-child(1) { font-size: 3.5rem; animation-delay: 0.2s; }
-        .hero-char:nth-child(2) { font-size: 5.5rem; animation-delay: 0s; }
-        .hero-char:nth-child(3) { font-size: 3.5rem; animation-delay: 0.4s; }
-
-        @keyframes hero-bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-12px); }
-        }
-
-        .hero-title {
-            position: relative;
-            z-index: 1;
-        }
-
-        .hero-title h1 {
-            font-size: clamp(2.2rem, 7vw, 3.5rem);
-            font-weight: 900;
-            line-height: 1.1;
-            letter-spacing: -1px;
-            margin-bottom: 6px;
-        }
-
-        .hero-title .line1 { color: #e17055; text-shadow: 2px 2px 0 rgba(0,0,0,0.08); }
-        .hero-title .line2 { color: #0984e3; text-shadow: 2px 2px 0 rgba(0,0,0,0.08); }
-        .hero-title .line3 { color: #00b894; text-shadow: 2px 2px 0 rgba(0,0,0,0.08); }
-
-        .hero-subtitle {
-            position: relative;
-            z-index: 1;
-            font-size: 1rem;
-            font-weight: 700;
-            color: var(--text-mid);
-            margin-top: 4px;
-            background: rgba(255,255,255,0.6);
-            display: inline-block;
-            padding: 4px 16px;
-            border-radius: 20px;
-        }
-
-        /* ===== INSTALL BANNER (non-intrusive) ===== */
-        .install-banner {
-            display: none;
-            margin: 0 16px;
-            margin-top: -10px;
-            padding: 10px 16px;
-            background: linear-gradient(135deg, #6C5CE7, #a29bfe);
-            border-radius: var(--radius-md);
-            color: white;
-            font-weight: 800;
-            font-size: 0.95rem;
-            align-items: center;
             justify-content: space-between;
-            gap: 10px;
-            box-shadow: var(--shadow-lg);
+            align-items: center;
             position: relative;
-            z-index: 10;
-            cursor: pointer;
-            border: none;
-            font-family: inherit;
-            width: calc(100% - 32px);
-            text-align: left;
+            z-index: 1;
         }
 
-        .install-banner-content {
+        .hero-left {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .hero-mascots {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 8px;
+        }
+
+        .mascot {
+            font-size: 3rem;
+            filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.1));
+            animation: mascot-bounce 2s ease-in-out infinite alternate;
+        }
+
+        .mascot:nth-child(2) { animation-delay: 0.3s; }
+        .mascot:nth-child(3) { animation-delay: 0.6s; }
+
+        @keyframes mascot-bounce {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-8px); }
+        }
+
+        .hero-title-text {
+            font-size: clamp(2.2rem, 8vw, 3rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 12px;
+            text-shadow: 1px 1px 0px #fff;
+        }
+
+        .t-bermain { color: #e15f41; }
+        .t-belajar { color: #3867d6; }
+        .t-tumbuh { color: #20bf6b; }
+
+        .hero-tag {
+            background: #b4a7d6;
+            color: white;
+            border: 2px solid var(--border-color);
+            border-radius: 20px;
+            padding: 4px 16px;
+            font-size: 0.8rem;
+            font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 6px;
+            box-shadow: 0 4px 0 rgba(74,63,53,0.15);
         }
 
-        .install-banner .install-icon {
-            font-size: 1.8rem;
-        }
-
-        .install-banner .install-btn-action {
-            background: white;
-            color: var(--purple);
-            border: none;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-weight: 800;
-            font-size: 0.85rem;
-            font-family: inherit;
-            cursor: pointer;
-            white-space: nowrap;
-            flex-shrink: 0;
-        }
-
-        .install-banner .install-close {
-            position: absolute;
-            top: 6px;
-            right: 8px;
-            background: none;
-            border: none;
-            color: rgba(255,255,255,0.7);
-            font-size: 1rem;
-            cursor: pointer;
-            padding: 2px;
-        }
-
-        /* ===== CATEGORY BAR ===== */
-        .category-section {
-            padding: 18px 0 8px;
-        }
-
-        .category-scroll {
+        /* PWA Install Card */
+        .install-card {
+            background: #fffdf5;
+            border: 2.5px solid var(--border-color);
+            border-radius: 24px;
+            padding: 16px;
+            width: 200px;
             display: flex;
-            gap: 12px;
-            overflow-x: auto;
-            padding: 0 16px 8px;
-            scroll-snap-type: x mandatory;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 4px 4px 0 var(--border-color);
+            position: relative;
         }
 
-        .category-scroll::-webkit-scrollbar { display: none; }
+        .install-kids-illustration {
+            display: flex;
+            gap: -8px;
+            margin-bottom: 4px;
+        }
 
-        .category-item {
-            flex-shrink: 0;
+        .ill-kid {
+            font-size: 2.4rem;
+            filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.1));
+        }
+
+        .install-btn {
+            background: #6C5CE7;
+            color: white;
+            border: 2px solid var(--border-color);
+            border-radius: 20px;
+            padding: 8px 24px;
+            font-family: inherit;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            box-shadow: 0 4px 0 var(--border-color);
+            transition: transform 0.1s;
+        }
+
+        .install-btn:active {
+            transform: translateY(2px);
+        }
+
+        @media (max-width: 550px) {
+            .hero-section {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+                align-items: center;
+            }
+            .hero-left {
+                align-items: center;
+            }
+            .install-card {
+                width: 100%;
+                max-width: 280px;
+            }
+        }
+
+        /* ===== CATEGORY NAVBAR ===== */
+        .category-container {
+            width: calc(100% - 32px);
+            max-width: 800px;
+            background: white;
+            border: 2.5px solid var(--border-color);
+            border-radius: 24px;
+            padding: 12px;
+            box-shadow: 4px 4px 0 var(--border-color);
+            margin-bottom: 24px;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .category-list {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            min-width: 550px;
+        }
+
+        .category-btn {
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 6px;
-            scroll-snap-align: start;
-            text-decoration: none;
+            background: none;
+            border: none;
             cursor: pointer;
+            font-family: inherit;
         }
 
-        .category-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 18px;
+        .category-circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid var(--border-color);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.8rem;
-            box-shadow: var(--shadow-card);
-            transition: all 0.2s;
-            border: 3px solid rgba(255,255,255,0.8);
+            font-size: 1.5rem;
+            box-shadow: 0 4px 0 rgba(74,63,53,0.15);
+            transition: transform 0.1s;
         }
 
-        .category-item:active .category-icon {
-            transform: scale(0.9);
+        .category-btn:active .category-circle {
+            transform: translateY(2px);
         }
 
         .category-label {
-            font-size: 0.72rem;
-            font-weight: 800;
-            color: var(--text-mid);
-            text-align: center;
-            white-space: nowrap;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-color);
         }
 
-        /* ===== SECTION HEADERS ===== */
-        .section-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 16px 16px 10px;
+        /* ===== MAIN GAME SECTION ===== */
+        .main-section {
+            width: 100%;
+            max-width: 800px;
+            padding: 0 16px;
         }
 
         .section-title {
-            font-size: 1.15rem;
-            font-weight: 900;
-            color: var(--text-dark);
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 16px;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
         }
 
-        /* ===== POPULAR GAMES GRID ===== */
-        .games-scroll {
+        .games-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            padding: 0 16px 8px;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 16px;
+            margin-bottom: 30px;
         }
 
-        @media (max-width: 420px) {
-            .games-scroll {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 8px;
+        @media (max-width: 400px) {
+            .games-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
 
-        @media (min-width: 600px) {
-            .games-scroll {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 16px;
-                max-width: 600px;
-                margin: 0 auto;
-            }
-        }
-
-        .game-card {
-            position: relative;
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            text-decoration: none;
+        .game-card-wrapper {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            aspect-ratio: 1;
-            padding: 10px 6px 8px;
-            box-shadow: var(--shadow-card);
-            transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 3px solid rgba(255,255,255,0.5);
+            text-decoration: none;
+            color: inherit;
         }
 
-        .game-card:active {
-            transform: scale(0.93);
-        }
-
-        @media (hover: hover) {
-            .game-card:hover {
-                transform: translateY(-4px) scale(1.03);
-                box-shadow: var(--shadow-lg);
-            }
-        }
-
-        .game-card-emoji {
-            font-size: clamp(2rem, 8vw, 3rem);
-            filter: drop-shadow(0 3px 6px rgba(0,0,0,0.15));
-            margin-bottom: 4px;
-            transition: transform 0.3s;
-        }
-
-        .game-card:active .game-card-emoji {
-            transform: rotate(-10deg) scale(1.15);
-        }
-
-        .game-card-name {
-            font-size: clamp(0.6rem, 2.5vw, 0.78rem);
-            font-weight: 800;
-            color: white;
-            text-align: center;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.25);
-            line-height: 1.15;
-            padding: 0 2px;
-        }
-
-        .game-card-play {
-            position: absolute;
-            bottom: 6px;
-            right: 6px;
-            width: 26px;
-            height: 26px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.35);
-            backdrop-filter: blur(4px);
+        .game-card-body {
+            width: 100%;
+            aspect-ratio: 1.1;
+            background: white;
+            border: 2.5px solid var(--border-color);
+            border-radius: 20px;
+            position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.7rem;
-            color: white;
-            border: 2px solid rgba(255,255,255,0.5);
+            box-shadow: 4px 4px 0 var(--border-color);
+            transition: transform 0.2s;
+            overflow: hidden;
         }
 
-        .badge-new {
+        .game-card-wrapper:active .game-card-body {
+            transform: translateY(2px);
+        }
+
+        .game-card-artwork {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: #fff;
+        }
+
+        .game-card-badge {
             position: absolute;
-            top: 6px;
-            right: 6px;
-            background: linear-gradient(135deg, #ff7675, #e17055);
-            color: white;
+            top: 4px;
+            right: 4px;
+            background: #fdcb6e;
+            color: #4a3f35;
+            border: 1.5px solid var(--border-color);
             font-size: 0.55rem;
-            font-weight: 900;
+            font-weight: 700;
             padding: 2px 6px;
-            border-radius: 8px;
-            letter-spacing: 0.5px;
-            box-shadow: 0 2px 6px rgba(225,112,85,0.4);
-            animation: pulse-badge 1.5s ease-in-out infinite;
+            border-radius: 10px;
+            box-shadow: 0 2px 0 var(--border-color);
+            transform: rotate(5deg);
+            z-index: 2;
         }
 
-        @keyframes pulse-badge {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
+        .game-card-play-btn {
+            position: absolute;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 3px 0 var(--border-color);
+            z-index: 10;
         }
 
-        /* Game card colors */
-        .gc-1 { background: linear-gradient(145deg, #74b9ff, #0984e3); }
-        .gc-2 { background: linear-gradient(145deg, #a29bfe, #6C5CE7); }
-        .gc-3 { background: linear-gradient(145deg, #ffeaa7, #fdcb6e); }
-        .gc-4 { background: linear-gradient(145deg, #fab1a0, #e17055); }
-        .gc-5 { background: linear-gradient(145deg, #81ecec, #00cec9); }
-        .gc-6 { background: linear-gradient(145deg, #fd79a8, #e84393); }
-        .gc-7 { background: linear-gradient(145deg, #55efc4, #00b894); }
-        .gc-8 { background: linear-gradient(145deg, #ffeaa7, #e17055); }
-        .gc-9 { background: linear-gradient(145deg, #dfe6e9, #6C5CE7); }
+        .game-card-play-icon {
+            width: 0;
+            height: 0;
+            border-top: 6px solid transparent;
+            border-bottom: 6px solid transparent;
+            border-left: 10px solid #2ecc71;
+            margin-left: 3px;
+        }
 
-        /* ===== INFO CARDS ROW ===== */
-        .info-row {
+        .game-card-title {
+            margin-top: 10px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-align: center;
+            color: var(--text-color);
+        }
+
+        /* ===== PARENT ZONE ===== */
+        .parent-zone-section {
+            width: 100%;
+            max-width: 800px;
+            padding: 0 16px;
+            margin-bottom: 24px;
+        }
+
+        .parent-cards-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            padding: 0 16px 12px;
+            gap: 16px;
         }
 
-        @media (min-width: 600px) {
-            .info-row {
-                max-width: 600px;
-                margin: 0 auto;
+        @media (max-width: 480px) {
+            .parent-cards-row {
+                grid-template-columns: 1fr;
             }
         }
 
-        .info-card {
-            background: var(--bg-card);
-            border-radius: var(--radius-lg);
-            padding: 14px;
-            box-shadow: var(--shadow-card);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .info-card-title {
-            font-size: 0.72rem;
-            font-weight: 900;
-            color: var(--purple);
-            margin-bottom: 4px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .info-card-emoji {
-            font-size: 2.5rem;
-            position: absolute;
-            bottom: 6px;
-            right: 8px;
-            opacity: 0.9;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
-        }
-
-        .tip-text {
-            font-size: 0.7rem;
-            font-weight: 700;
-            color: var(--text-mid);
-            line-height: 1.4;
-            max-width: 70%;
-        }
-
-        .progress-bar-wrap {
-            margin-top: 8px;
-            background: #eee;
-            height: 8px;
-            border-radius: 4px;
-            overflow: hidden;
-            width: 70%;
-        }
-
-        .progress-bar-fill {
-            height: 100%;
-            border-radius: 4px;
-            background: linear-gradient(90deg, var(--green), var(--green-dark));
-            transition: width 0.5s;
-        }
-
-        .progress-text {
-            font-size: 0.7rem;
-            font-weight: 800;
-            color: var(--green-dark);
-            margin-top: 3px;
-        }
-
-        /* ===== PARENT SECTION ===== */
         .parent-card {
-            margin: 0 16px 16px;
-            background: linear-gradient(135deg, #fff5f5, #ffeaa7);
-            border-radius: var(--radius-lg);
+            border: 2.5px solid var(--border-color);
+            border-radius: 20px;
             padding: 16px;
-            box-shadow: var(--shadow-card);
+            box-shadow: 4px 4px 0 var(--border-color);
             display: flex;
             align-items: center;
             gap: 12px;
+            cursor: pointer;
         }
 
-        @media (min-width: 600px) {
-            .parent-card {
-                max-width: 568px;
-                margin: 0 auto 16px;
-            }
-        }
+        .parent-card-c1 { background: #c2f0c2; }
+        .parent-card-c2 { background: #ffddcc; }
 
         .parent-card-icon {
             font-size: 2.5rem;
-            flex-shrink: 0;
         }
 
-        .parent-card-text {
-            font-size: 0.78rem;
-            font-weight: 700;
-            color: var(--text-mid);
-            line-height: 1.4;
-        }
-
-        .parent-card-label {
-            font-size: 0.72rem;
-            font-weight: 900;
-            color: var(--pink);
-            margin-bottom: 2px;
+        .parent-card-info {
+            flex: 1;
             display: flex;
-            align-items: center;
+            flex-direction: column;
             gap: 4px;
         }
 
-        /* ===== BOTTOM NAV ===== */
+        .parent-card-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .parent-progress-bar {
+            width: 100%;
+            height: 12px;
+            background: white;
+            border: 1.5px solid var(--border-color);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .parent-progress-fill {
+            height: 100%;
+            background: #2ecc71;
+            width: 60%;
+        }
+
+        /* ===== STATS & TIPS ===== */
+        .stats-tips-section {
+            width: 100%;
+            max-width: 800px;
+            padding: 0 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .stat-box {
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: 20px;
+            padding: 12px 16px;
+            box-shadow: 4px 4px 0 var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stat-box-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-box-label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: #b4a7d6;
+            text-transform: uppercase;
+        }
+
+        .stat-box-value {
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-top: 2px;
+        }
+
+        .stat-box-desc {
+            font-size: 0.7rem;
+            color: #7f8c8d;
+        }
+
+        .stat-box-icon {
+            font-size: 1.8rem;
+        }
+
+        .tips-banner {
+            background: #ffeaa7;
+            border: 2px solid var(--border-color);
+            border-radius: 20px;
+            padding: 16px;
+            box-shadow: 4px 4px 0 var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .tips-banner-left {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .tips-banner-icon {
+            font-size: 1.8rem;
+            margin-top: -2px;
+        }
+
+        .tips-banner-text {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .tips-banner-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .tips-banner-desc {
+            font-size: 0.75rem;
+            line-height: 1.3;
+        }
+
+        .tips-banner-right {
+            font-size: 2.5rem;
+            opacity: 0.9;
+        }
+
+        /* ===== BOTTOM NAVIGATION ===== */
         .bottom-nav {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
-            height: 68px;
+            height: 64px;
             background: white;
-            border-top: 1px solid rgba(0,0,0,0.06);
+            border-top: 2px solid var(--border-color);
             display: flex;
             align-items: center;
             justify-content: space-around;
-            z-index: 200;
-            box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
+            z-index: 100;
+            box-shadow: 0 -4px 10px rgba(0,0,0,0.05);
             padding-bottom: env(safe-area-inset-bottom, 0);
         }
 
         .nav-item {
+            background: none;
+            border: none;
+            cursor: pointer;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 2px;
-            text-decoration: none;
-            cursor: pointer;
-            padding: 4px 12px;
-            border-radius: 12px;
-            transition: all 0.2s;
-            background: none;
-            border: none;
+            justify-content: center;
             font-family: inherit;
+            padding: 4px 16px;
+            border-radius: 12px;
+            transition: background 0.2s;
         }
 
         .nav-item.active {
-            background: rgba(108,92,231,0.1);
+            background: #e8f5e9;
         }
 
         .nav-item-icon {
-            font-size: 1.5rem;
-            line-height: 1;
+            font-size: 1.4rem;
         }
 
         .nav-item-label {
             font-size: 0.65rem;
-            font-weight: 800;
-            color: var(--text-mid);
+            font-weight: 600;
+            color: var(--text-color);
+            margin-top: 2px;
         }
 
         .nav-item.active .nav-item-label {
-            color: var(--purple);
+            color: #2ecc71;
         }
 
-        /* ===== FOOTER ===== */
-        .footer {
+        .footer-text {
             text-align: center;
-            padding: 16px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            color: var(--text-mid);
-            opacity: 0.7;
+            font-size: 0.75rem;
+            color: #7f8c8d;
+            margin-bottom: 24px;
+            font-weight: 600;
         }
-
-        /* ===== SCROLLBAR HIDE ===== */
-        ::-webkit-scrollbar { width: 0; height: 0; }
     </style>
 </head>
 <body>
 
     <!-- TOP BAR -->
     <div class="top-bar">
-        <div class="top-bar-left">
-            <div class="avatar">👦</div>
-            <div class="greeting">
-                <div class="greeting-name">Hi, Kiddo! 👋</div>
-                <div class="greeting-stars">⭐ Ayo bermain!</div>
+        <div class="user-profile-wrap">
+            <div class="kid-avatar-pill">
+                <div class="kid-avatar">👦</div>
+                <div class="kid-info">
+                    <span class="kid-name">Hi, Kiddo! 👋</span>
+                    <span class="kid-stars">⭐ Ayo bermain!</span>
+                </div>
             </div>
+            <button class="profile-btn">👤 Profile</button>
         </div>
-        <div class="top-bar-right">
-            <button class="top-btn" id="muteBtn" title="Suara">🔊</button>
-        </div>
+        <button class="sound-toggle-btn" id="muteBtn">🔊</button>
     </div>
 
     <!-- HERO SECTION -->
-    <div class="hero">
-        <div class="hero-decorations">
-            <div class="hero-deco">🏰</div>
-            <div class="hero-deco">🚀</div>
-            <div class="hero-deco">☁️</div>
-            <div class="hero-deco">⭐</div>
-            <div class="hero-deco">🐼</div>
-            <div class="hero-deco">🌈</div>
-            <div class="hero-deco">🦋</div>
-            <div class="hero-deco">✨</div>
-        </div>
-        <div class="hero-characters">
-            <span class="hero-char">🐱</span>
-            <span class="hero-char">🧒</span>
-            <span class="hero-char">🐶</span>
-        </div>
-        <div class="hero-title">
-            <h1>
-                <span class="line1">BERMAIN</span><br>
-                <span class="line2">BELAJAR</span><br>
-                <span class="line3">TUMBUH!</span>
+    <div class="hero-section">
+        <div class="hero-left">
+            <div class="hero-mascots">
+                <span class="mascot">🐱</span>
+                <span class="mascot">👦</span>
+                <span class="mascot">🐶</span>
+            </div>
+            <h1 class="hero-title-text">
+                <span class="t-bermain">BERMAIN</span><br>
+                <span class="t-belajar">BELAJAR</span><br>
+                <span class="t-tumbuh">TUMBUH!</span>
             </h1>
-        </div>
-        <div class="hero-subtitle">🎮 Game Seru untuk Anak Cerdas</div>
-    </div>
-
-    <!-- INSTALL BANNER (inline, not blocking) -->
-    <div class="install-banner" id="installBanner">
-        <div class="install-banner-content">
-            <span class="install-icon">📲</span>
-            <div>
-                <div style="font-size:0.85rem;">Install Kiddo Games</div>
-                <div style="font-size:0.7rem;opacity:0.85;font-weight:600;">Main offline di tablet!</div>
+            <div class="hero-tag">
+                <span>🎮</span> Game Seru untuk Anak Cerdas
             </div>
         </div>
-        <button class="install-btn-action" id="installAction">Install</button>
-        <button class="install-close" id="installClose">✕</button>
+        <div class="install-card" id="installBanner">
+            <div class="install-kids-illustration">
+                <span class="ill-kid">👧</span>
+                <span class="ill-kid" style="margin-left:-8px;">👦</span>
+                <span class="ill-kid" style="margin-left:-8px;">🧒</span>
+            </div>
+            <button class="install-btn" id="installAction">Install App</button>
+        </div>
     </div>
 
-    <!-- CATEGORY BAR -->
-    <div class="category-section">
-        <div class="category-scroll">
-            <a href="#angka" class="category-item" data-filter="angka">
-                <div class="category-icon" style="background: linear-gradient(145deg, #74b9ff, #a29bfe);">🔢</div>
-                <span class="category-label">Angka</span>
-            </a>
-            <a href="#bentuk" class="category-item" data-filter="bentuk">
-                <div class="category-icon" style="background: linear-gradient(145deg, #a29bfe, #6C5CE7);">🔷</div>
-                <span class="category-label">Bentuk</span>
-            </a>
-            <a href="#memori" class="category-item" data-filter="memori">
-                <div class="category-icon" style="background: linear-gradient(145deg, #ffeaa7, #fdcb6e);">🧠</div>
-                <span class="category-label">Memori</span>
-            </a>
-            <a href="#puzzle" class="category-item" data-filter="puzzle">
-                <div class="category-icon" style="background: linear-gradient(145deg, #fab1a0, #e17055);">🧩</div>
+    <!-- CATEGORY NAVBAR -->
+    <div class="category-container">
+        <div class="category-list">
+            <button class="category-btn">
+                <div class="category-circle" style="background: #a2d2ff;">🔢</div>
+                <span class="category-label">Number</span>
+            </button>
+            <button class="category-btn">
+                <div class="category-circle" style="background: #bde0fe;">🔷</div>
+                <span class="category-label">Triangle</span>
+            </button>
+            <button class="category-btn">
+                <div class="category-circle" style="background: #ffc8dd;">🧠</div>
+                <span class="category-label">Brain</span>
+            </button>
+            <button class="category-btn">
+                <div class="category-circle" style="background: #ffb5a7;">🧩</div>
                 <span class="category-label">Puzzle</span>
-            </a>
-            <a href="#suara" class="category-item" data-filter="suara">
-                <div class="category-icon" style="background: linear-gradient(145deg, #81ecec, #00cec9);">🔊</div>
-                <span class="category-label">Suara</span>
-            </a>
-            <a href="#kreativitas" class="category-item" data-filter="kreativitas">
-                <div class="category-icon" style="background: linear-gradient(145deg, #55efc4, #00b894);">🎨</div>
-                <span class="category-label">Kreatif</span>
-            </a>
-            <a href="#lainnya" class="category-item" data-filter="lainnya">
-                <div class="category-icon" style="background: linear-gradient(145deg, #fd79a8, #e84393);">🌟</div>
-                <span class="category-label">Lainnya</span>
-            </a>
+            </button>
+            <button class="category-btn">
+                <div class="category-circle" style="background: #fcd5ce;">📢</div>
+                <span class="category-label">Megaphone</span>
+            </button>
+            <button class="category-btn">
+                <div class="category-circle" style="background: #ffe5d9;">🎨</div>
+                <span class="category-label">Palette</span>
+            </button>
+            <button class="category-btn">
+                <div class="category-circle" style="background: #fff2cc;">⭐</div>
+                <span class="category-label">Star</span>
+            </button>
         </div>
     </div>
 
-    <!-- POPULAR GAMES -->
-    <div class="section-header">
+    <!-- ALL GAMES SECTION -->
+    <div class="main-section">
         <div class="section-title">🔥 Semua Game</div>
+        <div class="games-grid">
+            
+            <a href="berhitung.html" class="game-card-wrapper">
+                <div class="game-card-body">
+                    <div class="game-card-artwork" style="background: #d6e4ff;">
+                        <!-- Custom vector drawing for Menghitung Jari -->
+                        <svg viewBox="0 0 100 100" width="80" height="80">
+                            <!-- Cloud/Background bubble -->
+                            <circle cx="50" cy="50" r="35" fill="white" opacity="0.6"/>
+                            <!-- Blocks with 1, 2, 3 -->
+                            <rect x="22" y="45" width="22" height="22" rx="4" fill="#ff7675" stroke="#4a3f35" stroke-width="2.5"/>
+                            <rect x="48" y="45" width="22" height="22" rx="4" fill="#74b9ff" stroke="#4a3f35" stroke-width="2.5"/>
+                            <rect x="35" y="22" width="22" height="22" rx="4" fill="#ffeaa7" stroke="#4a3f35" stroke-width="2.5"/>
+                            <text x="33" y="61" font-family="Fredoka" font-size="12" font-weight="bold" fill="#4a3f35" text-anchor="middle">1</text>
+                            <text x="59" y="61" font-family="Fredoka" font-size="12" font-weight="bold" fill="#4a3f35" text-anchor="middle">3</text>
+                            <text x="46" y="38" font-family="Fredoka" font-size="12" font-weight="bold" fill="#4a3f35" text-anchor="middle">2</text>
+                        </svg>
+                    </div>
+                    <div class="game-card-play-btn">
+                        <div class="game-card-play-icon"></div>
+                    </div>
+                </div>
+                <div class="game-card-title">Menghitung Jari</div>
+            </a>
+
+            <a href="bentuk.html" class="game-card-wrapper">
+                <div class="game-card-body">
+                    <div class="game-card-artwork" style="background: #e8f5e9;">
+                        <!-- Shapes illustration -->
+                        <svg viewBox="0 0 100 100" width="80" height="80">
+                            <circle cx="50" cy="50" r="35" fill="white" opacity="0.6"/>
+                            <!-- Triangle -->
+                            <polygon points="50,25 72,62 28,62" fill="#ff7675" stroke="#4a3f35" stroke-width="2.5"/>
+                            <!-- Circle -->
+                            <circle cx="35" cy="58" r="14" fill="#74b9ff" stroke="#4a3f35" stroke-width="2.5"/>
+                            <!-- Square -->
+                            <rect x="52" y="44" width="24" height="24" rx="4" fill="#2ecc71" stroke="#4a3f35" stroke-width="2.5" transform="rotate(15 64 56)"/>
+                        </svg>
+                    </div>
+                    <div class="game-card-play-btn">
+                        <div class="game-card-play-icon"></div>
+                    </div>
+                </div>
+                <div class="game-card-title">Mencocokkan Bentuk</div>
+            </a>
+
+            <a href="memory.html" class="game-card-wrapper">
+                <div class="game-card-body">
+                    <div class="game-card-artwork" style="background: #fff9db;">
+                        <!-- Memory Card face illustrations -->
+                        <svg viewBox="0 0 100 100" width="80" height="80">
+                            <circle cx="50" cy="50" r="35" fill="white" opacity="0.6"/>
+                            <!-- Card 1 -->
+                            <rect x="20" y="28" width="26" height="36" rx="4" fill="#a29bfe" stroke="#4a3f35" stroke-width="2.5" transform="rotate(-5 33 46)"/>
+                            <text x="31" y="52" font-size="18" text-anchor="middle" transform="rotate(-5 33 46)">🐱</text>
+                            <!-- Card 2 -->
+                            <rect x="54" y="28" width="26" height="36" rx="4" fill="#a29bfe" stroke="#4a3f35" stroke-width="2.5" transform="rotate(5 67 46)"/>
+                            <text x="67" y="52" font-size="18" text-anchor="middle" transform="rotate(5 67 46)">🐱</text>
+                        </svg>
+                    </div>
+                    <div class="game-card-play-btn">
+                        <div class="game-card-play-icon"></div>
+                    </div>
+                </div>
+                <div class="game-card-title">Mengingat Teman</div>
+            </a>
+
+            <a href="puzzle.html" class="game-card-wrapper">
+                <div class="game-card-body">
+                    <div class="game-card-badge">BARU</div>
+                    <div class="game-card-artwork" style="background: #ffe3e3;">
+                        <!-- Jigsaw Puzzle illustration -->
+                        <svg viewBox="0 0 100 100" width="80" height="80">
+                            <circle cx="50" cy="50" r="35" fill="white" opacity="0.6"/>
+                            <!-- Puzzle block piece -->
+                            <path d="M 30,30 L 45,30 A 6,6 0 0,1 55,30 L 70,30 L 70,45 A 6,6 0 0,0 70,55 L 70,70 L 55,70 A 6,6 0 0,1 45,70 L 30,70 L 30,55 A 6,6 0 0,1 30,45 Z" fill="#ffeaa7" stroke="#4a3f35" stroke-width="2.5"/>
+                            <text x="50" y="55" font-size="20" text-anchor="middle">🧩</text>
+                        </svg>
+                    </div>
+                    <div class="game-card-play-btn">
+                        <div class="game-card-play-icon"></div>
+                    </div>
+                </div>
+                <div class="game-card-title">Teka-teki Hewan</div>
+            </a>
+
+            <a href="suara.html" class="game-card-wrapper">
+                <div class="game-card-body">
+                    <div class="game-card-badge">BARU</div>
+                    <div class="game-card-artwork" style="background: #f3e5f5;">
+                        <!-- Sound Megaphone illustration -->
+                        <svg viewBox="0 0 100 100" width="80" height="80">
+                            <circle cx="50" cy="50" r="35" fill="white" opacity="0.6"/>
+                            <path d="M25,40 L40,40 L55,25 L55,75 L40,60 L25,60 Z" fill="#74b9ff" stroke="#4a3f35" stroke-width="2.5"/>
+                            <!-- Sound waves -->
+                            <path d="M65,40 A15,15 0 0,1 65,60" fill="none" stroke="#4a3f35" stroke-width="2.5" stroke-linecap="round"/>
+                            <path d="M73,32 A25,25 0 0,1 73,68" fill="none" stroke="#4a3f35" stroke-width="2.5" stroke-linecap="round"/>
+                            <text x="35" y="55" font-size="12" text-anchor="middle">🎵</text>
+                        </svg>
+                    </div>
+                    <div class="game-card-play-btn">
+                        <div class="game-card-play-icon"></div>
+                    </div>
+                </div>
+                <div class="game-card-title">Siapa Suaranya?</div>
+            </a>
+
+            <a href="balon.html" class="game-card-wrapper">
+                <div class="game-card-body">
+                    <div class="game-card-badge">BARU</div>
+                    <div class="game-card-artwork" style="background: #e0f7fa;">
+                        <!-- Balloons illustration -->
+                        <svg viewBox="0 0 100 100" width="80" height="80">
+                            <circle cx="50" cy="50" r="35" fill="white" opacity="0.6"/>
+                            <!-- Red Balloon -->
+                            <ellipse cx="40" cy="45" rx="12" ry="16" fill="#ff7675" stroke="#4a3f35" stroke-width="2.5"/>
+                            <path d="M40,61 L40,75" fill="none" stroke="#4a3f35" stroke-width="1.5"/>
+                            <!-- Purple Balloon -->
+                            <ellipse cx="58" cy="42" rx="12" ry="16" fill="#a29bfe" stroke="#4a3f35" stroke-width="2.5"/>
+                            <path d="M58,58 L58,72" fill="none" stroke="#4a3f35" stroke-width="1.5"/>
+                        </svg>
+                    </div>
+                    <div class="game-card-play-btn">
+                        <div class="game-card-play-icon"></div>
+                    </div>
+                </div>
+                <div class="game-card-title">Menjatuhkan Balon</div>
+            </a>
+
+            <a href="mewarnai.html" class="game-card-wrapper">
+                <div class="game-card-body">
+                    <div class="game-card-artwork" style="background: #faf0e6;">
+                        <!-- Coloring book illustration -->
+                        <svg viewBox="0 0 100 100" width="80" height="80">
+                            <circle cx="50" cy="50" r="35" fill="white" opacity="0.6"/>
+                            <!-- Sketchbook -->
+                            <rect x="25" y="28" width="50" height="44" rx="4" fill="white" stroke="#4a3f35" stroke-width="2.5"/>
+                            <path d="M 30,40 C 40,30 45,60 55,40 C 65,30 65,55 70,45" fill="none" stroke="#e17055" stroke-width="2.5"/>
+                            <!-- Palette brush -->
+                            <path d="M 68,52 L 80,68 C 82,70 80,72 78,70 L 68,58 Z" fill="#fdcb6e" stroke="#4a3f35" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <div class="game-card-play-btn">
+                        <div class="game-card-play-icon"></div>
+                    </div>
+                </div>
+                <div class="game-card-title">Ayo Melukis</div>
+            </a>
+
+            <a href="urutan.html" class="game-card-wrapper">
+                <div class="game-card-body">
+                    <div class="game-card-artwork" style="background: #e8f5e9;">
+                        <!-- Sorting Blocks illustration -->
+                        <svg viewBox="0 0 100 100" width="80" height="80">
+                            <circle cx="50" cy="50" r="35" fill="white" opacity="0.6"/>
+                            <!-- Small box -->
+                            <rect x="25" y="48" width="18" height="18" rx="3" fill="#ff7675" stroke="#4a3f35" stroke-width="2.5"/>
+                            <!-- Med box -->
+                            <rect x="48" y="38" width="28" height="28" rx="4" fill="#2ecc71" stroke="#4a3f35" stroke-width="2.5"/>
+                            <text x="34" y="60" font-size="10" font-family="Fredoka" font-weight="bold" fill="#4a3f35" text-anchor="middle">1</text>
+                            <text x="62" y="56" font-size="12" font-family="Fredoka" font-weight="bold" fill="#4a3f35" text-anchor="middle">2</text>
+                        </svg>
+                    </div>
+                    <div class="game-card-play-btn">
+                        <div class="game-card-play-icon"></div>
+                    </div>
+                </div>
+                <div class="game-card-title">Menyusun Balok</div>
+            </a>
+
+            <a href="labirin.html" class="game-card-wrapper">
+                <div class="game-card-body">
+                    <div class="game-card-badge">BARU</div>
+                    <div class="game-card-artwork" style="background: #e0f2f1;">
+                        <!-- Maze illustration -->
+                        <svg viewBox="0 0 100 100" width="80" height="80">
+                            <circle cx="50" cy="50" r="35" fill="white" opacity="0.6"/>
+                            <!-- Maze walls -->
+                            <rect x="25" y="25" width="50" height="50" rx="6" fill="none" stroke="#4a3f35" stroke-width="2.5"/>
+                            <path d="M 35,25 L 35,55 M 35,45 L 65,45 M 50,45 L 50,75" stroke="#4a3f35" stroke-width="2.5" stroke-linecap="round"/>
+                            <!-- Star Goal -->
+                            <text x="65" y="68" font-size="14">🌟</text>
+                        </svg>
+                    </div>
+                    <div class="game-card-play-btn">
+                        <div class="game-card-play-icon"></div>
+                    </div>
+                </div>
+                <div class="game-card-title">Mari Berbagi</div>
+            </a>
+
+        </div>
     </div>
 
-    <div class="games-scroll">
-        <a href="berhitung.html" class="game-card gc-1">
-            <div class="game-card-emoji">🔢</div>
-            <div class="game-card-name">Berapa Jumlahnya?</div>
-            <div class="game-card-play">▶</div>
-        </a>
-        <a href="bentuk.html" class="game-card gc-2">
-            <div class="game-card-emoji">🔷</div>
-            <div class="game-card-name">Cocokkan Bentuk</div>
-            <div class="game-card-play">▶</div>
-        </a>
-        <a href="memory.html" class="game-card gc-3">
-            <div class="game-card-emoji">🐾</div>
-            <div class="game-card-name">Cari Pasangan</div>
-            <div class="game-card-play">▶</div>
-        </a>
-        <a href="puzzle.html" class="game-card gc-4">
-            <div class="game-card-emoji">🧩</div>
-            <div class="game-card-name">Susun Gambar</div>
-            <div class="game-card-play">▶</div>
-        </a>
-        <a href="suara.html" class="game-card gc-5">
-            <div class="game-card-emoji">🔊</div>
-            <div class="game-card-name">Suara Siapa?</div>
-            <div class="game-card-play">▶</div>
-        </a>
-        <a href="balon.html" class="game-card gc-6">
-            <div class="game-card-emoji">🎈</div>
-            <div class="game-card-name">Pop Balon</div>
-            <div class="game-card-play">▶</div>
-        </a>
-        <a href="mewarnai.html" class="game-card gc-7">
-            <div class="game-card-emoji">🎨</div>
-            <div class="game-card-name">Ayo Mewarnai</div>
-            <div class="game-card-play">▶</div>
-        </a>
-        <a href="urutan.html" class="game-card gc-8">
-            <div class="game-card-emoji">📊</div>
-            <div class="game-card-name">Susun Urutan</div>
-            <div class="game-card-play">▶</div>
-            <span class="badge-new">BARU</span>
-        </a>
-        <a href="labirin.html" class="game-card gc-9">
-            <div class="game-card-emoji">🌟</div>
-            <div class="game-card-name">Bantu Teman</div>
-            <div class="game-card-play">▶</div>
-            <span class="badge-new">BARU</span>
-        </a>
+    <!-- ZONA ORANG TUA -->
+    <div class="parent-zone-section">
+        <div class="section-title">🔥 ZONA ORANG TUA 👨‍👩‍👧</div>
+        <div class="parent-cards-row">
+            
+            <div class="parent-card parent-card-c1">
+                <div class="parent-card-icon">⏰</div>
+                <div class="parent-card-info">
+                    <span class="parent-card-title">Atur Waktu Bermain</span>
+                    <div class="parent-progress-bar">
+                        <div class="parent-progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="parent-card parent-card-c2">
+                <div class="parent-card-icon">📊</div>
+                <div class="parent-card-info">
+                    <span class="parent-card-title">Cek Progres</span>
+                </div>
+            </div>
+
+        </div>
     </div>
 
-    <!-- INFO CARDS -->
-    <div class="section-header">
+    <!-- STATS & TIPS -->
+    <div class="stats-tips-section">
         <div class="section-title">📊 Info</div>
+        <div class="stats-grid">
+            <div class="stat-box">
+                <div class="stat-box-content">
+                    <span class="stat-box-label">Total Game</span>
+                    <span class="stat-box-value">9 Game</span>
+                    <span class="stat-box-desc">siap dimainkan!</span>
+                </div>
+                <div class="stat-box-icon">🎮</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-box-content">
+                    <span class="stat-box-label">Offline</span>
+                    <span class="stat-box-value">Tersedia Offline</span>
+                    <span class="stat-box-desc">Main tanpa internet!</span>
+                </div>
+                <div class="stat-box-icon">📶</div>
+            </div>
+        </div>
+
+        <div class="tips-banner">
+            <div class="tips-banner-left">
+                <div class="tips-banner-icon">💡</div>
+                <div class="tips-banner-text">
+                    <span class="tips-banner-title">Tips Orang Tua</span>
+                    <span class="tips-banner-desc">Dampingi anak saat bermain. Berikan pujian di setiap pencapaian untuk membangun rasa percaya diri!</span>
+                </div>
+            </div>
+            <div class="tips-banner-right">👨‍👩‍👧</div>
+        </div>
     </div>
 
-    <div class="info-row">
-        <div class="info-card">
-            <div class="info-card-title">🎮 TOTAL GAME</div>
-            <div style="font-size: 1.8rem; font-weight: 900; color: var(--purple);">9</div>
-            <div class="tip-text">game edukasi siap dimainkan!</div>
-            <div class="info-card-emoji">🎯</div>
-        </div>
-        <div class="info-card">
-            <div class="info-card-title">📱 OFFLINE</div>
-            <div style="font-size: 1rem; font-weight: 900; color: var(--green-dark); margin-top: 4px;">Tersedia!</div>
-            <div class="tip-text">Install untuk main tanpa internet</div>
-            <div class="info-card-emoji">📶</div>
-        </div>
-    </div>
-
-    <!-- PARENT TIP -->
-    <div class="parent-card">
-        <div class="parent-card-icon">💡</div>
-        <div>
-            <div class="parent-card-label">💖 TIPS ORANG TUA</div>
-            <div class="parent-card-text">Dampingi anak saat bermain. Berikan pujian di setiap pencapaian untuk membangun rasa percaya diri! 🌟</div>
-        </div>
-    </div>
-
-    <!-- FOOTER -->
-    <div class="footer">
-        Made with ❤️ untuk anak-anak Indonesia
+    <!-- FOOTER TEXT -->
+    <div class="footer-text">
+        Made with ❤️ untuk anak-anak Indonesia 😊
     </div>
 
     <!-- BOTTOM NAVIGATION -->
     <nav class="bottom-nav">
-        <button class="nav-item active" onclick="scrollTo({top:0,behavior:'smooth'})">
+        <button class="nav-item active">
             <span class="nav-item-icon">🏠</span>
             <span class="nav-item-label">Home</span>
         </button>
-        <button class="nav-item" onclick="document.querySelector('.games-scroll').scrollIntoView({behavior:'smooth'})">
+        <button class="nav-item" onclick="document.querySelector('.games-grid').scrollIntoView({behavior:'smooth'})">
             <span class="nav-item-icon">🎮</span>
             <span class="nav-item-label">Games</span>
         </button>
-        <button class="nav-item" id="navInstall" style="display:none;" onclick="handleInstallClick()">
-            <span class="nav-item-icon">📲</span>
-            <span class="nav-item-label">Install</span>
+        <button class="nav-item" onclick="document.querySelector('.parent-zone-section').scrollIntoView({behavior:'smooth'})">
+            <span class="nav-item-icon">📊</span>
+            <span class="nav-item-label">Progress</span>
         </button>
-        <button class="nav-item" onclick="document.querySelector('.parent-card').scrollIntoView({behavior:'smooth'})">
-            <span class="nav-item-icon">👨‍👩‍👧</span>
-            <span class="nav-item-label">Info</span>
+        <button class="nav-item">
+            <span class="nav-item-icon">⚙️</span>
+            <span class="nav-item-label">Settings</span>
         </button>
     </nav>
 
@@ -897,11 +1056,11 @@
         });
 
         // ===== Card Sounds =====
-        document.querySelectorAll('.game-card').forEach(card => {
+        document.querySelectorAll('.game-card-wrapper').forEach(card => {
             card.addEventListener('click', () => playSound('click'));
         });
 
-        document.querySelectorAll('.category-item').forEach(item => {
+        document.querySelectorAll('.category-btn').forEach(item => {
             item.addEventListener('click', (e) => {
                 e.preventDefault();
                 playSound('tap');
@@ -921,14 +1080,11 @@
         let deferredPrompt;
         const installBanner = document.getElementById('installBanner');
         const installAction = document.getElementById('installAction');
-        const installClose = document.getElementById('installClose');
-        const navInstall = document.getElementById('navInstall');
 
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
             installBanner.style.display = 'flex';
-            navInstall.style.display = 'flex';
         });
 
         function handleInstallClick() {
@@ -937,21 +1093,14 @@
                 deferredPrompt.userChoice.then(() => {
                     deferredPrompt = null;
                     installBanner.style.display = 'none';
-                    navInstall.style.display = 'none';
                 });
             }
         }
 
         installAction.addEventListener('click', handleInstallClick);
 
-        installClose.addEventListener('click', (e) => {
-            e.stopPropagation();
-            installBanner.style.display = 'none';
-        });
-
         window.addEventListener('appinstalled', () => {
             installBanner.style.display = 'none';
-            navInstall.style.display = 'none';
         });
 
         // ===== Service Worker Registration =====
