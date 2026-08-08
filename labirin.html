@@ -27,7 +27,6 @@
             box-sizing: border-box;
             user-select: none;
             -webkit-user-select: none;
-            touch-action: none;
         }
 
         body, html {
@@ -43,6 +42,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            touch-action: auto;
         }
 
         .back-btn {
@@ -83,12 +83,31 @@
             display: none;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
             width: 100%;
             height: 100%;
             padding: 20px;
             text-align: center;
+        }
+
+        /* Start Screen: Enable Touch Vertical Pan/Scroll */
+        #start-screen {
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            touch-action: pan-y;
+            justify-content: flex-start;
+            padding-top: max(75px, env(safe-area-inset-top));
+            padding-bottom: max(50px, env(safe-area-inset-bottom));
+        }
+
+        #game-screen {
+            justify-content: center;
+            touch-action: none;
+        }
+
+        #celeb-screen {
+            justify-content: center;
+            overflow-y: auto;
+            touch-action: pan-y;
         }
 
         .screen.active {
@@ -106,7 +125,7 @@
         h2 {
             font-size: clamp(22px, 3.8vw, 32px);
             color: #5c6bc0;
-            margin: 8px 0 12px;
+            margin: 12px 0 12px;
             text-shadow: 1px 1px 0 #fff;
         }
 
@@ -116,8 +135,9 @@
             flex-wrap: wrap;
             justify-content: center;
             gap: clamp(10px, 2.5vw, 18px);
-            max-width: 700px;
+            max-width: 720px;
             margin-bottom: 16px;
+            touch-action: pan-y;
         }
 
         .picker-card {
@@ -133,6 +153,7 @@
             cursor: pointer;
             box-shadow: 0 6px 15px rgba(0,0,0,0.08);
             transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            touch-action: manipulation;
         }
 
         .picker-card:hover {
@@ -163,6 +184,7 @@
             box-shadow: 0 6px 0 var(--secondary);
             transition: transform 0.1s, box-shadow 0.1s;
             width: clamp(200px, 55vw, 280px);
+            touch-action: manipulation;
         }
 
         .btn:active {
@@ -189,12 +211,14 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.12);
             padding: 10px;
             margin-top: max(10px, env(safe-area-inset-top));
+            touch-action: none;
         }
 
         canvas {
             width: 100%;
             height: 100%;
             border-radius: 14px;
+            touch-action: none;
         }
 
         #hint-btn {
@@ -213,6 +237,7 @@
             cursor: pointer;
             box-shadow: 0 6px 0 #fbc02d;
             z-index: 10;
+            touch-action: manipulation;
         }
 
         #hint-btn:active {
@@ -270,7 +295,7 @@
             <div class="picker-grid" id="goal-grid"></div>
 
             <h2>3. Pilih Tingkat Kesulitan:</h2>
-            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;">
+            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 40px;">
                 <button class="btn" onclick="startGame(5)">⭐ Mudah</button>
                 <button class="btn" onclick="startGame(7)">⭐⭐ Sedang</button>
                 <button class="btn" onclick="startGame(9)">⭐⭐⭐ Sulit</button>
@@ -701,7 +726,7 @@
                 ctx.globalAlpha = 0.5;
                 ctx.stroke();
 
-                // Draw Path Dots (Titik-Titik Pathway)
+                // Draw Path Dots
                 ctx.fillStyle = '#ffffff';
                 ctx.globalAlpha = 0.85;
                 for(let i=0; i<trail.length; i++) {
