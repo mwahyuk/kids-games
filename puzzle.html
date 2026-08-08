@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Susun Gambarnya!</title>
+    <title>Teka-teki Hewan! 🧩</title>
     <meta name="theme-color" content="#667eea">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -13,20 +13,30 @@
     <link rel="apple-touch-icon" href="icons/app-icon.jpg">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap');
-        
+
+        :root {
+            --bg-start: #ffeaa7;
+            --bg-end: #fab1a0;
+            --primary: #ff7675;
+            --secondary: #e17055;
+            --text: #2d3436;
+        }
+
         * {
             box-sizing: border-box;
             user-select: none;
             -webkit-user-select: none;
+            touch-action: none;
         }
 
-        body {
+        body, html {
             margin: 0;
             padding: 0;
+            width: 100vw;
+            height: 100vh;
             font-family: 'Bubblegum Sans', 'Comic Sans MS', cursive, sans-serif;
-            background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
-            min-height: 100vh;
-            min-height: -webkit-fill-available;
+            background: linear-gradient(135deg, var(--bg-start), var(--bg-end));
+            color: var(--text);
             overflow: hidden;
             display: flex;
             flex-direction: column;
@@ -34,667 +44,399 @@
             justify-content: center;
         }
 
-        #home-btn {
+        .back-btn {
             position: fixed;
             top: max(15px, env(safe-area-inset-top));
             left: max(15px, env(safe-area-inset-left));
             width: 60px;
             height: 60px;
-            font-size: 32px;
             background: #ffffff;
-            border: 3px solid #ff758c;
+            border: 3px solid #ff6b6b;
             border-radius: 50%;
-            cursor: pointer;
+            font-size: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
             z-index: 99999;
             box-shadow: 0 6px 15px rgba(0,0,0,0.15);
-            text-align: center;
-            line-height: 52px;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            pointer-events: auto;
             transition: transform 0.15s;
+            cursor: pointer;
+            pointer-events: auto;
         }
 
-        #home-btn:active {
-            transform: scale(0.9);
-        }
-
-        #screens {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+        .back-btn:active { transform: scale(0.9); }
 
         .screen {
-            position: absolute;
-            top: 0;
-            left: 0;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             width: 100%;
             height: 100%;
+            padding: 20px;
+            text-align: center;
+            overflow-y: auto;
+        }
+
+        .screen.active { display: flex; }
+
+        h1 {
+            font-size: clamp(32px, 6vw, 56px);
+            margin: 0 0 15px 0;
+            color: #d63031;
+            text-shadow: 3px 3px 0px white, -3px -3px 0px white, 3px -3px 0px white, -3px 3px 0px white;
+            animation: bounce 2s infinite ease-in-out;
+        }
+
+        h2 {
+            font-size: clamp(22px, 3.8vw, 32px);
+            color: #e17055;
+            margin: 8px 0 12px;
+            text-shadow: 1px 1px 0 #fff;
+        }
+
+        .picker-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: clamp(10px, 2.5vw, 18px);
+            max-width: 700px;
+            margin-bottom: 20px;
+        }
+
+        .picker-card {
+            width: clamp(75px, 16vw, 105px);
+            height: clamp(75px, 16vw, 105px);
+            background: white;
+            border: 4px solid #ff7675;
+            border-radius: 24px;
+            font-size: clamp(40px, 8.5vw, 60px);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.4s;
-            padding: 20px;
+            cursor: pointer;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            padding: 5px;
         }
 
-        .screen.active {
-            opacity: 1;
-            pointer-events: all;
+        .picker-card span {
+            font-size: clamp(12px, 2.2vw, 15px);
+            font-weight: bold;
+            color: #2d3436;
+            margin-top: 2px;
         }
 
-        h1 {
-            font-size: clamp(32px, 6vw, 56px);
-            color: #fff;
-            text-shadow: 3px 3px 0 #ff758c, -3px -3px 0 #ff758c, 3px -3px 0 #ff758c, -3px 3px 0 #ff758c;
-            margin-bottom: 20px;
-            margin-top: max(20px, env(safe-area-inset-top));
-            text-align: center;
-            padding: 0 20px;
-        }
-        
-        .menu-row {
-            display: flex;
-            gap: clamp(10px, 3vw, 25px);
-            flex-wrap: wrap;
-            justify-content: center;
-            padding: 10px;
-            max-width: 900px;
+        .picker-card:hover { transform: scale(1.08); }
+
+        .picker-card.selected {
+            background: #ffe082;
+            border-color: #d63031;
+            transform: scale(1.15);
+            box-shadow: 0 0 20px rgba(214, 48, 49, 0.4);
         }
 
         .btn {
-            background: #ff758c;
-            border: 4px solid #fff;
+            background: white;
+            border: 4px solid var(--secondary);
             border-radius: 25px;
-            padding: 14px 28px;
-            font-size: clamp(20px, 4vw, 32px);
-            color: #fff;
-            cursor: pointer;
-            box-shadow: 0 6px 0 #ff4b6b, 0 10px 15px rgba(0,0,0,0.1);
-            transition: transform 0.1s, box-shadow 0.1s;
+            padding: 12px 28px;
+            font-size: clamp(22px, 4vw, 32px);
             font-family: inherit;
-            min-width: 140px;
-            text-align: center;
+            color: var(--text);
+            cursor: pointer;
+            margin: 8px;
+            box-shadow: 0 6px 0 var(--secondary);
+            transition: transform 0.1s, box-shadow 0.1s;
+            width: clamp(200px, 55vw, 280px);
         }
 
         .btn:active {
             transform: translateY(6px);
-            box-shadow: 0 0 0 #ff4b6b;
+            box-shadow: 0 0 0 var(--secondary);
         }
 
-        .scene-btn {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-size: clamp(20px, 3vw, 28px);
-            background: #4facfe;
-            box-shadow: 0 6px 0 #00f2fe;
-            border-color: #fff;
-            width: clamp(140px, 25vw, 220px);
-            padding: 15px;
+        .btn.btn-primary {
+            background: #ff7675;
+            color: white;
+            border-color: #d63031;
+            box-shadow: 0 6px 0 #b2bec3;
         }
-        
-        .scene-btn:active {
-            box-shadow: 0 0 0 #00f2fe;
-        }
+        .btn.btn-primary:active { box-shadow: 0 0 0 #b2bec3; }
 
-        .scene-emoji {
-            font-size: clamp(45px, 8vw, 70px);
-            margin-bottom: 5px;
-        }
-
-        .level-btn {
-            background: #f6d365;
-            box-shadow: 0 6px 0 #fda085;
-            width: clamp(160px, 25vw, 240px);
-        }
-        .level-btn:active {
-            box-shadow: 0 0 0 #fda085;
-        }
-
-        #game-area {
+        #puzzle-container {
             position: relative;
-            width: 90vw;
-            height: 65vh;
-            max-width: 900px;
-            max-height: 650px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            width: clamp(280px, 78vmin, 620px);
+            height: clamp(280px, 78vmin, 620px);
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+            padding: 12px;
+            margin-top: max(10px, env(safe-area-inset-top));
         }
-        
-        canvas#puzzleCanvas {
-            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-            border: 6px solid #fff;
-            border-radius: 20px;
-            background: #eef;
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            border-radius: 18px;
             touch-action: none;
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
         }
 
-        canvas#confetti {
+        #confetti-canvas {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
             pointer-events: none;
-            z-index: 10000;
+            z-index: 100;
         }
 
-        #controls {
-            display: flex;
-            gap: 20px;
-            margin-top: 15px;
+        .celeb-text {
+            font-size: clamp(50px, 10vw, 75px);
+            color: #d63031;
+            margin-bottom: 15px;
+            text-shadow: 3px 3px 0 white;
+            animation: pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        @keyframes pop {
+            0% { transform: scale(0); }
+            80% { transform: scale(1.1); }
+            100% { transform: scale(1); }
         }
     </style>
 </head>
 <body>
-    <a href="index.html" id="home-btn" title="Kembali ke Beranda" onclick="window.location.href='index.html'; return true;">🏠</a>
-    
+
+    <a href="index.html" class="back-btn" onclick="window.location.href='index.html'; return true;">🏠</a>
+
     <div id="screens">
-        <!-- Scene Selection -->
-        <div id="screen-scene" class="screen active">
-            <h1>Pilih Gambar!</h1>
-            <div class="menu-row">
-                <button class="btn scene-btn" onclick="selectScene('rumah')">
-                    <div class="scene-emoji">🏡</div>
-                    Rumah
-                </button>
-                <button class="btn scene-btn" onclick="selectScene('laut')">
-                    <div class="scene-emoji">🐠</div>
-                    Bawah Laut
-                </button>
-                <button class="btn scene-btn" onclick="selectScene('angkasa')">
-                    <div class="scene-emoji">🚀</div>
-                    Luar Angkasa
-                </button>
+        <!-- 1. Selection Screen -->
+        <div id="start-screen" class="screen active">
+            <h1>Teka-teki Hewan! 🧩</h1>
+
+            <h2>1. Pilih Karakter Gambar:</h2>
+            <div class="picker-grid" id="puzzle-grid"></div>
+
+            <h2>2. Pilih Potongan:</h2>
+            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;">
+                <button class="btn" onclick="startPuzzle(2)">⭐ 2 x 2 Potongan</button>
+                <button class="btn" onclick="startPuzzle(3)">⭐⭐ 3 x 3 Potongan</button>
             </div>
         </div>
 
-        <!-- Level Selection -->
-        <div id="screen-level" class="screen">
-            <h1>Pilih Tingkat Kesulitan!</h1>
-            <div class="menu-row">
-                <button class="btn level-btn" onclick="startGame(2, 2)">⭐ Mudah<br>(2x2)</button>
-                <button class="btn level-btn" onclick="startGame(3, 2)">⭐⭐ Sedang<br>(3x2)</button>
-                <button class="btn level-btn" onclick="startGame(3, 3)">⭐⭐⭐ Sulit<br>(3x3)</button>
+        <!-- 2. Game Screen -->
+        <div id="game-screen" class="screen">
+            <div id="puzzle-container">
+                <canvas id="puzzle-canvas"></canvas>
             </div>
-            <br>
-            <button class="btn" style="background:#ddd; color:#333; box-shadow: 0 6px 0 #aaa; border-color:#fff;" onclick="showScreen('screen-scene')">Kembali</button>
         </div>
 
-        <!-- Game -->
-        <div id="screen-game" class="screen">
-            <div id="game-area">
-                <canvas id="puzzleCanvas"></canvas>
-            </div>
-            <div id="controls">
-                <button class="btn" onclick="showScreen('screen-scene')">Ganti Gambar</button>
-            </div>
+        <!-- 3. Celebration Screen -->
+        <div id="celeb-screen" class="screen">
+            <div class="celeb-text">Hebat Sekali! 🎉</div>
+            <div style="font-size: 80px; margin: 15px 0;" id="celeb-emoji">🐱</div>
+            <button class="btn btn-primary" onclick="showScreen('start-screen')">Main Lagi!</button>
         </div>
     </div>
-    
-    <canvas id="confetti"></canvas>
+
+    <canvas id="confetti-canvas"></canvas>
 
     <script>
-        // SOUND SYSTEM
-        function playSound(type) {
+        const puzzleList = [
+            { id: 'cat', emoji: '🐱', name: 'Kucing', color: '#ff7675' },
+            { id: 'dino', emoji: '🦖', name: 'Dino', color: '#55efc4' },
+            { id: 'dog', emoji: '🐶', name: 'Anjing', color: '#ffeaa7' },
+            { id: 'rabbit', emoji: '🐰', name: 'Kelinci', color: '#74b9ff' },
+            { id: 'panda', emoji: '🐼', name: 'Panda', color: '#a29bfe' },
+            { id: 'lion', emoji: '🦁', name: 'Singa', color: '#fdcb6e' }
+        ];
+
+        let selectedPuzzle = puzzleList[0];
+
+        function renderPuzzlePicker() {
+            const grid = document.getElementById('puzzle-grid');
+            grid.innerHTML = '';
+            puzzleList.forEach(p => {
+                const card = document.createElement('div');
+                card.className = `picker-card ${p.id === selectedPuzzle.id ? 'selected' : ''}`;
+                card.innerHTML = `${p.emoji}<span>${p.name}</span>`;
+                card.onclick = () => {
+                    playAudioTone(600, 0.1);
+                    selectedPuzzle = p;
+                    renderPuzzlePicker();
+                };
+                grid.appendChild(card);
+            });
+        }
+
+        // Audio
+        function playAudioTone(freq, dur) {
             try {
                 const ctx = new (window.AudioContext || window.webkitAudioContext)();
                 const osc = ctx.createOscillator();
                 const gain = ctx.createGain();
-                osc.connect(gain);
-                gain.connect(ctx.destination);
-                
-                if (type === 'pop') {
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(400, ctx.currentTime);
-                    osc.frequency.exponentialRampToValueAtTime(600, ctx.currentTime + 0.1);
-                    gain.gain.setValueAtTime(0.3, ctx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
-                    osc.start(ctx.currentTime);
-                    osc.stop(ctx.currentTime + 0.1);
-                } else if (type === 'snap') {
-                    osc.type = 'triangle';
-                    osc.frequency.setValueAtTime(300, ctx.currentTime);
-                    osc.frequency.exponentialRampToValueAtTime(800, ctx.currentTime + 0.1);
-                    gain.gain.setValueAtTime(0.4, ctx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
-                    osc.start(ctx.currentTime);
-                    osc.stop(ctx.currentTime + 0.1);
-                } else if (type === 'victory') {
-                    osc.type = 'square';
-                    let t = ctx.currentTime;
-                    [440, 554, 659, 880].forEach((freq, i) => {
-                        osc.frequency.setValueAtTime(freq, t + i * 0.15);
-                        gain.gain.setValueAtTime(0.2, t + i * 0.15);
-                        gain.gain.setTargetAtTime(0, t + i * 0.15 + 0.1, 0.05);
-                    });
-                    osc.start(t);
-                    osc.stop(t + 0.8);
-                }
-            } catch (e) {}
+                osc.connect(gain); gain.connect(ctx.destination);
+                osc.frequency.value = freq;
+                gain.gain.setValueAtTime(0.15, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + dur);
+                osc.start(); osc.stop(ctx.currentTime + dur);
+            } catch(e) {}
         }
 
-        // CONFETTI SYSTEM
-        const confCanvas = document.getElementById('confetti');
-        const confCtx = confCanvas.getContext('2d');
-        let particles = [];
-        
-        function resizeConfetti() {
-            confCanvas.width = window.innerWidth;
-            confCanvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeConfetti);
-        resizeConfetti();
+        const canvas = document.getElementById('puzzle-canvas');
+        const ctx = canvas.getContext('2d');
+        let pieces = [];
+        let gridSize = 2;
+        let activePiece = null;
+        let dragOffset = { x: 0, y: 0 };
 
-        function spawnConfetti() {
-            particles = [];
-            const colors = ['#fce18a', '#ff726d', '#b48def', '#f4306d', '#4facfe'];
-            for(let i=0; i<100; i++) {
-                particles.push({
-                    x: confCanvas.width / 2,
-                    y: confCanvas.height / 2,
-                    r: Math.random() * 8 + 4,
-                    dx: Math.random() * 20 - 10,
-                    dy: Math.random() * -20 - 5,
-                    color: colors[Math.floor(Math.random() * colors.length)],
-                    tilt: Math.floor(Math.random() * 10) - 10,
-                    tiltAngleInc: (Math.random() * 0.07) + 0.05,
-                    tiltAngle: 0
-                });
-            }
-            animateConfetti();
-        }
-
-        let confAnimId;
-        function animateConfetti() {
-            confCtx.clearRect(0, 0, confCanvas.width, confCanvas.height);
-            let active = false;
-            particles.forEach(p => {
-                p.tiltAngle += p.tiltAngleInc;
-                p.y += (Math.cos(p.tiltAngle) + 1 + p.r / 2) / 2;
-                p.x += Math.sin(p.tiltAngle) * 2;
-                p.dy += 0.2;
-                p.y += p.dy;
-                p.x += p.dx;
-                
-                if (p.y <= confCanvas.height) active = true;
-
-                confCtx.beginPath();
-                confCtx.lineWidth = p.r;
-                confCtx.strokeStyle = p.color;
-                confCtx.moveTo(p.x + p.tilt + p.r, p.y);
-                confCtx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r);
-                confCtx.stroke();
-            });
-            
-            if (active) {
-                confAnimId = requestAnimationFrame(animateConfetti);
-            } else {
-                cancelAnimationFrame(confAnimId);
-            }
-        }
-
-        // APP STATE
-        let currentScene = '';
         function showScreen(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            playSound('pop');
         }
 
-        function selectScene(scene) {
-            currentScene = scene;
-            showScreen('screen-level');
+        function startPuzzle(size) {
+            gridSize = size;
+            showScreen('game-screen');
+            initCanvas();
         }
 
-        // DRAWING SCENES
-        const sourceCanvas = document.createElement('canvas');
-        const sCtx = sourceCanvas.getContext('2d');
-        const CANVAS_WIDTH = 800;
-        const CANVAS_HEIGHT = 600;
-        sourceCanvas.width = CANVAS_WIDTH;
-        sourceCanvas.height = CANVAS_HEIGHT;
+        function initCanvas() {
+            const container = document.getElementById('puzzle-container');
+            const rect = container.getBoundingClientRect();
+            canvas.width = rect.width * 2;
+            canvas.height = rect.height * 2;
 
-        function drawScene() {
-            sCtx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-            
-            if (currentScene === 'rumah') {
-                sCtx.fillStyle = '#87CEEB';
-                sCtx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-                
-                sCtx.fillStyle = '#FFD700';
-                sCtx.beginPath();
-                sCtx.arc(100, 100, 60, 0, Math.PI * 2);
-                sCtx.fill();
+            const pw = canvas.width / gridSize;
+            const ph = canvas.height / gridSize;
 
-                sCtx.fillStyle = '#FFFFFF';
-                function drawCloud(cx, cy) {
-                    sCtx.beginPath();
-                    sCtx.arc(cx, cy, 30, 0, Math.PI*2);
-                    sCtx.arc(cx+40, cy-10, 40, 0, Math.PI*2);
-                    sCtx.arc(cx+80, cy, 30, 0, Math.PI*2);
-                    sCtx.fill();
-                }
-                drawCloud(200, 100);
-                drawCloud(500, 150);
-
-                sCtx.fillStyle = '#7CFC00';
-                sCtx.fillRect(0, CANVAS_HEIGHT - 150, CANVAS_WIDTH, 150);
-                
-                sCtx.fillStyle = '#FFE4B5';
-                sCtx.fillRect(300, 300, 200, 150);
-                
-                sCtx.fillStyle = '#FF6347';
-                sCtx.beginPath();
-                sCtx.moveTo(280, 300);
-                sCtx.lineTo(400, 200);
-                sCtx.lineTo(520, 300);
-                sCtx.fill();
-
-                sCtx.fillStyle = '#8B4513';
-                sCtx.fillRect(380, 370, 40, 80);
-
-                sCtx.fillStyle = '#8B4513';
-                sCtx.fillRect(600, 350, 40, 100);
-
-                sCtx.fillStyle = '#228B22';
-                sCtx.beginPath();
-                sCtx.arc(620, 310, 60, 0, Math.PI*2);
-                sCtx.arc(580, 330, 50, 0, Math.PI*2);
-                sCtx.arc(660, 330, 50, 0, Math.PI*2);
-                sCtx.fill();
-
-            } else if (currentScene === 'laut') {
-                let grd = sCtx.createLinearGradient(0,0,0,CANVAS_HEIGHT);
-                grd.addColorStop(0, '#00BFFF');
-                grd.addColorStop(1, '#000080');
-                sCtx.fillStyle = grd;
-                sCtx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-
-                sCtx.fillStyle = '#F4A460';
-                sCtx.fillRect(0, CANVAS_HEIGHT - 80, CANVAS_WIDTH, 80);
-
-                sCtx.fillStyle = '#2E8B57';
-                for(let i=0; i<5; i++) {
-                    sCtx.beginPath();
-                    sCtx.ellipse(50 + i*150, CANVAS_HEIGHT - 60, 15, 60, 0, 0, Math.PI*2);
-                    sCtx.fill();
-                    sCtx.beginPath();
-                    sCtx.ellipse(80 + i*150, CANVAS_HEIGHT - 40, 10, 40, 0.5, 0, Math.PI*2);
-                    sCtx.fill();
-                }
-
-                sCtx.fillStyle = '#FFD700';
-                sCtx.beginPath();
-                sCtx.ellipse(400, 250, 80, 50, 0, 0, Math.PI*2);
-                sCtx.fill();
-                sCtx.fillStyle = '#A9A9A9';
-                sCtx.fillRect(380, 180, 40, 40);
-                sCtx.fillStyle = '#87CEEB';
-                sCtx.beginPath();
-                sCtx.arc(430, 250, 20, 0, Math.PI*2);
-                sCtx.fill();
-                sCtx.strokeStyle = '#333';
-                sCtx.lineWidth = 4;
-                sCtx.stroke();
-
-                function drawFish(x, y, color) {
-                    sCtx.fillStyle = color;
-                    sCtx.beginPath();
-                    sCtx.ellipse(x, y, 30, 20, 0, 0, Math.PI*2);
-                    sCtx.fill();
-                    sCtx.beginPath();
-                    sCtx.moveTo(x-20, y);
-                    sCtx.lineTo(x-50, y-20);
-                    sCtx.lineTo(x-50, y+20);
-                    sCtx.fill();
-                    sCtx.fillStyle = '#FFF';
-                    sCtx.beginPath();
-                    sCtx.arc(x+15, y-5, 5, 0, Math.PI*2);
-                    sCtx.fill();
-                    sCtx.fillStyle = '#000';
-                    sCtx.beginPath();
-                    sCtx.arc(x+16, y-5, 2, 0, Math.PI*2);
-                    sCtx.fill();
-                }
-                drawFish(200, 150, '#FF4500');
-                drawFish(600, 350, '#FF1493');
-                drawFish(150, 400, '#32CD32');
-
-                sCtx.fillStyle = 'rgba(255,255,255,0.4)';
-                [ [450,200], [470,160], [460,110], [250,120], [260,80] ].forEach(p => {
-                    sCtx.beginPath();
-                    sCtx.arc(p[0], p[1], 10, 0, Math.PI*2);
-                    sCtx.fill();
-                });
-
-            } else if (currentScene === 'angkasa') {
-                sCtx.fillStyle = '#0B0B2A';
-                sCtx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-
-                sCtx.fillStyle = '#FFF';
-                for(let i=0; i<80; i++) {
-                    sCtx.beginPath();
-                    sCtx.arc(Math.random()*CANVAS_WIDTH, Math.random()*CANVAS_HEIGHT, Math.random()*2+1, 0, Math.PI*2);
-                    sCtx.fill();
-                }
-
-                sCtx.fillStyle = '#F1C40F';
-                sCtx.beginPath();
-                sCtx.arc(120, 120, 60, 0, Math.PI*2);
-                sCtx.fill();
-                sCtx.fillStyle = '#0B0B2A';
-                sCtx.beginPath();
-                sCtx.arc(140, 100, 60, 0, Math.PI*2);
-                sCtx.fill();
-
-                sCtx.fillStyle = '#E67E22';
-                sCtx.beginPath();
-                sCtx.arc(650, 200, 50, 0, Math.PI*2);
-                sCtx.fill();
-                sCtx.strokeStyle = '#D35400';
-                sCtx.lineWidth = 15;
-                sCtx.beginPath();
-                sCtx.ellipse(650, 200, 90, 25, 0.3, 0, Math.PI*2);
-                sCtx.stroke();
-
-                sCtx.fillStyle = '#E74C3C';
-                sCtx.beginPath();
-                sCtx.moveTo(400, 250);
-                sCtx.lineTo(350, 450);
-                sCtx.lineTo(450, 450);
-                sCtx.fill();
-                sCtx.fillStyle = '#ECF0F1';
-                sCtx.beginPath();
-                sCtx.moveTo(400, 250);
-                sCtx.lineTo(370, 400);
-                sCtx.lineTo(430, 400);
-                sCtx.fill();
-                sCtx.fillStyle = '#3498DB';
-                sCtx.beginPath();
-                sCtx.arc(400, 340, 20, 0, Math.PI*2);
-                sCtx.fill();
-
-                sCtx.fillStyle = '#F39C12';
-                sCtx.beginPath();
-                sCtx.moveTo(370, 450);
-                sCtx.lineTo(400, 520);
-                sCtx.lineTo(430, 450);
-                sCtx.fill();
-            }
-        }
-
-        // GAME LOGIC
-        const canvas = document.getElementById('puzzleCanvas');
-        const ctx = canvas.getContext('2d');
-        let pieces = [];
-        let cols = 0, rows = 0;
-        let pWidth = 0, pHeight = 0;
-        let selectedPiece = null;
-        let offsetX = 0, offsetY = 0;
-
-        function startGame(c, r) {
-            cols = c;
-            rows = r;
-            showScreen('screen-game');
-            drawScene();
-            initPuzzle();
-        }
-
-        function initPuzzle() {
-            canvas.width = CANVAS_WIDTH;
-            canvas.height = CANVAS_HEIGHT;
-            pWidth = CANVAS_WIDTH / cols;
-            pHeight = CANVAS_HEIGHT / rows;
             pieces = [];
-
-            for (let y = 0; y < rows; y++) {
-                for (let x = 0; x < cols; x++) {
+            for (let r = 0; r < gridSize; r++) {
+                for (let c = 0; c < gridSize; c++) {
+                    const targetX = c * pw;
+                    const targetY = r * ph;
+                    const randomX = Math.random() * (canvas.width - pw);
+                    const randomY = Math.random() * (canvas.height - ph);
+                    
                     pieces.push({
-                        id: `${x}-${y}`,
-                        sx: x * pWidth,
-                        sy: y * pHeight,
-                        cx: Math.random() * (CANVAS_WIDTH - pWidth),
-                        cy: Math.random() * (CANVAS_HEIGHT - pHeight),
-                        placed: false
+                        id: r * gridSize + c,
+                        targetX, targetY,
+                        currentX: randomX,
+                        currentY: randomY,
+                        width: pw, height: ph,
+                        isSnapped: false
                     });
                 }
             }
-            drawPuzzle();
+
+            render();
         }
 
-        function drawPuzzle() {
+        function render() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            ctx.globalAlpha = 0.25;
-            ctx.drawImage(sourceCanvas, 0, 0);
-            ctx.globalAlpha = 1.0;
-            
-            ctx.strokeStyle = '#bbb';
-            ctx.lineWidth = 2;
-            for(let y=0; y<rows; y++) {
-                for(let x=0; x<cols; x++) {
-                    ctx.strokeRect(x * pWidth, y * pHeight, pWidth, pHeight);
+            // Draw background ghost container
+            ctx.fillStyle = '#f8f9fa';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw grid outline targets
+            const pw = canvas.width / gridSize;
+            const ph = canvas.height / gridSize;
+            ctx.strokeStyle = '#dcdde1';
+            ctx.lineWidth = 4;
+            for (let r = 0; r < gridSize; r++) {
+                for (let c = 0; c < gridSize; c++) {
+                    ctx.strokeRect(c * pw, r * ph, pw, ph);
                 }
             }
 
+            // Draw Pieces
             pieces.forEach(p => {
-                ctx.drawImage(sourceCanvas, p.sx, p.sy, pWidth, pHeight, p.cx, p.cy, pWidth, pHeight);
-                ctx.strokeStyle = p.placed ? 'transparent' : '#fff';
-                ctx.lineWidth = 4;
-                ctx.strokeRect(p.cx, p.cy, pWidth, pHeight);
-            });
-            
-            if(selectedPiece) {
                 ctx.save();
-                ctx.shadowColor = 'rgba(0,0,0,0.4)';
-                ctx.shadowBlur = 12;
-                ctx.shadowOffsetX = 4;
-                ctx.shadowOffsetY = 4;
-                ctx.drawImage(sourceCanvas, selectedPiece.sx, selectedPiece.sy, pWidth, pHeight, selectedPiece.cx, selectedPiece.cy, pWidth, pHeight);
-                ctx.strokeStyle = '#ff758c';
+                ctx.translate(p.currentX, p.currentY);
+                
+                // Card background
+                ctx.fillStyle = selectedPuzzle.color;
+                ctx.fillRect(0, 0, p.width, p.height);
+                ctx.strokeStyle = '#2d3436';
                 ctx.lineWidth = 6;
-                ctx.strokeRect(selectedPiece.cx, selectedPiece.cy, pWidth, pHeight);
+                ctx.strokeRect(0, 0, p.width, p.height);
+
+                // Draw Emoji Artwork
+                ctx.font = `${p.width * 0.5}px Arial`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(selectedPuzzle.emoji, p.width / 2, p.height / 2);
+
                 ctx.restore();
-            }
+            });
         }
 
-        function getMousePos(e) {
+        // Pointer Events for Dragging
+        canvas.addEventListener('pointerdown', (e) => {
             const rect = canvas.getBoundingClientRect();
-            const scaleX = canvas.width / rect.width;
-            const scaleY = canvas.height / rect.height;
-            let clientX = e.clientX;
-            let clientY = e.clientY;
-            
-            if(e.touches && e.touches.length > 0) {
-                clientX = e.touches[0].clientX;
-                clientY = e.touches[0].clientY;
-            }
-            
-            return {
-                x: (clientX - rect.left) * scaleX,
-                y: (clientY - rect.top) * scaleY
-            };
-        }
+            const scale = canvas.width / rect.width;
+            const x = (e.clientX - rect.left) * scale;
+            const y = (e.clientY - rect.top) * scale;
 
-        function onDown(e) {
-            e.preventDefault();
-            const pos = getMousePos(e);
-            
             for (let i = pieces.length - 1; i >= 0; i--) {
                 const p = pieces[i];
-                if (!p.placed && pos.x >= p.cx && pos.x <= p.cx + pWidth && pos.y >= p.cy && pos.y <= p.cy + pHeight) {
-                    selectedPiece = p;
-                    offsetX = pos.x - p.cx;
-                    offsetY = pos.y - p.cy;
+                if (!p.isSnapped && x >= p.currentX && x <= p.currentX + p.width && y >= p.currentY && y <= p.currentY + p.height) {
+                    activePiece = p;
+                    dragOffset.x = x - p.currentX;
+                    dragOffset.y = y - p.currentY;
+                    playAudioTone(500, 0.08);
+                    // Move to top
                     pieces.splice(i, 1);
                     pieces.push(p);
-                    drawPuzzle();
-                    playSound('pop');
                     break;
                 }
             }
-        }
+        });
 
-        function onMove(e) {
-            e.preventDefault();
-            if (selectedPiece) {
-                const pos = getMousePos(e);
-                selectedPiece.cx = pos.x - offsetX;
-                selectedPiece.cy = pos.y - offsetY;
-                drawPuzzle();
+        canvas.addEventListener('pointermove', (e) => {
+            if (!activePiece) return;
+            const rect = canvas.getBoundingClientRect();
+            const scale = canvas.width / rect.width;
+            const x = (e.clientX - rect.left) * scale;
+            const y = (e.clientY - rect.top) * scale;
+
+            activePiece.currentX = x - dragOffset.x;
+            activePiece.currentY = y - dragOffset.y;
+            render();
+        });
+
+        canvas.addEventListener('pointerup', () => {
+            if (!activePiece) return;
+            
+            const dist = Math.hypot(activePiece.currentX - activePiece.targetX, activePiece.currentY - activePiece.targetY);
+            if (dist < 60) {
+                activePiece.currentX = activePiece.targetX;
+                activePiece.currentY = activePiece.targetY;
+                activePiece.isSnapped = true;
+                playAudioTone(800, 0.15);
+            } else {
+                playAudioTone(300, 0.1);
             }
-        }
+            activePiece = null;
+            render();
 
-        function onUp(e) {
-            e.preventDefault();
-            if (selectedPiece) {
-                const snapRadius = 60;
-                if (Math.abs(selectedPiece.cx - selectedPiece.sx) < snapRadius && 
-                    Math.abs(selectedPiece.cy - selectedPiece.sy) < snapRadius) {
-                    
-                    selectedPiece.cx = selectedPiece.sx;
-                    selectedPiece.cy = selectedPiece.sy;
-                    selectedPiece.placed = true;
-                    playSound('snap');
-                }
-                
-                selectedPiece = null;
-                drawPuzzle();
-                checkWin();
-            }
-        }
-
-        function checkWin() {
-            if (pieces.every(p => p.placed)) {
+            if (pieces.every(p => p.isSnapped)) {
                 setTimeout(() => {
-                    playSound('victory');
-                    spawnConfetti();
-                }, 200);
+                    playAudioTone(1000, 0.4);
+                    document.getElementById('celeb-emoji').innerText = selectedPuzzle.emoji;
+                    showScreen('celeb-screen');
+                }, 400);
             }
-        }
+        });
 
-        canvas.addEventListener('mousedown', onDown);
-        canvas.addEventListener('mousemove', onMove);
-        window.addEventListener('mouseup', onUp);
-
-        canvas.addEventListener('touchstart', onDown, {passive: false});
-        canvas.addEventListener('touchmove', onMove, {passive: false});
-        window.addEventListener('touchend', onUp);
-        window.addEventListener('touchcancel', onUp);
+        renderPuzzlePicker();
     </script>
 </body>
 </html>

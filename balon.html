@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Pecahkan Balonnya! 🎈</title>
     <meta name="theme-color" content="#667eea">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -10,579 +11,264 @@
     <link rel="icon" type="image/svg+xml" href="icons/favicon.svg">
     <link rel="icon" type="image/jpeg" href="icons/app-icon.jpg">
     <link rel="apple-touch-icon" href="icons/app-icon.jpg">
-    <title>Pecahkan Balonnya!</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap');
-        
+
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: none;
+        }
+
         body, html {
             margin: 0;
             padding: 0;
             width: 100vw;
             height: 100vh;
-            overflow: hidden;
             font-family: 'Bubblegum Sans', 'Comic Sans MS', cursive, sans-serif;
-            touch-action: none;
-            background-color: #87CEEB;
-            transition: background 2s ease-in-out;
-        }
-
-        body.bg-day {
-            background: linear-gradient(to bottom, #87CEEB, #E0F6FF);
-        }
-        body.bg-sunset {
-            background: linear-gradient(to bottom, #FF7E5F, #FEB47B, #FFD2A5);
-        }
-        body.bg-night {
-            background: linear-gradient(to bottom, #0F2027, #203A43, #2C5364);
-        }
-
-        #night-stars {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 2s ease-in-out;
-            background-image: 
-                radial-gradient(2px 2px at 20px 30px, #eee, rgba(0,0,0,0)),
-                radial-gradient(2px 2px at 40px 70px, #fff, rgba(0,0,0,0)),
-                radial-gradient(2px 2px at 50px 160px, #ddd, rgba(0,0,0,0)),
-                radial-gradient(2px 2px at 90px 40px, #fff, rgba(0,0,0,0)),
-                radial-gradient(2px 2px at 130px 80px, #fff, rgba(0,0,0,0)),
-                radial-gradient(2px 2px at 160px 120px, #ddd, rgba(0,0,0,0));
-            background-repeat: repeat;
-            background-size: 200px 200px;
-        }
-        body.bg-night #night-stars { opacity: 1; }
-
-        canvas {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-        }
-
-        #gameCanvas { z-index: 1; }
-        #confettiCanvas { z-index: 10; pointer-events: none; }
-
-        #ui-layer {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 20;
+            background: linear-gradient(180deg, #74b9ff 0%, #a29bfe 100%);
+            color: #2d3436;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-            background: rgba(255,255,255,0.4);
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-            padding: 20px;
+            justify-content: center;
         }
 
-        h1 {
-            font-size: clamp(36px, 8vw, 64px);
-            color: #FF1493;
-            text-shadow: 3px 3px 0 #FFF, -1px -1px 0 #FFF, 1px -1px 0 #FFF, -1px 1px 0 #FFF, 1px 1px 0 #FFF;
-            margin-bottom: 2rem;
-            text-align: center;
-            animation: bounce 2s infinite ease-in-out;
-            padding: 0 20px;
-        }
-
-        .btn-mode {
-            background: linear-gradient(135deg, #FF9A9E 0%, #FECFEF 100%);
-            border: 4px solid #FFF;
-            border-radius: 40px;
-            padding: 16px 32px;
-            font-size: clamp(24px, 5vw, 36px);
-            font-family: inherit;
-            color: #D81B60;
-            margin: 8px;
-            cursor: pointer;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            transition: transform 0.2s, box-shadow 0.2s;
-            width: clamp(260px, 80vw, 380px);
-            text-align: center;
-        }
-        
-        .btn-mode:nth-child(2) {
-            background: linear-gradient(135deg, #84FAB0 0%, #8FD3F4 100%);
-            color: #00695C;
-        }
-
-        .btn-mode:nth-child(3) {
-            background: linear-gradient(135deg, #FCCB90 0%, #D57EEB 100%);
-            color: #4A148C;
-        }
-
-        .btn-mode:active {
-            transform: scale(0.95);
-        }
-
-        #back-btn {
+        .back-btn {
             position: fixed;
             top: max(15px, env(safe-area-inset-top));
             left: max(15px, env(safe-area-inset-left));
             width: 60px;
             height: 60px;
-            background: #FFF;
-            border: 3px solid #FF9A9E;
+            background: #ffffff;
+            border: 3px solid #ff6b6b;
             border-radius: 50%;
             font-size: 32px;
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
             text-decoration: none;
             z-index: 99999;
             box-shadow: 0 6px 15px rgba(0,0,0,0.15);
             transition: transform 0.15s;
-            color: #000;
-            pointer-events: auto;
             cursor: pointer;
+            pointer-events: auto;
         }
 
-        #back-btn:active {
-            transform: scale(0.9);
+        .back-btn:active { transform: scale(0.9); }
+
+        .screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            padding: 20px;
+            text-align: center;
         }
 
-        #target-display {
+        .screen.active { display: flex; }
+
+        h1 {
+            font-size: clamp(32px, 6vw, 56px);
+            margin: 0 0 15px 0;
+            color: #ff7675;
+            text-shadow: 3px 3px 0px white, -3px -3px 0px white, 3px -3px 0px white, -3px 3px 0px white;
+            animation: bounce 2s infinite ease-in-out;
+        }
+
+        .btn {
+            background: white;
+            border: 4px solid #74b9ff;
+            border-radius: 25px;
+            padding: 12px 28px;
+            font-size: clamp(22px, 4vw, 32px);
+            font-family: inherit;
+            color: #2d3436;
+            cursor: pointer;
+            margin: 10px;
+            box-shadow: 0 6px 0 #0984e3;
+            transition: transform 0.1s;
+            width: clamp(220px, 60vw, 300px);
+        }
+
+        .btn:active { transform: translateY(6px); box-shadow: 0 0 0 #0984e3; }
+
+        .btn.btn-primary {
+            background: #ff7675;
+            color: white;
+            border-color: #d63031;
+            box-shadow: 0 6px 0 #b2bec3;
+        }
+
+        #score-board {
             position: absolute;
             top: max(15px, env(safe-area-inset-top));
-            left: 50%;
-            transform: translateX(-50%);
-            background: #FFF;
-            border: 4px solid #FFCE00;
-            border-radius: 30px;
-            padding: 8px 30px;
-            font-size: clamp(28px, 6vw, 48px);
-            color: #FF5722;
-            z-index: 5;
-            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
-            display: none;
-            white-space: nowrap;
+            right: max(15px, env(safe-area-inset-right));
+            font-size: clamp(22px, 4.5vw, 32px);
+            color: white;
+            background: rgba(0,0,0,0.25);
+            padding: 8px 20px;
+            border-radius: 24px;
+            z-index: 100;
+        }
+
+        canvas {
+            width: 100vw;
+            height: 100vh;
+            position: absolute;
+            top: 0; left: 0;
         }
 
         @keyframes bounce {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-15px); }
         }
-
-        @keyframes celebrationZoom {
-            0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
-            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
-            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-        }
-
-        #celebration-msg {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: clamp(60px, 12vw, 100px);
-            color: #FFD700;
-            text-shadow: 4px 4px 0 #FF4500, -2px -2px 0 #FFF, 2px -2px 0 #FFF, -2px 2px 0 #FFF, 2px 2px 0 #FFF;
-            z-index: 15;
-            display: none;
-            text-align: center;
-            white-space: nowrap;
-        }
-        
-        .show-celebration {
-            display: block !important;
-            animation: celebrationZoom 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
     </style>
 </head>
-<body class="bg-day">
-    <div id="night-stars"></div>
-    
-    <a href="index.html" id="back-btn" aria-label="Kembali ke Beranda" onclick="window.location.href='index.html'; return true;">🏠</a>
-    
-    <div id="target-display">Cari: <span id="current-target"></span></div>
-    
-    <div id="celebration-msg">HORE! 🎉</div>
+<body>
 
-    <canvas id="gameCanvas"></canvas>
-    <canvas id="confettiCanvas"></canvas>
+    <a href="index.html" class="back-btn" onclick="window.location.href='index.html'; return true;">🏠</a>
 
-    <div id="ui-layer">
-        <h1>Pecahkan Balonnya!</h1>
-        <button class="btn-mode" onclick="startGame('huruf')">🔤 Huruf (A-Z)</button>
-        <button class="btn-mode" onclick="startGame('angka')">🔢 Angka (1-9)</button>
-        <button class="btn-mode" onclick="startGame('campuran')">🔤🔢 Campuran</button>
+    <div id="screens">
+        <!-- 1. Start Screen -->
+        <div id="start-screen" class="screen active">
+            <h1>Pecahkan Balonnya! 🎈</h1>
+            <p style="font-size: clamp(20px, 4vw, 28px); color: white; margin-bottom: 25px; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);">Sentuh atau klik balon yang terbang di langit!</p>
+            <button class="btn btn-primary" onclick="startGame()">Mulai Main! 🎈</button>
+        </div>
+
+        <!-- 2. Game Screen -->
+        <div id="game-screen" class="screen">
+            <div id="score-board">Skor: <span id="score-val">0</span></div>
+            <canvas id="balloon-canvas"></canvas>
+        </div>
     </div>
 
     <script>
-        const state = {
-            mode: 'huruf',
-            score: 0,
-            target: '',
-            balloons: [],
-            particles: [],
-            confetti: [],
-            isRunning: false,
-            paused: false
-        };
-
-        const canvas = document.getElementById('gameCanvas');
+        const canvas = document.getElementById('balloon-canvas');
         const ctx = canvas.getContext('2d');
-        const confettiCanvas = document.getElementById('confettiCanvas');
-        const cCtx = confettiCanvas.getContext('2d');
-        
-        let width, height;
-        
-        function resize() {
-            width = window.innerWidth;
-            height = window.innerHeight;
-            canvas.width = width;
-            canvas.height = height;
-            confettiCanvas.width = width;
-            confettiCanvas.height = height;
-        }
-        window.addEventListener('resize', resize);
-        resize();
+        let balloons = [];
+        let score = 0;
+        let animId = null;
+        const colors = ['#ff7675', '#74b9ff', '#55efc4', '#ffeaa7', '#a29bfe', '#fd79a8'];
+        const emojis = ['⭐', '🎈', '🎉', '🍎', '🐱', '🦖'];
 
-        // Audio 
-        function playSound(type) {
-            try {
-                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                
-                const now = audioCtx.currentTime;
-                
-                if (type === 'pop') {
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(800, now);
-                    osc.frequency.exponentialRampToValueAtTime(100, now + 0.1);
-                    gain.gain.setValueAtTime(1, now);
-                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
-                    osc.start(now);
-                    osc.stop(now + 0.1);
-                } else if (type === 'bounce') {
-                    osc.type = 'triangle';
-                    osc.frequency.setValueAtTime(200, now);
-                    osc.frequency.linearRampToValueAtTime(300, now + 0.15);
-                    gain.gain.setValueAtTime(0.3, now);
-                    gain.gain.linearRampToValueAtTime(0.01, now + 0.15);
-                    osc.start(now);
-                    osc.stop(now + 0.15);
-                } else if (type === 'cheer') {
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(440, now);
-                    osc.frequency.setValueAtTime(554.37, now + 0.1);
-                    osc.frequency.setValueAtTime(659.25, now + 0.2);
-                    osc.frequency.setValueAtTime(880, now + 0.3);
-                    gain.gain.setValueAtTime(0, now);
-                    gain.gain.linearRampToValueAtTime(0.5, now + 0.05);
-                    gain.gain.setValueAtTime(0.5, now + 0.4);
-                    gain.gain.linearRampToValueAtTime(0.01, now + 0.6);
-                    osc.start(now);
-                    osc.stop(now + 0.6);
-                }
-            } catch(e) {}
+        function showScreen(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
         }
 
-        const huruf = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-        const angka = '123456789'.split('');
-        const colors = [
-            {bg: '#FF9A9E', text: '#FFF'},
-            {bg: '#84FAB0', text: '#00695C'},
-            {bg: '#FCCB90', text: '#D50000'},
-            {bg: '#A1C4FD', text: '#0D47A1'},
-            {bg: '#FFD194', text: '#3E2723'},
-            {bg: '#E2B0FF', text: '#4A148C'}
-        ];
-        
-        function getRandomItem(arr) {
-            return arr[Math.floor(Math.random() * arr.length)];
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function startGame() {
+            score = 0;
+            document.getElementById('score-val').innerText = score;
+            showScreen('game-screen');
+            spawnBalloons();
+            if (animId) cancelAnimationFrame(animId);
+            loop();
         }
 
-        function spawnBalloon(isTarget = false) {
-            let val;
-            if (isTarget) {
-                val = state.target;
-            } else {
-                let pool = [];
-                if (state.mode === 'huruf') pool = huruf;
-                else if (state.mode === 'angka') pool = angka;
-                else pool = huruf.concat(angka);
-                
-                do {
-                    val = getRandomItem(pool);
-                } while(val === state.target && Math.random() > 0.2);
+        function spawnBalloons() {
+            balloons = [];
+            for (let i = 0; i < 7; i++) {
+                createBalloon();
             }
+        }
 
-            const color = getRandomItem(colors);
-            const radius = Math.random() * 20 + 55;
-            const x = Math.random() * (width - radius * 2) + radius;
-            const y = height + radius + Math.random() * 200;
-            const speed = Math.random() * 1.5 + 1.2; 
-            
-            const shapes = ['round', 'round', 'round', 'heart', 'star'];
-            const shape = getRandomItem(shapes);
-
-            state.balloons.push({
-                x, y, radius, speed, val, color, shape,
-                bounceTimer: 0,
-                swayOffset: Math.random() * Math.PI * 2,
-                swaySpeed: Math.random() * 0.02 + 0.01
+        function createBalloon() {
+            const r = Math.random() * 25 + 35;
+            balloons.push({
+                x: Math.random() * (canvas.width - r * 2) + r,
+                y: canvas.height + r + Math.random() * 200,
+                r: r,
+                speed: Math.random() * 2 + 1.5,
+                color: colors[Math.floor(Math.random() * colors.length)],
+                emoji: emojis[Math.floor(Math.random() * emojis.length)]
             });
         }
 
-        function setTarget() {
-            let pool = [];
-            if (state.mode === 'huruf') pool = huruf;
-            else if (state.mode === 'angka') pool = angka;
-            else pool = huruf.concat(angka);
+        function loop() {
+            if (!document.getElementById('game-screen').classList.contains('active')) return;
             
-            state.target = getRandomItem(pool);
-            document.getElementById('current-target').innerText = state.target;
-            
-            let hasTarget = state.balloons.some(b => b.val === state.target);
-            if (!hasTarget) {
-                spawnBalloon(true);
-            }
-        }
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        function updateBackground() {
-            if (state.score >= 20) {
-                document.body.className = 'bg-night';
-            } else if (state.score >= 10) {
-                document.body.className = 'bg-sunset';
-            } else {
-                document.body.className = 'bg-day';
-            }
-        }
-
-        function startGame(mode) {
-            state.mode = mode;
-            state.score = 0;
-            state.balloons = [];
-            state.particles = [];
-            state.confetti = [];
-            state.isRunning = true;
-            state.paused = false;
-            
-            document.getElementById('ui-layer').style.display = 'none';
-            document.getElementById('target-display').style.display = 'block';
-            
-            updateBackground();
-            setTarget();
-            
-            for(let i=0; i<8; i++) {
-                spawnBalloon(i === 0);
-            }
-            
-            playSound('bounce');
-            requestAnimationFrame(loop);
-        }
-
-        function spawnConfetti(x, y) {
-            for (let i = 0; i < 80; i++) {
-                state.confetti.push({
-                    x: x || width / 2,
-                    y: y || height / 2,
-                    vx: (Math.random() - 0.5) * 20,
-                    vy: (Math.random() - 0.5) * 20 - 5,
-                    size: Math.random() * 12 + 6,
-                    color: `hsl(${Math.random() * 360}, 100%, 60%)`,
-                    life: 1,
-                    decay: Math.random() * 0.01 + 0.01
-                });
-            }
-        }
-        
-        function spawnPopParticles(x, y, color) {
-            for(let i=0; i<25; i++) {
-                state.particles.push({
-                    x: x,
-                    y: y,
-                    vx: (Math.random() - 0.5) * 12,
-                    vy: (Math.random() - 0.5) * 12,
-                    size: Math.random() * 6 + 4,
-                    color: color,
-                    life: 1,
-                    decay: 0.04
-                });
-            }
-        }
-
-        function drawBalloon(b) {
-            ctx.save();
-            ctx.translate(b.x, b.y);
-            
-            // String
-            ctx.beginPath();
-            ctx.moveTo(0, b.radius);
-            ctx.quadraticCurveTo(-10, b.radius + 20, 0, b.radius + 40);
-            ctx.quadraticCurveTo(10, b.radius + 60, 0, b.radius + 80);
-            ctx.strokeStyle = '#fff';
-            ctx.lineWidth = 3;
-            ctx.stroke();
-
-            ctx.fillStyle = b.color.bg;
-            
-            if (b.bounceTimer > 0) {
-                const scaleX = 1 + Math.sin(b.bounceTimer * Math.PI * 4) * 0.15;
-                const scaleY = 1 - Math.sin(b.bounceTimer * Math.PI * 4) * 0.15;
-                ctx.scale(scaleX, scaleY);
-                b.bounceTimer -= 0.03;
-            }
-            
-            ctx.beginPath();
-            if (b.shape === 'heart') {
-                const r = b.radius;
-                ctx.moveTo(0, r * 0.3);
-                ctx.bezierCurveTo(-r, -r * 0.5, -r * 1.5, r * 0.5, 0, r);
-                ctx.bezierCurveTo(r * 1.5, r * 0.5, r, -r * 0.5, 0, r * 0.3);
-            } else if (b.shape === 'star') {
-                const r = b.radius * 1.3;
-                for(let i=0; i<5; i++) {
-                    ctx.lineTo(Math.cos((18 + i*72)/180*Math.PI) * r, -Math.sin((18 + i*72)/180*Math.PI) * r);
-                    ctx.lineTo(Math.cos((54 + i*72)/180*Math.PI) * r*0.5, -Math.sin((54 + i*72)/180*Math.PI) * r*0.5);
+            balloons.forEach((b, idx) => {
+                b.y -= b.speed;
+                if (b.y < -b.r * 2) {
+                    b.y = canvas.height + b.r;
+                    b.x = Math.random() * (canvas.width - b.r * 2) + b.r;
                 }
-                ctx.closePath();
-            } else {
-                ctx.scale(1, 1.2);
-                ctx.arc(0, 0, b.radius, 0, Math.PI * 2);
-                ctx.scale(1, 1/1.2);
-            }
-            ctx.fill();
-            ctx.lineWidth = 4;
-            ctx.strokeStyle = 'rgba(255,255,255,0.6)';
-            ctx.stroke();
 
-            ctx.fillStyle = b.color.text;
-            ctx.font = `bold ${b.radius * 0.9}px 'Bubblegum Sans', sans-serif`;
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(b.val, 0, b.shape === 'heart' ? b.radius*0.1 : 0);
-            
-            ctx.restore();
+                // Draw Balloon Body
+                ctx.beginPath();
+                ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+                ctx.fillStyle = b.color;
+                ctx.fill();
+                ctx.strokeStyle = 'white';
+                ctx.lineWidth = 3;
+                ctx.stroke();
+
+                // Draw Emoji inside balloon
+                ctx.font = `${b.r * 0.9}px Arial`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(b.emoji, b.x, b.y);
+
+                // String line
+                ctx.beginPath();
+                ctx.moveTo(b.x, b.y + b.r);
+                ctx.lineTo(b.x, b.y + b.r + 25);
+                ctx.strokeStyle = 'rgba(255,255,255,0.7)';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            });
+
+            animId = requestAnimationFrame(loop);
         }
 
-        function checkClick(x, y) {
-            if (state.paused) return;
-            
-            for (let i = state.balloons.length - 1; i >= 0; i--) {
-                let b = state.balloons[i];
-                let dx = x - b.x;
-                let dy = y - b.y;
-                let dist = Math.sqrt(dx*dx + dy*dy);
-                
-                if (dist <= b.radius * 1.3) {
-                    if (b.val === state.target) {
-                        playSound('pop');
-                        spawnPopParticles(b.x, b.y, b.color.bg);
-                        state.balloons.splice(i, 1);
-                        state.score++;
-                        
-                        updateBackground();
-                        
-                        if (state.score > 0 && state.score % 5 === 0) {
-                            state.paused = true;
-                            playSound('cheer');
-                            spawnConfetti();
-                            document.getElementById('celebration-msg').classList.add('show-celebration');
-                            
-                            setTimeout(() => {
-                                document.getElementById('celebration-msg').classList.remove('show-celebration');
-                                state.paused = false;
-                                setTarget();
-                                spawnBalloon(true); 
-                            }, 2800);
-                        } else {
-                            setTarget();
-                            spawnBalloon(true);
-                        }
-                        spawnBalloon();
-                    } else {
-                        playSound('bounce');
-                        b.bounceTimer = 1;
-                    }
+        function popAt(clientX, clientY) {
+            for (let i = balloons.length - 1; i >= 0; i--) {
+                const b = balloons[i];
+                const dist = Math.hypot(clientX - b.x, clientY - b.y);
+                if (dist < b.r + 15) {
+                    playPopSound();
+                    score += 10;
+                    document.getElementById('score-val').innerText = score;
+                    balloons.splice(i, 1);
+                    createBalloon();
                     break;
                 }
             }
         }
 
-        canvas.addEventListener('mousedown', (e) => checkClick(e.clientX, e.clientY));
+        canvas.addEventListener('click', (e) => popAt(e.clientX, e.clientY));
         canvas.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            for(let i=0; i<e.touches.length; i++) {
-                checkClick(e.touches[i].clientX, e.touches[i].clientY);
-            }
-        }, {passive: false});
+            const touch = e.changedTouches[0];
+            popAt(touch.clientX, touch.clientY);
+        }, {passive: true});
 
-        let lastTime = 0;
-        function loop(timestamp) {
-            if (!state.isRunning) return;
-            const dt = timestamp - lastTime;
-            lastTime = timestamp;
-
-            ctx.clearRect(0, 0, width, height);
-            cCtx.clearRect(0, 0, width, height);
-
-            if (!state.paused) {
-                for (let i = 0; i < state.balloons.length; i++) {
-                    let b = state.balloons[i];
-                    b.y -= b.speed;
-                    b.x += Math.sin(timestamp * b.swaySpeed + b.swayOffset) * 1.5;
-
-                    if (b.y + b.radius * 2 < 0) {
-                        b.y = height + b.radius * 2;
-                        b.x = Math.random() * (width - b.radius * 2) + b.radius;
-                    }
-                    drawBalloon(b);
-                }
-            } else {
-                for (let i = 0; i < state.balloons.length; i++) {
-                    drawBalloon(state.balloons[i]);
-                }
-            }
-
-            for (let i = state.particles.length - 1; i >= 0; i--) {
-                let p = state.particles[i];
-                p.x += p.vx;
-                p.y += p.vy;
-                p.life -= p.decay;
-                
-                if (p.life <= 0) {
-                    state.particles.splice(i, 1);
-                    continue;
-                }
-                
-                ctx.fillStyle = p.color;
-                ctx.globalAlpha = p.life;
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
-                ctx.fill();
-                ctx.globalAlpha = 1;
-            }
-
-            for (let i = state.confetti.length - 1; i >= 0; i--) {
-                let c = state.confetti[i];
-                c.x += c.vx;
-                c.y += c.vy;
-                c.vy += 0.2; 
-                c.life -= c.decay;
-
-                if (c.life <= 0) {
-                    state.confetti.splice(i, 1);
-                    continue;
-                }
-
-                cCtx.fillStyle = c.color;
-                cCtx.globalAlpha = c.life;
-                cCtx.save();
-                cCtx.translate(c.x, c.y);
-                cCtx.rotate(timestamp * 0.01 * (c.vx > 0 ? 1 : -1));
-                cCtx.fillRect(-c.size/2, -c.size/2, c.size, c.size);
-                cCtx.restore();
-                cCtx.globalAlpha = 1;
-            }
-
-            requestAnimationFrame(loop);
+        function playPopSound() {
+            try {
+                const ctxAudio = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctxAudio.createOscillator();
+                const gain = ctxAudio.createGain();
+                osc.connect(gain); gain.connect(ctxAudio.destination);
+                osc.frequency.setValueAtTime(800, ctxAudio.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(200, ctxAudio.currentTime + 0.1);
+                gain.gain.setValueAtTime(0.3, ctxAudio.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctxAudio.currentTime + 0.1);
+                osc.start(); osc.stop(ctxAudio.currentTime + 0.1);
+            } catch(e) {}
         }
     </script>
 </body>
